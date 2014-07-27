@@ -1,0 +1,4 @@
+ProjectIdea
+===========
+
+AngularJs app
