@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+	<bean id="restAuthenticationEntryPoint"
+		class="in.anandm.projectidea.interfaces.rest.helper.RestAuthenticationEntryPoint">
+
+	</bean>
+
+	<bean id="customUserDetailsService"
+		class="in.anandm.projectidea.domain.service.CustomUserDetailsService">
+
+	</bean>
+
+	<bean id="simpleUrlAuthenticationFailureHandler"
+		class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+	</bean>
+
+	<bean id="restAuthenticationSuccessHandler"
+		class="in.anandm.projectidea.interfaces.rest.helper.RestAuthenticationSuccessHandler">
+	</bean>
+
+	<security:global-method-security
+		secured-annotations="enabled" authentication-manager-ref="authenticationManager"
+		proxy-target-class="true" pre-post-annotations="enabled">
+	</security:global-method-security>
+
+	<security:http pattern="/resources/**" security="none" />
+
+	<security:http entry-point-ref="restAuthenticationEntryPoint"
+		use-expressions="true" authentication-manager-ref="authenticationManager"
+		disable-url-rewriting="true" create-session="ifRequired">
+
+		<security:intercept-url pattern="/**" access="permitAll" />
+
+		<!-- <security:intercept-url pattern="/login" access="permitAll" /> -->
+
+		<security:form-login
+			authentication-success-handler-ref="restAuthenticationSuccessHandler"
+			authentication-failure-handler-ref="simpleUrlAuthenticationFailureHandler"
+			username-parameter="username" password-parameter="password" />
+
+		<security:logout />
+
+	</security:http>
+
+	<security:authentication-manager id="authenticationManager">
+		<security:authentication-provider
+			user-service-ref="customUserDetailsService">
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+</beans>
