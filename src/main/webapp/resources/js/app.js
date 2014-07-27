@@ -87,6 +87,14 @@ angular.module(
 			isSecure : false,
 		}
 
+	}).state('projectIdea', {
+		url : '/projectIdea/{id}',
+		templateUrl : 'partials/projectIdea',
+		controller : 'ProjectIdeaController',
+		data : {
+			isSecure : false,
+		}
+
 	});
 }).run(
 		function($location, $rootScope, editableOptions, AUTH_EVENTS,

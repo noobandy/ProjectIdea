@@ -7,7 +7,7 @@
 	</div>
 	<div class="col-md-6">
 		<div class="list-group">
-			<a ng-repeat="projectIdea in projectIdeas" href="#"
+			<a ng-repeat="projectIdea in projectIdeas" ui-sref="projectIdea({id:projectIdea.id})"
 				class="list-group-item">
 				<h4 class="list-group-item-heading">{{projectIdea.title}}</h4>
 				<p class="list-group-item-text">{{projectIdea.description}}</p>

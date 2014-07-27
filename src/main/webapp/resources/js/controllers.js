@@ -66,26 +66,23 @@ angular.module('ProjectIdeaApp.controllers', []).controller('HomeController',fun
 	  $scope.maxSize = 5;
 })
 .controller('ProjectIdeaController',
-		function($scope, ngTableParams) {
-	$scope.projectIdeas = [];
-	for (var i = 0; i < 10; i++) {
-		$scope.projectIdeas.push({
-			id : i,
-			title : 'title ' + i,
+		function($scope, $stateParams) {
+		$scope.projectIdea = {
+			id : 1,
+			title : 'title ',
 			description : "This is a hack. In my opinion, it's justifiable and relatively safe."
 
 				+ "Only Gecko is treats fieldsets this way, so we are using a proprietary Gecko feature to target a well-understood Gecko behaviour as a workaround to another well-understood Gecko behaviour which is both unique and undesirable."
 
-				+ "The Gecko targeting hack has been around for a while. Given its widespread use as a means to target Gecko issues² I believe Mozilla will be conservative about removing it."
+				+ "The Gecko targeting hack has been around for a while. Given its widespread use as a means to target Gecko issuesï¿½ I believe Mozilla will be conservative about removing it."
 
 				+ "Changes to fieldset behaviour tend to meet resistance out of concern for legacy support."
 
-				+ "Given how fundamental table layout is, I strongly doubt that the codepath for calculating the dimensions of internal table elements will be significantly changed in the near future. " + i,
+				+ "Given how fundamental table layout is, I strongly doubt that the codepath for calculating the dimensions of internal table elements will be significantly changed in the near future. ",
 				estimatedTimeInMilliseconds : 4512459,
-				author : 'author ' + 1,
+				author : 'author ',
 				tags : [ 'java', 'spring', 'hibernate','spring security','jpa','angular js' ]
-		});
-	}
+		};
 
 	$scope.tab = 1;
 
