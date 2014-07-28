@@ -36,12 +36,12 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="/" target="_blank"><spring:message
+				<a class="navbar-brand" ui-sref="home"><spring:message
 						code="Project.title" /></a>
 			</div>
 
 			<ul class="nav navbar-nav">
-				<li><a ui-sref="myIdeas"><spring:message
+				<li><a ui-sref="myProjectIdeas.drafted"><spring:message
 							code="ProjectIdea.myIdeas" /> </a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">

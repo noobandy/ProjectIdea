@@ -2,8 +2,136 @@
 
 /* Controllers */
 
-angular.module('ProjectIdeaApp.controllers', []).controller('HomeController',function($scope,$stateParams){
+angular.module('ProjectIdeaApp.controllers', []).controller('HomeController',function($scope,ProjectIdeaService,$stateParams){
 	console.log($stateParams.tag);
+	
+	ProjectIdeaService.getPublishedProjectIdeas('java',1,5).success(function(page){
+		console.log(page);
+	});
+	
+	$scope.tags = [{
+		tag: 'java',
+		count: '100'
+	},
+	{
+		tag: 'spring',
+		count: '50'
+	},
+	{
+		tag: 'hibernate',
+		count: '25'
+	},
+	{
+		tag: 'jpa',
+		count: '26'
+	},
+	{
+		tag: 'spring security',
+		count: '23'
+	},
+	{
+		tag: 'angular js',
+		count: '20'
+	},
+	{
+		tag: 'Quartz',
+		count: '10'
+	},
+	{
+		tag: 'Activiti',
+		count: '15'
+	}
+	];
+	
+	$scope.projectIdeas = [];
+	for (var i = 0; i < 10; i++) {
+		$scope.projectIdeas.push({
+			id : i,
+			title : 'title ' + i,
+			description : "This is a hack. In my opinion, it's justifiable and relatively safe.",
+				estimatedTimeInMilliseconds : 4512459,
+				author : 'author ' + 1,
+				tags : [ 'java', 'spring', 'hibernate','spring security','jpa','angular js' ]
+		});
+	}
+	
+	
+	 $scope.totalItems = 50;
+	  $scope.currentPage = 1;
+	  $scope.itemsPerPage = 5;
+
+	  $scope.setPage = function (pageNo) {
+	    $scope.currentPage = pageNo;
+	  };
+
+	  $scope.pageChanged = function() {
+	    console.log('Page changed to: ' + $scope.currentPage);
+	  };
+
+	  $scope.maxSize = 5;
+}).controller('DraftedProjectIdeaController',function($scope){
+	$scope.tags = [{
+		tag: 'java',
+		count: '100'
+	},
+	{
+		tag: 'spring',
+		count: '50'
+	},
+	{
+		tag: 'hibernate',
+		count: '25'
+	},
+	{
+		tag: 'jpa',
+		count: '26'
+	},
+	{
+		tag: 'spring security',
+		count: '23'
+	},
+	{
+		tag: 'angular js',
+		count: '20'
+	},
+	{
+		tag: 'Quartz',
+		count: '10'
+	},
+	{
+		tag: 'Activiti',
+		count: '15'
+	}
+	];
+	
+	$scope.projectIdeas = [];
+	for (var i = 0; i < 10; i++) {
+		$scope.projectIdeas.push({
+			id : i,
+			title : 'title ' + i,
+			description : "This is a hack. In my opinion, it's justifiable and relatively safe.",
+				estimatedTimeInMilliseconds : 4512459,
+				author : 'author ' + 1,
+				tags : [ 'java', 'spring', 'hibernate','spring security','jpa','angular js' ]
+		});
+	}
+	
+	
+	 $scope.totalItems = 50;
+	  $scope.currentPage = 1;
+	  $scope.itemsPerPage = 5;
+
+	  $scope.setPage = function (pageNo) {
+	    $scope.currentPage = pageNo;
+	  };
+
+	  $scope.pageChanged = function() {
+	    console.log('Page changed to: ' + $scope.currentPage);
+	  };
+
+	  $scope.maxSize = 5;
+}).
+controller('PublishedProjectIdeaController',function($scope){
 	$scope.tags = [{
 		tag: 'java',
 		count: '100'

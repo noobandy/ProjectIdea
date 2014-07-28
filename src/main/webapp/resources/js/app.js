@@ -76,11 +76,10 @@ angular.module(
 		templateUrl : 'partials/chat',
 		controller : 'ChatController',
 		data : {
-			isSecure : true,
-			authorizedRole : 'ROLE_USER'
+			isSecure : true
 		}
 	}).state('home', {
-		url : '/home/{tag}',
+		url : '/home?tag',
 		templateUrl : 'partials/home',
 		controller : 'HomeController',
 		data : {
@@ -95,6 +94,27 @@ angular.module(
 			isSecure : false,
 		}
 
+	}).state('myProjectIdeas', {
+		abstract: true,
+		url : '/myProjectIdeas',
+		templateUrl : 'partials/myProjectIdeas',
+		data : {
+			isSecure : false,
+		}
+	}).state('myProjectIdeas.drafted', {
+		url : '/drafted?tag',
+		templateUrl : 'partials/draftedProjectIdeas',
+		controller : 'DraftedProjectIdeaController',
+		data : {
+			isSecure : false,
+		}
+	}).state('myProjectIdeas.published', {
+		url : '/published?tag',
+		templateUrl : 'partials/publishedProjectIdeas',
+		controller : 'PublishedProjectIdeaController',
+		data : {
+			isSecure : false,
+		}
 	});
 }).run(
 		function($location, $rootScope, editableOptions, AUTH_EVENTS,
