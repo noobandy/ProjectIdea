@@ -16,10 +16,11 @@ public class RestResourceHelperTest extends BaseTest {
 
 	@Test
 	public void test() {
-		Page page = new Page<ProjectIdeaSummary>("java", 1, 5);
+		Page<ProjectIdeaSummary> page = new Page<ProjectIdeaSummary>("java", 1,
+				5);
 
 		page.setAuthor("user");
-		page.setStatus(ProjectIdeaStatus.PUBLISHED.toString());
+		page.setStatus(ProjectIdeaStatus.PUBLISHED);
 
 		page = helper.getPage(page);
 
