@@ -5,7 +5,7 @@
 <html>
 <head>
 <link rel="stylesheet"
-	href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"></link>
+	href="${pageContext.request.contextPath}/resources/css/bootstrap-readable.min.css"></link>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/xeditable.css"></link>
 <link rel="stylesheet"
@@ -59,15 +59,15 @@
 	</nav>
 	<div class="container-fluid" ui-view></div>
 	<script
-		src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
 	<script
-		src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
+		src="${pageContext.request.contextPath}/resources/js/angular.min.js"></script>
 
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/js/angular-ui-router.js"></script>
 
 	<script
-		src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 
 	<script
 		src='${pageContext.request.contextPath}/resources/js/ng-table.min.js'></script>
