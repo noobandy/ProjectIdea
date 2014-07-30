@@ -1,9 +1,14 @@
 <div class="row">
 	<div class="col-md-3">
+		<div class="btn-group">
+		<a class="btn btn-primary" ui-sref="myProjectIdeas.drafted.new">
+		<i class="fa fa-plus"></i>
+		</a>
+		</div>
 		<div class="list-group">
 			<a ui-sref-active="active" ng-repeat="tag in tags"
 				class="list-group-item"
-				ui-sref="home.publishedProjectIdeas({tag:tag.tag})"><span
+				ui-sref="myProjectIdeas.drafted.projectIdeas({tag:tag.tag})"><span
 				class="badge">{{tag.count}}</span> {{tag.tag}}</a>
 		</div>
 	</div>

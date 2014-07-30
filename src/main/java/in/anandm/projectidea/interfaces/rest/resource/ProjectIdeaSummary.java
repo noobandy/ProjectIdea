@@ -20,6 +20,7 @@ public class ProjectIdeaSummary implements Serializable {
 	private String title;
 	private String description;
 
+	
 	/**
 	 * 
 	 */
@@ -27,6 +28,20 @@ public class ProjectIdeaSummary implements Serializable {
 		super();
 
 	}
+
+	
+	/**
+	 * @param id
+	 * @param title
+	 * @param description
+	 */
+	public ProjectIdeaSummary(Long id, String title, String description) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.description = description;
+	}
+
 
 	public Long getId() {
 		return id;

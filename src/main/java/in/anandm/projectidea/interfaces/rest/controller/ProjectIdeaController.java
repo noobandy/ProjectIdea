@@ -44,7 +44,7 @@ public class ProjectIdeaController {
 	@RequestMapping(value = "/publishedProjectIdeas", method = RequestMethod.GET)
 	public @ResponseBody
 	ResponseEntity<Page<ProjectIdeaSummary>> getPublishedProjectIdeas(
-			@RequestParam(value = "tag") String tag,
+			@RequestParam(value = "tag",required=false) String tag,
 			@RequestParam(value = "page") Integer pageNumber,
 			@RequestParam(value = "itemsPerPage") Integer itemsPerPage) {
 
@@ -60,7 +60,7 @@ public class ProjectIdeaController {
 	@RequestMapping(value = "/draftedProjectIdeasOfUser", method = RequestMethod.GET)
 	public @ResponseBody
 	ResponseEntity<Page<ProjectIdeaSummary>> getDraftedProjectIdeasOfUser(
-			@RequestParam(value = "tag") String tag,
+			@RequestParam(value = "tag",required=false) String tag,
 			@RequestParam(value = "page") Integer pageNumber,
 			@RequestParam(value = "itemsPerPage") Integer itemsPerPage) {
 
@@ -81,7 +81,7 @@ public class ProjectIdeaController {
 	@RequestMapping(value = "/publishedProjectIdeasOfUser", method = RequestMethod.GET)
 	public @ResponseBody
 	ResponseEntity<Page<ProjectIdeaSummary>> getPublishedProjectIdeasOfUser(
-			@RequestParam(value = "tag") String tag,
+			@RequestParam(value = "tag",required=false) String tag,
 			@RequestParam(value = "page") Integer pageNumber,
 			@RequestParam(value = "itemsPerPage") Integer itemsPerPage) {
 		Page<ProjectIdeaSummary> page = new Page<ProjectIdeaSummary>(tag,
@@ -134,19 +134,29 @@ public class ProjectIdeaController {
 	@RequestMapping(value = "/publishedProjectIdeaTagCount")
 	public @ResponseBody
 	ResponseEntity<List<TagCount>> getPublishedProjectIdeaTagcount() {
-		return null;
+		return new ResponseEntity<List<TagCount>>(
+				restResourceHelper.getTagCount(ProjectIdeaStatus.PUBLISHED),
+				HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/draftedProjectIdeaTagCountOfUser")
 	public @ResponseBody
 	ResponseEntity<List<TagCount>> getDraftedProjectIdeaTagcountOfUser() {
-		return null;
+		UserDetails userDetails = (UserDetails) SecurityContextHolder
+				.getContext().getAuthentication().getPrincipal();
+		return new ResponseEntity<List<TagCount>>(
+				restResourceHelper.getTagCountOfUser(userDetails.getUsername(),
+						ProjectIdeaStatus.DRAFTED), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/publishedProjectIdeaTagCountOfUser")
 	public @ResponseBody
 	ResponseEntity<List<TagCount>> getPublishedProjectIdeaTagcountOfUser() {
-		return null;
+		UserDetails userDetails = (UserDetails) SecurityContextHolder
+				.getContext().getAuthentication().getPrincipal();
+		return new ResponseEntity<List<TagCount>>(
+				restResourceHelper.getTagCountOfUser(userDetails.getUsername(),
+						ProjectIdeaStatus.PUBLISHED), HttpStatus.OK);
 	}
 
 }

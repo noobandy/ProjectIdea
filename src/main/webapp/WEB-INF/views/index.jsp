@@ -7,11 +7,17 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/bootstrap-readable.min.css"></link>
 <link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css"></link>
+<link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/xeditable.css"></link>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/ng-table.min.css"></link>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/chat.css"></link>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/select.min.css"></link>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/select2.css"></link>	
 <style type="text/css">
 /* Forms */
 .ng-invalid.ng-dirty {
@@ -21,42 +27,52 @@
 .ng-valid.ng-dirty {
 	border-color: #78FA89;
 }
+
+body {
+	min-height: 2000px;
+	padding-top: 70px;
+}
 </style>
 <title><spring:message code="Project.title" /></title>
 </head>
 <body ng-cloak ng-app="ProjectIdeaApp">
-	<nav class="navbar navbar-default" role="navigation"
+	<!-- Fixed navbar -->
+	<div class="navbar navbar-default navbar-fixed-top" role="navigation"
 		ng-controller="NavBarController">
-		<div class="container-fluid">
-			<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target="#bs-example-navbar-collapse-1">
+					data-target=".navbar-collapse">
 					<span class="sr-only">Toggle navigation</span> <span
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" ui-sref="home"><spring:message
-						code="Project.title" /></a>
+				<a ui-sref-active="active" class="navbar-brand"
+					ui-sref="home.publishedProjectIdeas"> <spring:message
+						code="Project.title" /> <i class="fa fa-home"></i>
+				</a>
 			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li ui-sref-active="active"><a
+						ui-sref="myProjectIdeas.drafted.projectIdeas"> <spring:message
+								code="ProjectIdea.myIdeas" /><i class="fa fa-paper-plane-o"></i>
+					</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li ui-sref-active="active" ng-if="isLoggedIn()"><a
+						ui-sref="chat"> <i class="fa fa-comments-o"></i>
+					</a></li>
 
-			<ul class="nav navbar-nav">
-				<li><a ui-sref="myProjectIdeas.drafted"><spring:message
-							code="ProjectIdea.myIdeas" /> </a></li>
-			</ul>
-			<ul class="nav navbar-nav navbar-right">
-				<li ng-if="isLoggedIn()"><a data-toggle="tooltip"
-					data-placement="bottom" title="chat" ui-sref="chat"><i
-						class="glyphicon glyphicon-comment"></i></a></li>
-
-				<li ng-if="isLoggedIn()"><a data-toggle="tooltip"
-					data-placement="bottom" title="log out" ui-sref="logout">{{authenticatedUser()}}&nbsp;<i
-						class="glyphicon glyphicon-log-out"></i></a></li>
-			</ul>
+					<li ui-sref-active="active" ng-if="isLoggedIn()"><a
+						ui-sref="logout"> {{authenticatedUser()}}&nbsp;<i
+							class="fa fa-sign-out"></i>
+					</a></li>
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
 		</div>
-		<!-- /.navbar-collapse -->
-		<!-- /.container-fluid -->
-	</nav>
+	</div>
 	<div class="container-fluid" ui-view></div>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
@@ -75,6 +91,11 @@
 		src="${pageContext.request.contextPath}/resources/js/ui-bootstrap-tpls-0.11.0.min.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/js/xeditable.min.js"></script>
+
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/js/select.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/js/select2.min.js"></script>	
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/js/app.js"></script>
 	<script type="text/javascript"

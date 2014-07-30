@@ -3,8 +3,12 @@
  */
 package in.anandm.projectidea.domain.model;
 
+import java.io.Serializable;
+
+import javax.persistence.ColumnResult;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.SqlResultSetMapping;
 
 
 /**
@@ -12,8 +16,17 @@ import javax.persistence.Id;
  *
  */
 @Entity
-public class Tag {
+@SqlResultSetMapping(name="TagCount",
+columns={
+		@ColumnResult(name="tag"),
+		@ColumnResult(name="count"),
+})
+public class Tag implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	private String tag;
 
@@ -24,6 +37,12 @@ public class Tag {
 	public Tag(String tag) {
 		super();
 		this.tag = tag;
+	}
+
+	
+	
+	public String getTag() {
+		return tag;
 	}
 
 	@Override

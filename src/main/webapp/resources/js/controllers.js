@@ -2,200 +2,126 @@
 
 /* Controllers */
 
-angular.module('ProjectIdeaApp.controllers', []).controller('HomeController',function($scope,ProjectIdeaService,$stateParams){
-	console.log($stateParams.tag);
+angular.module('ProjectIdeaApp.controllers', []).
+controller('HomeController',function($scope,ProjectIdeaService){
+
+	$scope.tags = [];
+
+	ProjectIdeaService.getPublishedTagBadges().success(function(data){
+		$scope.tags = data;
+	});
+
+
+}).
+controller('PublishedProjectIdeaController',function($scope,$stateParams,ProjectIdeaService){
+
+	$scope.activeTag = $stateParams.tag;
+	$scope.projectIdeas = [];
+
+	$scope.totalItems = 0;
+	$scope.currentPage = 1;
+	$scope.itemsPerPage = 10;
+	$scope.maxSize = 5;
+	$scope.setPage = function (pageNo) {
+		$scope.currentPage = pageNo;
+	};
+
+	$scope.pageChanged = function() {
+		console.log('Page changed to: ' + $scope.currentPage);
+		ProjectIdeaService.getPublishedProjectIdeas($scope.activeTag,$scope.currentPage,$scope.itemsPerPage).success(function(page){
+			$scope.projectIdeas = page.data;
+			$scope.totalItems = page.totlaItems;
+		});
+	};
+
+	ProjectIdeaService.getPublishedProjectIdeas($scope.activeTag,$scope.currentPage,$scope.itemsPerPage).success(function(page){
+		$scope.projectIdeas = page.data;
+		$scope.totalItems = page.totlaItems;
+	});
+}).
+controller('MyDraftedProjectIdeaController',function($scope,ProjectIdeaService){
+
+	$scope.tags = [];
+	ProjectIdeaService.getDraftedTagBadgesOfUser().success(function(data){
+		$scope.tags = data;
+	});
+}).
+controller('MyPublishedProjectIdeaController',function($scope,ProjectIdeaService){
+
+	$scope.tags = [];
+	ProjectIdeaService.getPublishedTagBadgesOfUser().success(function(data){
+		$scope.tags = data;
+	});
+}).
+controller('UserDraftedProjectIdeaController',function($scope,$stateParams,ProjectIdeaService){
+
+	$scope.activeTag = $stateParams.tag;
+	$scope.projectIdeas = [];
+
+	$scope.totalItems = 0;
+	$scope.currentPage = 1;
+	$scope.itemsPerPage = 10;
+	$scope.maxSize = 5;
+	$scope.setPage = function (pageNo) {
+		$scope.currentPage = pageNo;
+	};
+
+	$scope.pageChanged = function() {
+		console.log('Page changed to: ' + $scope.currentPage);
+		ProjectIdeaService.getDraftedProjectIdeasOfUser($scope.activeTag,$scope.currentPage,$scope.itemsPerPage).success(function(page){
+			$scope.projectIdeas = page.data;
+			$scope.totalItems = page.totlaItems;
+		});
+	};
+
+	ProjectIdeaService.getDraftedProjectIdeasOfUser($scope.activeTag,$scope.currentPage,$scope.itemsPerPage).success(function(page){
+		$scope.projectIdeas = page.data;
+		$scope.totalItems = page.totlaItems;
+	});
+})
+.controller('NewProjectIdeaController',function($scope,ProjectIdeaService,TagService){
+	$scope.newProjectidea = {
+		title: '',
+		description: '',
+		tags: []
+	};
 	
-	ProjectIdeaService.getPublishedProjectIdeas('java',1,5).success(function(page){
-		console.log(page);
+	$scope.tags = [];
+	
+	TagService.getAllTags().success(function(data){
+		$scope.tags = data;
 	});
 	
-	$scope.tags = [{
-		tag: 'java',
-		count: '100'
-	},
-	{
-		tag: 'spring',
-		count: '50'
-	},
-	{
-		tag: 'hibernate',
-		count: '25'
-	},
-	{
-		tag: 'jpa',
-		count: '26'
-	},
-	{
-		tag: 'spring security',
-		count: '23'
-	},
-	{
-		tag: 'angular js',
-		count: '20'
-	},
-	{
-		tag: 'Quartz',
-		count: '10'
-	},
-	{
-		tag: 'Activiti',
-		count: '15'
-	}
-	];
-	
-	$scope.projectIdeas = [];
-	for (var i = 0; i < 10; i++) {
-		$scope.projectIdeas.push({
-			id : i,
-			title : 'title ' + i,
-			description : "This is a hack. In my opinion, it's justifiable and relatively safe.",
-				estimatedTimeInMilliseconds : 4512459,
-				author : 'author ' + 1,
-				tags : [ 'java', 'spring', 'hibernate','spring security','jpa','angular js' ]
-		});
-	}
-	
-	
-	 $scope.totalItems = 50;
-	  $scope.currentPage = 1;
-	  $scope.itemsPerPage = 5;
-
-	  $scope.setPage = function (pageNo) {
-	    $scope.currentPage = pageNo;
-	  };
-
-	  $scope.pageChanged = function() {
-	    console.log('Page changed to: ' + $scope.currentPage);
-	  };
-
-	  $scope.maxSize = 5;
-}).controller('DraftedProjectIdeaController',function($scope){
-	$scope.tags = [{
-		tag: 'java',
-		count: '100'
-	},
-	{
-		tag: 'spring',
-		count: '50'
-	},
-	{
-		tag: 'hibernate',
-		count: '25'
-	},
-	{
-		tag: 'jpa',
-		count: '26'
-	},
-	{
-		tag: 'spring security',
-		count: '23'
-	},
-	{
-		tag: 'angular js',
-		count: '20'
-	},
-	{
-		tag: 'Quartz',
-		count: '10'
-	},
-	{
-		tag: 'Activiti',
-		count: '15'
-	}
-	];
-	
-	$scope.projectIdeas = [];
-	for (var i = 0; i < 10; i++) {
-		$scope.projectIdeas.push({
-			id : i,
-			title : 'title ' + i,
-			description : "This is a hack. In my opinion, it's justifiable and relatively safe.",
-				estimatedTimeInMilliseconds : 4512459,
-				author : 'author ' + 1,
-				tags : [ 'java', 'spring', 'hibernate','spring security','jpa','angular js' ]
-		});
-	}
-	
-	
-	 $scope.totalItems = 50;
-	  $scope.currentPage = 1;
-	  $scope.itemsPerPage = 5;
-
-	  $scope.setPage = function (pageNo) {
-	    $scope.currentPage = pageNo;
-	  };
-
-	  $scope.pageChanged = function() {
-	    console.log('Page changed to: ' + $scope.currentPage);
-	  };
-
-	  $scope.maxSize = 5;
 }).
-controller('PublishedProjectIdeaController',function($scope){
-	$scope.tags = [{
-		tag: 'java',
-		count: '100'
-	},
-	{
-		tag: 'spring',
-		count: '50'
-	},
-	{
-		tag: 'hibernate',
-		count: '25'
-	},
-	{
-		tag: 'jpa',
-		count: '26'
-	},
-	{
-		tag: 'spring security',
-		count: '23'
-	},
-	{
-		tag: 'angular js',
-		count: '20'
-	},
-	{
-		tag: 'Quartz',
-		count: '10'
-	},
-	{
-		tag: 'Activiti',
-		count: '15'
-	}
-	];
-	
+controller('UserPublishedProjectIdeaController',function($scope,$stateParams,ProjectIdeaService){
+
+	$scope.activeTag = $stateParams.tag;
 	$scope.projectIdeas = [];
-	for (var i = 0; i < 10; i++) {
-		$scope.projectIdeas.push({
-			id : i,
-			title : 'title ' + i,
-			description : "This is a hack. In my opinion, it's justifiable and relatively safe.",
-				estimatedTimeInMilliseconds : 4512459,
-				author : 'author ' + 1,
-				tags : [ 'java', 'spring', 'hibernate','spring security','jpa','angular js' ]
+
+	$scope.totalItems = 0;
+	$scope.currentPage = 1;
+	$scope.itemsPerPage = 10;
+	$scope.maxSize = 5;
+	$scope.setPage = function (pageNo) {
+		$scope.currentPage = pageNo;
+	};
+
+	$scope.pageChanged = function() {
+		console.log('Page changed to: ' + $scope.currentPage);
+		ProjectIdeaService.getPublishedProjectIdeasOfUser($scope.activeTag,$scope.currentPage,$scope.itemsPerPage).success(function(page){
+			$scope.projectIdeas = page.data;
+			$scope.totalItems = page.totlaItems;
 		});
-	}
-	
-	
-	 $scope.totalItems = 50;
-	  $scope.currentPage = 1;
-	  $scope.itemsPerPage = 5;
+	};
 
-	  $scope.setPage = function (pageNo) {
-	    $scope.currentPage = pageNo;
-	  };
-
-	  $scope.pageChanged = function() {
-	    console.log('Page changed to: ' + $scope.currentPage);
-	  };
-
-	  $scope.maxSize = 5;
+	ProjectIdeaService.getPublishedProjectIdeasOfUser($scope.activeTag,$scope.currentPage,$scope.itemsPerPage).success(function(page){
+		$scope.projectIdeas = page.data;
+		$scope.totalItems = page.totlaItems;
+	});
 })
 .controller('ProjectIdeaController',
 		function($scope, $stateParams) {
-		$scope.projectIdea = {
+	$scope.projectIdea = {
 			id : 1,
 			title : 'title ',
 			description : "This is a hack. In my opinion, it's justifiable and relatively safe."
@@ -210,7 +136,7 @@ controller('PublishedProjectIdeaController',function($scope){
 				estimatedTimeInMilliseconds : 4512459,
 				author : 'author ',
 				tags : [ 'java', 'spring', 'hibernate','spring security','jpa','angular js' ]
-		};
+	};
 
 	$scope.tab = 1;
 
@@ -231,49 +157,51 @@ controller('PublishedProjectIdeaController',function($scope){
 
 	};
 
-}).controller(
-		'LoginController',
-		function($timeout, $location, $scope, $cookies, AUTH_EVENTS,
+}).
+controller('LoginController',
+		function($timeout, $location, $scope, AUTH_EVENTS,
 				AuthService, message) {
-			$scope.loginError = message;
-			$scope.credentials = {
-					username : '',
-					password : ''
-			};
+	$scope.loginError = message;
+	$scope.credentials = {
+			username : '',
+			password : ''
+	};
 
-			$scope.login = function() {
-				var loginSuccess = function() {
-					$timeout(function() {
-						$location.path("/notes");
-					}, 100);
-				};
+	$scope.login = function() {
+		var loginSuccess = function() {
+			$timeout(function() {
+				$location.path("/notes");
+			}, 100);
+		};
 
-				var loginError = function() {
-					$scope.loginError = "Bad Credentials";
-				};
-				AuthService.login($scope.credentials).then(loginSuccess,
-						loginError);
-			};
-		}).controller('NavBarController',
-				function($scope, AuthService, Session) {
-			$scope.isLoggedIn = function() {
-				return AuthService.isAuthenticated();
-			};
+		var loginError = function() {
+			$scope.loginError = "Bad Credentials";
+		};
+		AuthService.login($scope.credentials).then(loginSuccess,
+				loginError);
+	};
+}).
+controller('NavBarController',
+		function($scope, AuthService, Session) {
+	$scope.isLoggedIn = function() {
+		return AuthService.isAuthenticated();
+	};
 
-			$scope.authenticatedUser = function() {
-				return Session.getAuthenticatedUser();
-			};
-		}).controller('ChatController',
-				function($scope, ChatService, AuthService, Session) {
-			$scope.messages = [];
-			$scope.recentMessagesOfAuthor = [];
+	$scope.authenticatedUser = function() {
+		return Session.getAuthenticatedUser();
+	};
+}).
+controller('ChatController',
+		function($scope, ChatService, AuthService, Session) {
+	$scope.messages = [];
+	$scope.recentMessagesOfAuthor = [];
 
-			ChatService.list().success(function(data) {
-				$scope.messages = data;
-			});
+	ChatService.list().success(function(data) {
+		$scope.messages = data;
+	});
 
-			ChatService.recentMessagesOfAuthor().success(function(data) {
-				$scope.recentMessagesOfAuthor = data;
-			});
+	ChatService.recentMessagesOfAuthor().success(function(data) {
+		$scope.recentMessagesOfAuthor = data;
+	});
 
-		});
+});

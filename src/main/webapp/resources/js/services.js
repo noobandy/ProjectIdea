@@ -12,7 +12,7 @@ value('version', '0.1').service('ChatService',function($http){
 		return $http.get('loadChat/chatLogs');
 
 	};
-	
+
 	this.recentMessagesOfAuthor = function(){
 		return $http.get('loadChat/recentMessagesOfAuthor');
 	};
@@ -20,63 +20,77 @@ value('version', '0.1').service('ChatService',function($http){
 }).service('ProjectIdeaService',function($http){
 	this.getPublishedProjectIdeas = function(tag,pageNumber,itemsPerPage){
 		var page = {
-			tag: tag,
-			page: pageNumber,
-			status: 'PUBLISHED',
-			itemsPerPage: itemsPerPage
+				tag: tag,
+				page: pageNumber,
+				itemsPerPage: itemsPerPage
 		};
-		
+
 		return $http.get('projectIdea/publishedProjectIdeas',{params: page});
 	};
-	
-this.getDraftedProjectIdeasOfUser = function(tag,start,noOfRecords){
-		
+
+	this.getDraftedProjectIdeasOfUser = function(tag,pageNumber,itemsPerPage){
+		var page = {
+				tag: tag,
+				page: pageNumber,
+				itemsPerPage: itemsPerPage
+		};
+		return $http.get('projectIdea/draftedProjectIdeasOfUser',{params: page});
 	};
-	
-this.getPublishedProjectIdeasOfUser = function(tag,start,noOfRecords){
-		
+
+	this.getPublishedProjectIdeasOfUser = function(tag,pageNumber,itemsPerPage){
+		var page = {
+				tag: tag,
+				page: pageNumber,
+				itemsPerPage: itemsPerPage
+		};
+		return $http.get('projectIdea/publishedProjectIdeasOfUser',{params: page});
 	};
-	
-this.getProjectIdea = function(id){
-		
+
+	this.getProjectIdea = function(id){
+		return $http.get('projectIdea/'+id);
 	};	
-	
-this.getPublishedTagBadges = function(){
-	
-};
 
-this.getPublishedTagBadgesOfUser = function(){
-	
-};
+	this.getPublishedTagBadges = function(){
+		return $http.get('projectIdea/publishedProjectIdeaTagCount');
+	};
 
-this.getDraftedTagBadgesOfUser = function(){
-	
-};
+	this.getPublishedTagBadgesOfUser = function(){
+		return $http.get('projectIdea/publishedProjectIdeaTagCountOfUser');
+	};
 
-this.draftProjectIdea = function(projectIdea){
-	
-};
+	this.getDraftedTagBadgesOfUser = function(){
+		return $http.get('projectIdea/draftedProjectIdeaTagCountOfUser');
+	};
 
-this.publishProjectIdea = function(id){
-	
-};
+	this.draftProjectIdea = function(projectIdea){
+		return $http.post('projectIdea/new',projectIdea);
+	};
+
+	this.publishProjectIdea = function(id){
+
+	};
 
 }).service('ProjectIdeaReviewService',function($http){
-	
-	this.getProjectIdeaReviews = function(projectIdeaId,start,noOfRecords){
-		
+
+	this.getProjectIdeaReviews = function(projectIdeaId,pageNumber,itemsPerPage){
+
 	};
-	
+
 	this.addProjectIdeaReview = function(projectIdeaReview){
-		
+
 	};
-	
+
 	this.deleteProjectIdeaReview = function(projectIdeaReviewId){
-		
+
 	};
-	
+
 }).
-service('Session', function () {
+service('TagService',function($http){
+	this.getAllTags = function(){
+		return $http.get('tag/tags');
+	};
+})
+.service('Session', function () {
 
 	this.create = function (username) {
 		sessionStorage.setItem('username',username);

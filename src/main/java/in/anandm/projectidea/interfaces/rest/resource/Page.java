@@ -6,7 +6,7 @@ package in.anandm.projectidea.interfaces.rest.resource;
 import in.anandm.projectidea.domain.model.ProjectIdeaStatus;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author anandm
@@ -34,7 +34,7 @@ public class Page<T> implements Serializable {
 
 	private Integer totlaItems;
 
-	private ArrayList<T> data;
+	private List<T> data;
 
 	/**
 	 * @param tag
@@ -88,11 +88,11 @@ public class Page<T> implements Serializable {
 		this.totlaItems = totlaItems;
 	}
 
-	public ArrayList<T> getData() {
+	public List<T> getData() {
 		return data;
 	}
 
-	public void setData(ArrayList<T> data) {
+	public void setData(List<T> data) {
 		this.data = data;
 	}
 
