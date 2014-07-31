@@ -8,6 +8,7 @@ import in.anandm.projectidea.domain.model.AuthorityConstants;
 import in.anandm.projectidea.domain.repository.IAuthorityRepository;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.googlecode.genericdao.search.Filter;
 import com.googlecode.genericdao.search.Search;
@@ -27,6 +28,8 @@ public class AuthorityRepository extends BaseRepository<Authority, Long>
 	 * in.anandm.projectidea.domain.repository.IAuthorityRepository#addAuthority
 	 * (in.anandm.projectidea.domain.model.Authority)
 	 */
+	
+	@Transactional
 	@Override
 	public void saveAuthority(Authority authority) {
 		save(authority);
@@ -34,6 +37,7 @@ public class AuthorityRepository extends BaseRepository<Authority, Long>
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public Authority findAuthorityByName(AuthorityConstants authorityName) {
 
 		Search search = new Search(Authority.class);

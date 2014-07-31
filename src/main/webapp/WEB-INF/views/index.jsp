@@ -15,9 +15,8 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/chat.css"></link>
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/select.min.css"></link>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/select2.css"></link>	
+	href="${pageContext.request.contextPath}/resources/css/select2.css"></link>
+
 <style type="text/css">
 /* Forms */
 .ng-invalid.ng-dirty {
@@ -31,6 +30,15 @@
 body {
 	min-height: 2000px;
 	padding-top: 70px;
+}
+
+.select2>.select2-choice.ui-select-match {
+	/* Because of the inclusion of Bootstrap */
+	height: 29px;
+}
+
+.selectize-control>.selectize-dropdown {
+	top: 36px;
 }
 </style>
 <title><spring:message code="Project.title" /></title>
@@ -78,7 +86,10 @@ body {
 		src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/angular.min.js"></script>
-
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/js/select2.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/js/select2.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/js/angular-ui-router.js"></script>
 
@@ -92,10 +103,7 @@ body {
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/js/xeditable.min.js"></script>
 
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/js/select.min.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/js/select2.min.js"></script>	
+
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/js/app.js"></script>
 	<script type="text/javascript"

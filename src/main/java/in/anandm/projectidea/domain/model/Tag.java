@@ -10,18 +10,14 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.SqlResultSetMapping;
 
-
 /**
  * @author Anand
- *
+ * 
  */
 @Entity
-@SqlResultSetMapping(name="TagCount",
-columns={
-		@ColumnResult(name="tag"),
-		@ColumnResult(name="count"),
-})
-public class Tag implements Serializable{
+@SqlResultSetMapping(name = "TagCount", columns = {
+		@ColumnResult(name = "tag"), @ColumnResult(name = "count"), })
+public class Tag implements Serializable {
 
 	/**
 	 * 
@@ -34,13 +30,12 @@ public class Tag implements Serializable{
 		super();
 	}
 
-	public Tag(String tag) {
-		super();
-		this.tag = tag;
+	public static final Tag valueOf(String tag) {
+		Tag tagObj = new Tag();
+		tagObj.tag = tag;
+		return tagObj;
 	}
 
-	
-	
 	public String getTag() {
 		return tag;
 	}

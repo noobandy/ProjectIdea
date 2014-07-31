@@ -62,8 +62,8 @@ value('version', '0.1').service('ChatService',function($http){
 		return $http.get('projectIdea/draftedProjectIdeaTagCountOfUser');
 	};
 
-	this.draftProjectIdea = function(projectIdea){
-		return $http.post('projectIdea/new',projectIdea);
+	this.draftProjectIdea = function(projectIdeaDraft){
+		return $http.post('projectIdea/new',projectIdeaDraft);
 	};
 
 	this.publishProjectIdea = function(id){

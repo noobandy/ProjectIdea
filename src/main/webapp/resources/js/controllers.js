@@ -18,26 +18,21 @@ controller('PublishedProjectIdeaController',function($scope,$stateParams,Project
 	$scope.activeTag = $stateParams.tag;
 	$scope.projectIdeas = [];
 
-	$scope.totalItems = 0;
-	$scope.currentPage = 1;
 	$scope.itemsPerPage = 10;
+	$scope.currentPage = 1;
 	$scope.maxSize = 5;
-	$scope.setPage = function (pageNo) {
-		$scope.currentPage = pageNo;
+	$scope.totalItems = 11;
+	
+	$scope.pageChanged = function(){
+		console.log($scope.currentPage);
 	};
 
-	$scope.pageChanged = function() {
-		console.log('Page changed to: ' + $scope.currentPage);
-		ProjectIdeaService.getPublishedProjectIdeas($scope.activeTag,$scope.currentPage,$scope.itemsPerPage).success(function(page){
-			$scope.projectIdeas = page.data;
-			$scope.totalItems = page.totlaItems;
-		});
-	};
 
 	ProjectIdeaService.getPublishedProjectIdeas($scope.activeTag,$scope.currentPage,$scope.itemsPerPage).success(function(page){
 		$scope.projectIdeas = page.data;
 		$scope.totalItems = page.totlaItems;
 	});
+	
 }).
 controller('MyDraftedProjectIdeaController',function($scope,ProjectIdeaService){
 
@@ -56,15 +51,14 @@ controller('MyPublishedProjectIdeaController',function($scope,ProjectIdeaService
 controller('UserDraftedProjectIdeaController',function($scope,$stateParams,ProjectIdeaService){
 
 	$scope.activeTag = $stateParams.tag;
+
 	$scope.projectIdeas = [];
 
 	$scope.totalItems = 0;
 	$scope.currentPage = 1;
 	$scope.itemsPerPage = 10;
 	$scope.maxSize = 5;
-	$scope.setPage = function (pageNo) {
-		$scope.currentPage = pageNo;
-	};
+	$scope.numPages;
 
 	$scope.pageChanged = function() {
 		console.log('Page changed to: ' + $scope.currentPage);
@@ -80,18 +74,40 @@ controller('UserDraftedProjectIdeaController',function($scope,$stateParams,Proje
 	});
 })
 .controller('NewProjectIdeaController',function($scope,ProjectIdeaService,TagService){
-	$scope.newProjectidea = {
-		title: '',
-		description: '',
-		tags: []
+	$scope.alerts = [];
+
+	$scope.closeAlert = function(index) {
+		$scope.alerts.splice(index, 1);
 	};
-	
-	$scope.tags = [];
-	
+
+	$scope.newProjectidea = {
+			title: '',
+			description: '',
+			tags: []
+	};
+
+	$scope.select2Options = {
+			'multiple': true,
+			'simple_tags': true,
+			'tags': []   // Can be empty list.
+	};
+
 	TagService.getAllTags().success(function(data){
-		$scope.tags = data;
+		angular.forEach(data,function(key,value){
+			$scope.select2Options.tags.push(key.tag);
+		});
 	});
-	
+
+
+	$scope.saveDraft = function(projectIdeaDraft){
+		ProjectIdeaService.draftProjectIdea(projectIdeaDraft).success(function(data){
+			$scope.newProjectidea = data;
+			$scope.alerts.push({ type: 'success', msg: 'Draft Saved successfully' });
+		}).error(function(data){
+			$scope.alerts.push({ type: 'danger', msg: 'Failed to Save draft' });
+		});
+	};
+
 }).
 controller('UserPublishedProjectIdeaController',function($scope,$stateParams,ProjectIdeaService){
 

@@ -1,35 +1,28 @@
-<form name="newProjectideaForm" role="form" novalidate>
+<form name="newProjectideaForm" role="form"
+	ng-submit="newProjectideaForm.$valid && saveDraft(newProjectidea)"
+	novalidate>
+	<alert ng-repeat="alert in alerts" type="{{alert.type}}"
+		close="closeAlert($index)">{{alert.msg}}</alert>
 	<div class="form-group">
 		<label for="title">Title</label> <input
 			ng-model="newProjectidea.title" type="text" class="form-control"
-			placeholder="Title">
+			placeholder="Title" required>
 	</div>
 	<div class="form-group">
 		<label for="description">Description</label>
 		<textarea rows="3" cols="5" type="text" class="form-control"
-			ng-model="newProjectidea.description" placeholder="Brief Description" />
+			ng-model="newProjectidea.description" placeholder="Brief Description"
+			required />
 	</div>
 	<div class="form-group">
-		<label for="description">Tags</label> <select id="tagSelect"  multiple="multiple" class="form-control">
-			<option ng-repeat="tag in tags" ng-selected="newProjectidea.tags.selected"  value="tag.tag">
-			{{tag.tag}}
-			</option>
-		</select>
-	</div>
+		<label for="tag">Tags</label>
 
-	<div class="form-group">
-		<label for="exampleInputFile">File input</label> <input type="file"
-			id="exampleInputFile">
-		<p class="help-block">Example block-level help text here.</p>
+		<div class="form-controle">
+			<input type="hidden" ui-select2="select2Options" placeholder="Tags"
+				ng-model="newProjectidea.tags" style="width: 100%;" required>
+
+		</div>
+
 	</div>
-	<div class="checkbox">
-		<label> <input type="checkbox"> Check me out
-		</label>
-	</div>
-	<button type="submit" class="btn btn-default">Save</button>
+	<button class="btn btn-success">Save</button>
 </form>
-<script type="text/javascript">
-$(document).ready(function(){
-	$('#tagSelect').select2();
-})
-</script>

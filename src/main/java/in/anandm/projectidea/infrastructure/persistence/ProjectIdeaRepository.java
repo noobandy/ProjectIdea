@@ -3,35 +3,44 @@
  */
 package in.anandm.projectidea.infrastructure.persistence;
 
-import org.springframework.stereotype.Repository;
-
 import in.anandm.projectidea.domain.model.ProjectIdea;
 import in.anandm.projectidea.domain.repository.IProjectIdeaRepository;
 
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * @author Anand
- *
+ * 
  */
 @Repository
-public class ProjectIdeaRepository extends BaseRepository<ProjectIdea, Long> implements
-		IProjectIdeaRepository {
+public class ProjectIdeaRepository extends BaseRepository<ProjectIdea, Long>
+		implements IProjectIdeaRepository {
 
-	/* (non-Javadoc)
-	 * @see in.anandm.projectidea.domain.repository.IProjectIdeaRepository#saveProjectIdea(in.anandm.projectidea.domain.model.ProjectIdea)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see in.anandm.projectidea.domain.repository.IProjectIdeaRepository#
+	 * saveProjectIdea(in.anandm.projectidea.domain.model.ProjectIdea)
 	 */
 	@Override
+	@Transactional
 	public void saveProjectIdea(ProjectIdea projectIdea) {
-		// TODO Auto-generated method stub
+		
+		save(projectIdea);
 
 	}
 
-	/* (non-Javadoc)
-	 * @see in.anandm.projectidea.domain.repository.IProjectIdeaRepository#findProjectIdeaById(java.lang.Long)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see in.anandm.projectidea.domain.repository.IProjectIdeaRepository#
+	 * findProjectIdeaById(java.lang.Long)
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public ProjectIdea findProjectIdeaById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return find(id);
 	}
 
 }

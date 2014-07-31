@@ -7,11 +7,12 @@ import in.anandm.projectidea.domain.model.ProjectIdea;
 
 /**
  * @author anandm
- *
+ * 
  */
 public interface IProjectIdeaRepository {
 
-	void saveProjectIdea(ProjectIdea projectIdea);
 	
+	void saveProjectIdea(ProjectIdea projectIdea);
+
 	ProjectIdea findProjectIdeaById(Long id);
 }

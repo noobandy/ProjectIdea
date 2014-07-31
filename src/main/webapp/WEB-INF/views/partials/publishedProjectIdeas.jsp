@@ -5,8 +5,6 @@
 		<p class="list-group-item-text">{{projectIdea.description}}</p>
 	</a>
 </div>
-<pagination ng-if="totalItems > 0" total-items=totalItems
-	ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize"
-	class="pagination-sm" boundary-links="true" rotate="false"
-	num-pages="numPages"></pagination>
+<pagination ng-if="totalItems > 0" ng-model="currentPage" total-items="totalItems" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"
+	num-pages="numPages" ng-change="pageChanged()"></pagination>
 <pre ng-if="totalItems > 0">Page: {{currentPage}} / {{numPages}}</pre>

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -20,7 +21,7 @@ import javax.persistence.TemporalType;
 
 /**
  * @author Anand
- *
+ * 
  */
 @Entity
 public class ProjectIdea {
@@ -43,7 +44,7 @@ public class ProjectIdea {
 	@Enumerated(EnumType.STRING)
 	private ProjectIdeaStatus status;
 
-	@ManyToMany
+	@ManyToMany(cascade = { CascadeType.MERGE })
 	private Set<Tag> tags = new HashSet<Tag>();
 
 	ProjectIdea() {
@@ -86,4 +87,9 @@ public class ProjectIdea {
 		status = ProjectIdeaStatus.PUBLISHED;
 		lastModified = new Date();
 	}
+
+	public Long getId() {
+		return id;
+	}
+
 }

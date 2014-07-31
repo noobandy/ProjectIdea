@@ -3,10 +3,11 @@
  */
 package in.anandm.projectidea.infrastructure.persistence;
 
-import org.springframework.stereotype.Repository;
-
 import in.anandm.projectidea.domain.model.User;
 import in.anandm.projectidea.domain.repository.IUserRepository;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.googlecode.genericdao.search.Filter;
 import com.googlecode.genericdao.search.Search;
@@ -22,6 +23,7 @@ public class UserRepository extends BaseRepository<User, Long> implements IUserR
 	 * @see in.anandm.projectidea.domain.repository.IUserRepository#saveUser(in.anandm.projectidea.domain.model.User)
 	 */
 	@Override
+	@Transactional
 	public void saveUser(User user) {
 		save(user);
 
@@ -31,6 +33,7 @@ public class UserRepository extends BaseRepository<User, Long> implements IUserR
 	 * @see in.anandm.projectidea.domain.repository.IUserRepository#findUserByUserName(java.lang.String)
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public User findUserByUserName(String username) {
 		Search search = new Search(User.class);
 		search.addFilter(Filter.equal("username", username));

@@ -69,13 +69,13 @@ public class RestResourceHelper extends BaseRepository<ProjectIdea, Long> {
 
 		search.addFilter(finalFilter);
 
+		page.setTotlaItems(count(search));
+
 		int start = (page.getPage() - 1) * page.getItemsPerPage();
 
 		search.setFirstResult(start);
 		search.setMaxResults(page.getItemsPerPage());
-
-		page.setTotlaItems(count(search));
-
+		
 		search.setResultMode(Search.RESULT_ARRAY);
 
 		List<ProjectIdeaSummary> ideaSummaries = new ArrayList<ProjectIdeaSummary>();

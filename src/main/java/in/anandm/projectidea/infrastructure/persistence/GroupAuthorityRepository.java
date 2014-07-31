@@ -3,10 +3,11 @@
  */
 package in.anandm.projectidea.infrastructure.persistence;
 
-import org.springframework.stereotype.Repository;
-
 import in.anandm.projectidea.domain.model.GroupAuthority;
 import in.anandm.projectidea.domain.repository.IGroupAuthorityRepository;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.googlecode.genericdao.search.Filter;
 import com.googlecode.genericdao.search.Search;
@@ -21,7 +22,9 @@ public class GroupAuthorityRepository extends BaseRepository<GroupAuthority, Lon
 	/* (non-Javadoc)
 	 * @see in.anandm.projectidea.domain.repository.IGroupAuthorityRepository#saveGroupAuthority(in.anandm.projectidea.domain.model.GroupAuthority)
 	 */
+	
 	@Override
+	@Transactional
 	public void saveGroupAuthority(GroupAuthority groupAuthority) {
 		save(groupAuthority);
 
@@ -31,6 +34,7 @@ public class GroupAuthorityRepository extends BaseRepository<GroupAuthority, Lon
 	 * @see in.anandm.projectidea.domain.repository.IGroupAuthorityRepository#removeGroupAuthority(java.lang.Long, java.lang.Long)
 	 */
 	@Override
+	@Transactional
 	public void removeGroupAuthority(Long groupId, Long authorityId) {
 		Search search = new Search(GroupAuthority.class);
 		Filter goupFilter = Filter.equal("groupId", groupId);
