@@ -22,7 +22,7 @@ controller('PublishedProjectIdeaController',function($scope,$stateParams,Project
 	$scope.currentPage = 1;
 	$scope.maxSize = 5;
 	$scope.totalItems = 11;
-	
+
 	$scope.pageChanged = function(){
 		console.log($scope.currentPage);
 	};
@@ -32,7 +32,7 @@ controller('PublishedProjectIdeaController',function($scope,$stateParams,Project
 		$scope.projectIdeas = page.data;
 		$scope.totalItems = page.totlaItems;
 	});
-	
+
 }).
 controller('MyDraftedProjectIdeaController',function($scope,ProjectIdeaService){
 
@@ -198,7 +198,7 @@ controller('LoginController',
 	};
 }).
 controller('NavBarController',
-		function($scope, AuthService, Session) {
+		function($scope, AuthService, Session,$http,$modal) {
 	$scope.isLoggedIn = function() {
 		return AuthService.isAuthenticated();
 	};
@@ -206,6 +206,67 @@ controller('NavBarController',
 	$scope.authenticatedUser = function() {
 		return Session.getAuthenticatedUser();
 	};
+
+	$scope.userProfile ={
+			username:'',
+			completeName:'',
+			profilePicPath:'',
+			tagCounts:[]
+	};
+
+	$scope.formInsideTab= {formData:{}};
+
+
+	$scope.alerts = [];
+
+	$scope.closeAlert = function(index) {
+		$scope.alerts.splice(index, 1);
+	};
+
+	$scope.clearUpdatePasswordCommand = function(){
+		$scope.formInsideTab.formData.updatePasswordCommand = {
+				oldPassword:'',
+				newPassword:'',
+				confirmPassword:''
+		};
+	};
+
+	$scope.updatePassword = function(){
+		$http.put('user/'+Session.getAuthenticatedUser()+'/updatePassword',$scope.formInsideTab.formData.updatePasswordCommand).success(function(data){
+			$scope.clearUpdatePasswordCommand();
+			$scope.alerts.push({ type: 'success', msg: 'Password updated' });
+		}).error(function(){
+			$scope.clearUpdatePasswordCommand();
+			$scope.alerts.push({ type: 'danger', msg: 'Failed to update password' });
+		});
+	};
+
+	$http.get('user/'+Session.getAuthenticatedUser()).success(function(data){
+		$scope.userProfile = data;
+	});
+
+	var UserProfileModalController = function($scope,$modalInstance,userProfile){
+		$scope.userProfile = userProfile;
+
+		$scope.cancel = function () {
+			$modalInstance.dismiss('cancel');
+		};
+	};
+
+	$scope.showProfile = function(){
+
+		var modalInstance = $modal.open({
+			templateUrl: 'partials/userProfile',
+			controller: UserProfileModalController,
+			resolve: {
+				userProfile: function () {
+					return $scope.userProfile;
+				}
+			}
+		});
+	};
+
+
 }).
 controller('ChatController',
 		function($scope, ChatService, AuthService, Session) {

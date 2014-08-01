@@ -7,7 +7,7 @@ import in.anandm.projectidea.domain.model.ProjectIdea;
 import in.anandm.projectidea.domain.model.ProjectIdeaStatus;
 import in.anandm.projectidea.domain.model.User;
 import in.anandm.projectidea.domain.repository.IUserRepository;
-import in.anandm.projectidea.infrastructure.persistence.BaseRepository;
+import in.anandm.projectidea.infrastructure.persistence.jpa.BaseRepository;
 import in.anandm.projectidea.interfaces.rest.resource.Page;
 import in.anandm.projectidea.interfaces.rest.resource.ProjectIdeaSummary;
 import in.anandm.projectidea.interfaces.rest.resource.TagCount;

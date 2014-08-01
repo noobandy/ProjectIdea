@@ -21,7 +21,7 @@ public class AuthorityRepositoryTest extends BaseTest {
 	private IAuthorityRepository fixture; 
 	
 	/**
-	 * Test method for {@link in.anandm.projectidea.infrastructure.persistence.AuthorityRepository#saveAuthority(in.anandm.projectidea.domain.model.Authority)}.
+	 * Test method for {@link in.anandm.projectidea.infrastructure.persistence.jpa.AuthorityRepository#saveAuthority(in.anandm.projectidea.domain.model.Authority)}.
 	 */
 	@Test
 	public void testAuthority() {

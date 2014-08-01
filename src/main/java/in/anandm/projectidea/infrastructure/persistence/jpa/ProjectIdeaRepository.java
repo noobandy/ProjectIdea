@@ -1,7 +1,7 @@
 /**
  * 
  */
-package in.anandm.projectidea.infrastructure.persistence;
+package in.anandm.projectidea.infrastructure.persistence.jpa;
 
 import in.anandm.projectidea.domain.model.ProjectIdea;
 import in.anandm.projectidea.domain.repository.IProjectIdeaRepository;

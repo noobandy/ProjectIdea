@@ -20,7 +20,7 @@ public class GroupRepositoryTest extends BaseTest {
 	private IGroupRepository fixture;
 	
 	/**
-	 * Test method for {@link in.anandm.projectidea.infrastructure.persistence.GroupRepository#saveGroup(in.anandm.projectidea.domain.model.Group)}.
+	 * Test method for {@link in.anandm.projectidea.infrastructure.persistence.jpa.GroupRepository#saveGroup(in.anandm.projectidea.domain.model.Group)}.
 	 */
 	@Test
 	public void testSaveGroup() {

@@ -1,10 +1,12 @@
 /**
  * 
  */
-package in.anandm.projectidea.infrastructure.persistence;
+package in.anandm.projectidea.infrastructure.persistence.jpa;
 
 import in.anandm.projectidea.domain.model.User;
 import in.anandm.projectidea.domain.repository.IUserRepository;
+
+import java.io.InputStream;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +41,12 @@ public class UserRepository extends BaseRepository<User, Long> implements IUserR
 		search.addFilter(Filter.equal("username", username));
 		
 		return searchUnique(search);
+	}
+
+	@Override
+	public InputStream getProfilePicOfUser(String username) {
+		
+		return null;
 	}
 
 }

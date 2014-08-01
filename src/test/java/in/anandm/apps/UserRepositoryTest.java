@@ -20,7 +20,7 @@ public class UserRepositoryTest extends BaseTest{
 	private IUserRepository fixture;
 	
 	/**
-	 * Test method for {@link in.anandm.projectidea.infrastructure.persistence.UserRepository#saveUser(in.anandm.projectidea.domain.model.User)}.
+	 * Test method for {@link in.anandm.projectidea.infrastructure.persistence.jpa.UserRepository#saveUser(in.anandm.projectidea.domain.model.User)}.
 	 */
 	@Test
 	public void testSaveUser() {

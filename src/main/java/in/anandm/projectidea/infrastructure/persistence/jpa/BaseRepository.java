@@ -1,7 +1,7 @@
 /**
  * 
  */
-package in.anandm.projectidea.infrastructure.persistence;
+package in.anandm.projectidea.infrastructure.persistence.jpa;
 
 import java.io.Serializable;
 

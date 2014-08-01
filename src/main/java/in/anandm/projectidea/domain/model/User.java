@@ -5,6 +5,7 @@ package in.anandm.projectidea.domain.model;
 
 import java.util.Date;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,23 +14,26 @@ import javax.persistence.Table;
 
 /**
  * @author Anand
- *
+ * 
  */
 @Entity
-@Table(name="act_user")
+@Table(name = "act_user")
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	private String completeName;
 	private String emailId;
 	private String username;
 	private String password;
 	private boolean enabled;
 	private Date credentialExpiredAt;
-	
+
+	@Embedded
+	private UserProfilePic profilePic;
+
 	User() {
 		super();
 
@@ -74,14 +78,34 @@ public class User {
 		}
 	}
 
+	//getters
 	public Long getId() {
 		return id;
 	}
-
-	
 
 	public String getPassword() {
 		return password;
 	}
 
+	public String getCompleteName() {
+		return completeName;
+	}
+
+	public String getEmailId() {
+		return emailId;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public Date getCredentialExpiredAt() {
+		return credentialExpiredAt;
+	}
+
+	public UserProfilePic getProfilePic() {
+		return profilePic;
+	}
+
+	
 }

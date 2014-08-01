@@ -67,15 +67,22 @@ body {
 								code="ProjectIdea.myIdeas" /><i class="fa fa-paper-plane-o"></i>
 					</a></li>
 				</ul>
-				<ul class="nav navbar-nav navbar-right">
-					<li ui-sref-active="active" ng-if="isLoggedIn()"><a
-						ui-sref="chat"> <i class="fa fa-comments-o"></i>
+				<ul ng-if="isLoggedIn()" class="nav navbar-nav navbar-right">
+					<li ui-sref-active="active"><a ui-sref="chat"> <i
+							class="fa fa-comments-o"></i>
 					</a></li>
 
-					<li ui-sref-active="active" ng-if="isLoggedIn()"><a
-						ui-sref="logout"> {{authenticatedUser()}}&nbsp;<i
-							class="fa fa-sign-out"></i>
-					</a></li>
+					<li class="dropdown"><a href="javascript();"
+						class="dropdown-toggle" data-toggle="dropdown">{{authenticatedUser()}}&nbsp;<i
+							class="fa fa-cog"></i> <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#" ng-click="showProfile()"> <i class="fa fa-user"></i>Profile
+							</a></li>
+
+							<li ui-sref-active="active"><a ui-sref="logout"> <i
+									class="fa fa-sign-out"></i>Log Out
+							</a></li>
+						</ul></li>
 				</ul>
 			</div>
 			<!--/.nav-collapse -->
@@ -85,16 +92,17 @@ body {
 	<script
 		src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
 	<script
+		src="${pageContext.request.contextPath}/resources/js/angular-file-upload-shim.min.js"></script>
+	<script
 		src="${pageContext.request.contextPath}/resources/js/angular.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/angular-file-upload.min.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/js/select2.min.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/js/select2.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/js/angular-ui-router.js"></script>
-
-	<script
-		src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 
 	<script
 		src='${pageContext.request.contextPath}/resources/js/ng-table.min.js'></script>
@@ -116,11 +124,5 @@ body {
 		src="${pageContext.request.contextPath}/resources/js/filters.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/js/services.js"></script>
-
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$('a').tooltip();
-		});
-	</script>
 </body>
 </html>
