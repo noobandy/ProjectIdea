@@ -17,7 +17,7 @@
 	<div class="form-group">
 		<label for="tag">Tags</label>
 
-		<div class="form-controle">
+		<div class="form-control">
 			<input type="hidden" ui-select2="select2Options" placeholder="Tags"
 				ng-model="newProjectidea.tags" style="width: 100%;" required>
 

@@ -1,5 +1,5 @@
 <div class="row">
-	<tabset justified="true"> <tab
+	<tabset justified="true" type="pills"> <tab
 		ui-sref="myProjectIdeas.drafted.projectIdeas">
 		<tab-heading>
 		Saved Draft <i class="fa fa-folder"></i>

@@ -55,8 +55,10 @@ public class ProjectIdeaController {
 			@RequestParam(value = "page") Integer pageNumber,
 			@RequestParam(value = "itemsPerPage") Integer itemsPerPage) {
 
-		Page<ProjectIdeaSummary> page = new Page<ProjectIdeaSummary>(tag,
+		Page<ProjectIdeaSummary> page = new Page<ProjectIdeaSummary>(
 				pageNumber, itemsPerPage);
+
+		page.setTag(tag);
 
 		page.setStatus(ProjectIdeaStatus.PUBLISHED);
 
@@ -71,9 +73,10 @@ public class ProjectIdeaController {
 			@RequestParam(value = "page") Integer pageNumber,
 			@RequestParam(value = "itemsPerPage") Integer itemsPerPage) {
 
-		Page<ProjectIdeaSummary> page = new Page<ProjectIdeaSummary>(tag,
+		Page<ProjectIdeaSummary> page = new Page<ProjectIdeaSummary>(
 				pageNumber, itemsPerPage);
 
+		page.setTag(tag);
 		UserDetails userDetails = (UserDetails) SecurityContextHolder
 				.getContext().getAuthentication().getPrincipal();
 
@@ -91,8 +94,10 @@ public class ProjectIdeaController {
 			@RequestParam(value = "tag", required = false) String tag,
 			@RequestParam(value = "page") Integer pageNumber,
 			@RequestParam(value = "itemsPerPage") Integer itemsPerPage) {
-		Page<ProjectIdeaSummary> page = new Page<ProjectIdeaSummary>(tag,
+		Page<ProjectIdeaSummary> page = new Page<ProjectIdeaSummary>(
 				pageNumber, itemsPerPage);
+
+		page.setTag(tag);
 
 		UserDetails userDetails = (UserDetails) SecurityContextHolder
 				.getContext().getAuthentication().getPrincipal();
@@ -124,15 +129,6 @@ public class ProjectIdeaController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
 	ResponseEntity<ProjectIdea> updateProjectIdea(
-			@PathVariable(value = "id") Long id,
-			@RequestBody ProjectIdea projectIdea) {
-		projectIdeaRepository.saveProjectIdea(projectIdea);
-		return new ResponseEntity<ProjectIdea>(projectIdea, HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/{id}/document", method = RequestMethod.PUT)
-	public @ResponseBody
-	ResponseEntity<ProjectIdea> updateProjectIdeaDocument(
 			@PathVariable(value = "id") Long id,
 			@RequestBody ProjectIdea projectIdea) {
 		projectIdeaRepository.saveProjectIdea(projectIdea);

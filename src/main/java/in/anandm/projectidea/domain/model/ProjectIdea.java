@@ -11,6 +11,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,7 +45,7 @@ public class ProjectIdea {
 	@Enumerated(EnumType.STRING)
 	private ProjectIdeaStatus status;
 
-	@ManyToMany(cascade = { CascadeType.MERGE })
+	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
 	private Set<Tag> tags = new HashSet<Tag>();
 
 	ProjectIdea() {
@@ -88,8 +89,41 @@ public class ProjectIdea {
 		lastModified = new Date();
 	}
 
+	// getters
 	public Long getId() {
 		return id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public Long getEstimatedTimeInMilliseconds() {
+		return estimatedTimeInMilliseconds;
+	}
+
+	public String getEstimatedTimeInWords() {
+		return estimatedTimeInWords;
+	}
+
+	public User getAuthor() {
+		return author;
+	}
+
+	public Date getLastModified() {
+		return lastModified;
+	}
+
+	public ProjectIdeaStatus getStatus() {
+		return status;
+	}
+
+	public Set<Tag> getTags() {
+		return tags;
 	}
 
 }

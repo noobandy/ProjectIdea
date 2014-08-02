@@ -45,7 +45,9 @@
 			<tabset justified="true"> <tab heading="Contact">Contact
 			Details</tab> <tab> <tab-heading> <i
 				class="fa fa-security"></i>Security</tab-heading>
-			<div ng-form="formInsideTab.formData">
+			<div ng-form name="updatePasswordForm">
+
+
 				<alert ng-repeat="alert in alerts" type="{{alert.type}}"
 					close="closeAlert($index)">{{alert.msg}}</alert>
 				<div class="form-group">
@@ -63,13 +65,14 @@
 						placeholder="confirm password" required>
 
 				</div>
-				<button ng-click="updatePassword()"
-					class="btn btn-primary">Save</button>
-				<button type="button" ng-click="clearUpdatePasswordCommand()"
-					class="btn btn-warning">Clear</button>
+				<div class="form-group">
+					<button type="button" ng-click="updatePasswordForm.$valid && updatePassword()"
+						class="btn btn-primary">Save</button>
+					<button ng-if="updatePasswordForm.$dirty" type="button" ng-click="clearUpdatePasswordCommand()"
+						class="btn btn-warning">Clear</button>
+				</div>
 			</div>
 			</tab> </tabset>
-
 
 		</div>
 

@@ -28,8 +28,26 @@
 }
 
 body {
-	min-height: 2000px;
 	padding-top: 70px;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
 }
 
 .select2>.select2-choice.ui-select-match {
@@ -76,7 +94,8 @@ body {
 						class="dropdown-toggle" data-toggle="dropdown">{{authenticatedUser()}}&nbsp;<i
 							class="fa fa-cog"></i> <span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="#" ng-click="showProfile()"> <i class="fa fa-user"></i>Profile
+							<li><a href="#" ng-click="showProfile()"> <i
+									class="fa fa-user"></i>Profile
 							</a></li>
 
 							<li ui-sref-active="active"><a ui-sref="logout"> <i
@@ -89,6 +108,12 @@ body {
 		</div>
 	</div>
 	<div class="container-fluid" ui-view></div>
+	<div class="footer">
+		<div class="container">
+			<p class="text-muted">&copy;<a href="//anandm.in" target="_blank">Anand Mohan</a></p>
+		</div>
+	</div>
+
 	<script
 		src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
 	<script

@@ -37,13 +37,11 @@ public class Page<T> implements Serializable {
 	private List<T> data;
 
 	/**
-	 * @param tag
 	 * @param page
 	 * @param itemsPerPage
 	 */
-	public Page(String tag, Integer page, Integer itemsPerPage) {
+	public Page(Integer page, Integer itemsPerPage) {
 		super();
-		this.tag = tag;
 		this.page = page;
 		this.itemsPerPage = itemsPerPage;
 	}

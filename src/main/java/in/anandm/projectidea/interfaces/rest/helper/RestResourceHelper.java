@@ -75,7 +75,7 @@ public class RestResourceHelper extends BaseRepository<ProjectIdea, Long> {
 
 		search.setFirstResult(start);
 		search.setMaxResults(page.getItemsPerPage());
-		
+
 		search.setResultMode(Search.RESULT_ARRAY);
 
 		List<ProjectIdeaSummary> ideaSummaries = new ArrayList<ProjectIdeaSummary>();
@@ -91,6 +91,7 @@ public class RestResourceHelper extends BaseRepository<ProjectIdea, Long> {
 
 		return page;
 	}
+
 
 	public List<TagCount> getTagCount(ProjectIdeaStatus status) {
 		Query query = em().createNativeQuery(
@@ -137,7 +138,8 @@ public class RestResourceHelper extends BaseRepository<ProjectIdea, Long> {
 
 		for (Object result : objects) {
 			Object[] row = (Object[]) result;
-			tagCounts.add(new TagCount((String) row[0], ((BigInteger) row[1]).intValue()));
+			tagCounts.add(new TagCount((String) row[0], ((BigInteger) row[1])
+					.intValue()));
 		}
 		return tagCounts;
 	}

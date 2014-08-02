@@ -73,15 +73,20 @@ value('version', '0.1').service('ChatService',function($http){
 }).service('ProjectIdeaReviewService',function($http){
 
 	this.getProjectIdeaReviews = function(projectIdeaId,pageNumber,itemsPerPage){
+		var page = {
+				page: pageNumber,
+				itemsPerPage: itemsPerPage
+		};
+		return $http.get('projectIdea/'+projectIdeaId+'/reviews',{params: page});
 
 	};
 
-	this.addProjectIdeaReview = function(projectIdeaReview){
-
+	this.addProjectIdeaReview = function(projectIdeaId,projectIdeaReview){
+		return $http.post('projectIdea/'+projectIdeaId+'/reviews',projectIdeaReview);
 	};
 
-	this.deleteProjectIdeaReview = function(projectIdeaReviewId){
-
+	this.deleteProjectIdeaReview = function(projectIdeaId,projectIdeaReviewId){
+		return $http.delete('projectIdea/'+projectIdeaId+'/reviews/'+projectIdeaReviewId);
 	};
 
 }).

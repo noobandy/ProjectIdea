@@ -105,7 +105,17 @@ angular.module(
 					  isSecure : false,
 				  }
 
-			  }).state('myProjectIdeas', {
+			  }).
+			  state('projectIdea.reviews', {
+				  url : '/reviews',
+				  templateUrl : 'partials/projectIdeaReviews',
+				  controller : 'ProjectIdeaReviewController',
+				  data : {
+					  isSecure : false,
+				  }
+
+			  })
+			  .state('myProjectIdeas', {
 				  abstract: true,
 				  url : '/myProjectIdeas',
 				  templateUrl : 'partials/myProjectIdeas',

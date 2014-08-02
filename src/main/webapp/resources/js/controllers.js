@@ -16,15 +16,18 @@ controller('HomeController',function($scope,ProjectIdeaService){
 controller('PublishedProjectIdeaController',function($scope,$stateParams,ProjectIdeaService){
 
 	$scope.activeTag = $stateParams.tag;
+
 	$scope.projectIdeas = [];
 
 	$scope.itemsPerPage = 10;
 	$scope.currentPage = 1;
 	$scope.maxSize = 5;
-	$scope.totalItems = 11;
+	$scope.totalItems = 0;
 
 	$scope.pageChanged = function(){
-		console.log($scope.currentPage);
+		ProjectIdeaService.getPublishedProjectIdeas($scope.activeTag,$scope.currentPage,$scope.itemsPerPage).success(function(page){
+			$scope.projectIdeas = page.data;
+		});
 	};
 
 
@@ -61,10 +64,8 @@ controller('UserDraftedProjectIdeaController',function($scope,$stateParams,Proje
 	$scope.numPages;
 
 	$scope.pageChanged = function() {
-		console.log('Page changed to: ' + $scope.currentPage);
 		ProjectIdeaService.getDraftedProjectIdeasOfUser($scope.activeTag,$scope.currentPage,$scope.itemsPerPage).success(function(page){
 			$scope.projectIdeas = page.data;
-			$scope.totalItems = page.totlaItems;
 		});
 	};
 
@@ -118,15 +119,10 @@ controller('UserPublishedProjectIdeaController',function($scope,$stateParams,Pro
 	$scope.currentPage = 1;
 	$scope.itemsPerPage = 10;
 	$scope.maxSize = 5;
-	$scope.setPage = function (pageNo) {
-		$scope.currentPage = pageNo;
-	};
 
 	$scope.pageChanged = function() {
-		console.log('Page changed to: ' + $scope.currentPage);
 		ProjectIdeaService.getPublishedProjectIdeasOfUser($scope.activeTag,$scope.currentPage,$scope.itemsPerPage).success(function(page){
 			$scope.projectIdeas = page.data;
-			$scope.totalItems = page.totlaItems;
 		});
 	};
 
@@ -136,45 +132,80 @@ controller('UserPublishedProjectIdeaController',function($scope,$stateParams,Pro
 	});
 })
 .controller('ProjectIdeaController',
-		function($scope, $stateParams) {
+		function($scope, $stateParams,ProjectIdeaService) {
+
+	$scope.projectIdeaId = $stateParams.id;
+
 	$scope.projectIdea = {
-			id : 1,
-			title : 'title ',
-			description : "This is a hack. In my opinion, it's justifiable and relatively safe."
-
-				+ "Only Gecko is treats fieldsets this way, so we are using a proprietary Gecko feature to target a well-understood Gecko behaviour as a workaround to another well-understood Gecko behaviour which is both unique and undesirable."
-
-				+ "The Gecko targeting hack has been around for a while. Given its widespread use as a means to target Gecko issues� I believe Mozilla will be conservative about removing it."
-
-				+ "Changes to fieldset behaviour tend to meet resistance out of concern for legacy support."
-
-				+ "Given how fundamental table layout is, I strongly doubt that the codepath for calculating the dimensions of internal table elements will be significantly changed in the near future. ",
-				estimatedTimeInMilliseconds : 4512459,
-				author : 'author ',
-				tags : [ 'java', 'spring', 'hibernate','spring security','jpa','angular js' ]
 	};
 
-	$scope.tab = 1;
-
-	$scope.selectTab = function(tab){
-		$scope.tab = tab;
-	};
-
-	$scope.isSelected = function(tab){
-		return $scope.tab === tab;
-	};
-
-
-	$scope.review = {
-
-	};
-
-	$scope.addReview = function(projectIdea){
-
-	};
+	ProjectIdeaService.getProjectIdea($scope.projectIdeaId).success(function(data){
+		$scope.projectIdea = data;
+	});
 
 }).
-controller('LoginController',
+controller('ProjectIdeaReviewController',function($scope, $stateParams,ProjectIdeaReviewService){
+	$scope.projectIdeaId = $stateParams.id;
+
+	$scope.projectIdeaReviews = [];
+
+	$scope.totalItems = 0;
+	$scope.currentPage = 1;
+	$scope.itemsPerPage = 10;
+	$scope.maxSize = 5;
+
+
+	$scope.pageChanged = function() {
+		ProjectIdeaReviewService.getProjectIdeaReviews($scope.projectIdeaId,$scope.currentPage,$scope.itemsPerPage).success(function(page){
+			$scope.projectIdeaReviews = page.data;
+		});
+	};
+
+	ProjectIdeaReviewService.getProjectIdeaReviews($scope.projectIdeaId,$scope.currentPage,$scope.itemsPerPage).success(function(page){
+		$scope.projectIdeaReviews = page.data;
+		$scope.totalItems = page.totlaItems;
+	});
+
+
+	$scope.newReview = {
+			id:'',
+			projectIdeaId:$scope.projectIdeaId,
+			star:5,
+			remark:''
+
+	};
+
+	$scope.clearReviewForm = function(){
+		$scope.newReview = {
+				id:'',
+				projectIdeaId:$scope.projectIdeaId,
+				star:5,
+				remark:''
+
+		};
+	};
+
+	$scope.hoveringOver = function(value) {
+		$scope.overStar = value;
+	};
+
+	$scope.alerts = [];
+
+	$scope.closeAlert = function(index) {
+		$scope.alerts.splice(index, 1);
+	};
+
+
+	$scope.addReview = function(newReview){
+		ProjectIdeaReviewService.addProjectIdeaReview($scope.projectIdeaId,newReview).success(function(data){
+			$scope.clearReviewForm();
+			$scope.alerts.push({ type: 'success', msg: 'Review Added' });
+		}).error(function(){
+			$scope.alerts.push({ type: 'danger', msg: 'Failed to add review' });
+		});
+	};
+})
+.controller('LoginController',
 		function($timeout, $location, $scope, AUTH_EVENTS,
 				AuthService, message) {
 	$scope.loginError = message;
@@ -207,39 +238,6 @@ controller('NavBarController',
 		return Session.getAuthenticatedUser();
 	};
 
-	$scope.userProfile ={
-			username:'',
-			completeName:'',
-			profilePicPath:'',
-			tagCounts:[]
-	};
-
-	$scope.formInsideTab= {formData:{}};
-
-
-	$scope.alerts = [];
-
-	$scope.closeAlert = function(index) {
-		$scope.alerts.splice(index, 1);
-	};
-
-	$scope.clearUpdatePasswordCommand = function(){
-		$scope.formInsideTab.formData.updatePasswordCommand = {
-				oldPassword:'',
-				newPassword:'',
-				confirmPassword:''
-		};
-	};
-
-	$scope.updatePassword = function(){
-		$http.put('user/'+Session.getAuthenticatedUser()+'/updatePassword',$scope.formInsideTab.formData.updatePasswordCommand).success(function(data){
-			$scope.clearUpdatePasswordCommand();
-			$scope.alerts.push({ type: 'success', msg: 'Password updated' });
-		}).error(function(){
-			$scope.clearUpdatePasswordCommand();
-			$scope.alerts.push({ type: 'danger', msg: 'Failed to update password' });
-		});
-	};
 
 	$http.get('user/'+Session.getAuthenticatedUser()).success(function(data){
 		$scope.userProfile = data;
@@ -250,6 +248,36 @@ controller('NavBarController',
 
 		$scope.cancel = function () {
 			$modalInstance.dismiss('cancel');
+		};
+
+		$scope.updatePasswordCommand = {
+				oldPassword:'',
+				newPassword:'',
+				confirmPassword:''
+		};
+
+		$scope.alerts = [];
+
+		$scope.closeAlert = function(index) {
+			$scope.alerts.splice(index, 1);
+		};
+
+		$scope.clearUpdatePasswordCommand = function(){
+			$scope.updatePasswordCommand = {
+					oldPassword:'',
+					newPassword:'',
+					confirmPassword:''
+			};
+		};
+
+		$scope.updatePassword = function(){
+			$http.put('user/'+Session.getAuthenticatedUser()+'/updatePassword',$scope.updatePasswordCommand).success(function(data){
+				$scope.clearUpdatePasswordCommand();
+				$scope.alerts.push({ type: 'success', msg: 'Password updated' });
+			}).error(function(){
+				$scope.clearUpdatePasswordCommand();
+				$scope.alerts.push({ type: 'danger', msg: 'Failed to update password' });
+			});
 		};
 	};
 

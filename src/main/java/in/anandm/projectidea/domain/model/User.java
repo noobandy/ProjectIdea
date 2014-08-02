@@ -12,12 +12,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 /**
  * @author Anand
  * 
  */
 @Entity
 @Table(name = "act_user")
+@JsonIgnoreProperties(value={
+		"password"
+})
 public class User {
 
 	@Id

@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 
 /**
  * @author Anand
- *
+ * 
  */
 @Entity
 public class ProjectIdeaReview {
@@ -39,6 +39,27 @@ public class ProjectIdeaReview {
 		this.star = star;
 		this.remark = review;
 		this.user = user;
+	}
+
+	// getters
+	public Long getId() {
+		return id;
+	}
+
+	public Long getProjectIdeaId() {
+		return projectIdeaId;
+	}
+
+	public int getStar() {
+		return star;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public User getUser() {
+		return user;
 	}
 
 }
