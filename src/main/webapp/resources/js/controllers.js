@@ -177,10 +177,10 @@ controller('UpdateProjectIdeaController',function($scope,$stateParams,$upload,Pr
 		//$files: an array of files selected, each file has name, size, and type.
 		for (var i = 0; i < $files.length; i++) {
 			var file = $files[i];
-			$scope.upload = $upload.http({
+			$scope.upload = $upload.upload({
 				url: 'projectIdea/'+$scope.draftId+'/documents', //upload.php script, node.js route, or servlet url
-				//method: 'POST' or 'PUT',
-				//headers: {'header-key': 'header-value'},
+				method:'PUT',
+				headers: {'Content-Type': 'multipart/form-data'},
 				//withCredentials: true,
 				//data: {myObj: $scope.myModelObj},
 				file: file, // or list of files ($files) for html5 only

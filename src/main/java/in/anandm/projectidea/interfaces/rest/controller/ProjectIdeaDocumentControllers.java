@@ -42,7 +42,7 @@ public class ProjectIdeaDocumentControllers {
 
 	}
 
-	@RequestMapping(value = "/{projectIdeaId}/documents", method = RequestMethod.POST)
+	@RequestMapping(value = "/{projectIdeaId}/documents", method = RequestMethod.PUT)
 	public @ResponseBody
 	ResponseEntity<ProjectIdeaDocument> addProjectIdeaDocument(
 			@PathVariable(value = "projectIdeaId") Long projectIdeaId,
