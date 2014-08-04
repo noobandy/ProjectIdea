@@ -3,7 +3,8 @@
 //Declare app level module which depends on filters, and services
 angular.module(
 		'ProjectIdeaApp',
-		[ 'ui.router', 'ngTable', 'ui.bootstrap', 'xeditable',,'ui.select2'
+		[ 'ui.router', 'ngTable', 'ui.bootstrap', 'xeditable',,'ui.select2',
+		  'angularFileUpload'
 		  , 'ProjectIdeaApp.filters', 'ProjectIdeaApp.services',
 		  'ProjectIdeaApp.factories', 'ProjectIdeaApp.directives',
 		  'ProjectIdeaApp.controllers' ]).constant('AUTH_EVENTS', {
@@ -14,8 +15,8 @@ angular.module(
 			  notAuthenticated : 'auth-not-authenticated',
 			  notAuthorized : 'auth-not-authorized'
 		  }).config(function($stateProvider, $urlRouterProvider, $httpProvider) {
-			  
-			  
+
+
 			  var logsOutUserOn401 = [ '$q', '$location', function($q, $location) {
 				  var success = function(response) {
 					  return response;
@@ -153,6 +154,14 @@ angular.module(
 				  data : {
 					  isSecure : true,
 				  }
+			  }).
+			  state('myProjectIdeas.drafted.edit', {
+				  url : '/edit/{draftId}',
+				  templateUrl : 'partials/editProjectIdea',
+				  controller : 'UpdateProjectIdeaController',
+				  data : {
+					  isSecure : true,
+				  }
 			  })
 			  .state('myProjectIdeas.published.projectIdeas', {
 				  url : '?tag',
@@ -163,12 +172,12 @@ angular.module(
 				  }
 			  });
 		  }).run(
-				  function($location, $rootScope, editableOptions, AUTH_EVENTS,
+				  function($location, $rootScope,$templateCache, editableOptions, AUTH_EVENTS,
 						  AuthService) {
 
 					  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
-					  
-					  
+
+
 					  $rootScope.$on('$stateChangeStart', function(event, next, current) {
 						  if (next.data.isSecure) {
 							  if (!AuthService.isAuthenticated()) {
@@ -177,5 +186,10 @@ angular.module(
 								  $rootScope.$apply();
 							  }
 						  }
+					  });
+
+
+					  $rootScope.$on('$viewContentLoaded', function() {
+						  $templateCache.remove('partials/projectIdeaReviews');
 					  });
 				  });

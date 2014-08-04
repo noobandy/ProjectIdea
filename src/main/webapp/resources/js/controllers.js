@@ -110,6 +110,103 @@ controller('UserDraftedProjectIdeaController',function($scope,$stateParams,Proje
 	};
 
 }).
+controller('UpdateProjectIdeaController',function($scope,$stateParams,$upload,ProjectIdeaService,TagService){
+
+	$scope.draftId = $stateParams.draftId;
+
+	$scope.alerts = [];
+
+	$scope.closeAlert = function(index) {
+		$scope.alerts.splice(index, 1);
+	};
+
+	$scope.projectIdeaDraft = {
+			id:'',
+			title:'',
+			description:'',
+			tags: []
+	};
+
+	$scope.projectIdeaEstimatedTime = {
+			years: '',
+			months: '',
+			days: ''
+	};
+
+	$scope.select2Options = {
+			'multiple': true,
+			'simple_tags': true,
+			'tags': []   // Can be empty list.
+	};
+
+
+	ProjectIdeaService.getProjectIdea($scope.draftId).success(function(data){
+		$scope.projectIdeaDraft.id = data.id;
+		$scope.projectIdeaDraft.title = data.title;
+		$scope.projectIdeaDraft.description = data.description;
+		angular.forEach(data.tags,function(key,value){
+			$scope.projectIdeaDraft.tags.push(key.tag);
+		});
+	});
+
+	TagService.getAllTags().success(function(data){
+		angular.forEach(data,function(key,value){
+			$scope.select2Options.tags.push(key.tag);
+		});
+	});
+
+
+	$scope.updateDraft = function(projectIdeaDraft){
+		ProjectIdeaService.draftProjectIdea(projectIdeaDraft).success(function(data){
+			$scope.newProjectidea = data;
+			$scope.alerts.push({ type: 'success', msg: 'Draft Saved successfully' });
+		}).error(function(data){
+			$scope.alerts.push({ type: 'danger', msg: 'Failed to Save draft' });
+		});
+	};
+
+
+	$scope.updateEstimatedTime = function(projectIdeaEstimatedTime){
+		ProjectIdeaService.updateEstimatedTime($scope.draftId,projectIdeaEstimatedTime).success(function(){
+
+		});
+	};
+
+
+	$scope.onFileSelect = function($files) {
+		//$files: an array of files selected, each file has name, size, and type.
+		for (var i = 0; i < $files.length; i++) {
+			var file = $files[i];
+			$scope.upload = $upload.http({
+				url: 'projectIdea/'+$scope.draftId+'/documents', //upload.php script, node.js route, or servlet url
+				//method: 'POST' or 'PUT',
+				//headers: {'header-key': 'header-value'},
+				//withCredentials: true,
+				//data: {myObj: $scope.myModelObj},
+				file: file, // or list of files ($files) for html5 only
+				//fileName: 'doc.jpg' or ['1.jpg', '2.jpg', ...] // to modify the name of the file(s)
+				// customize file formData name ('Content-Desposition'), server side file variable name. 
+				//fileFormDataName: myFile, //or a list of names for multiple files (html5). Default is 'file' 
+				// customize how data is added to formData. See #40#issuecomment-28612000 for sample code
+				//formDataAppender: function(formData, key, val){}
+			}).progress(function(evt) {
+				console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+			}).success(function(data, status, headers, config) {
+				// file is uploaded successfully
+				console.log(data);
+			});
+			//.error(...)
+			//.then(success, error, progress); 
+			// access or attach event listeners to the underlying XMLHttpRequest.
+			//.xhr(function(xhr){xhr.upload.addEventListener(...)})
+		}
+		/* alternative way of uploading, send the file binary with the file's content-type.
+	       Could be used to upload files to CouchDB, imgur, etc... html5 FileReader is needed. 
+	       It could also be used to monitor the progress of a normal http post/put request with large data*/
+		// $scope.upload = $upload.http({...})  see 88#issuecomment-31366487 for sample code.
+	};
+})
+.
 controller('UserPublishedProjectIdeaController',function($scope,$stateParams,ProjectIdeaService){
 
 	$scope.activeTag = $stateParams.tag;
@@ -170,8 +267,9 @@ controller('ProjectIdeaReviewController',function($scope, $stateParams,ProjectId
 	$scope.newReview = {
 			id:'',
 			projectIdeaId:$scope.projectIdeaId,
-			star:5,
-			remark:''
+			stars:0,
+			remark:'',
+			author:''
 
 	};
 
@@ -179,14 +277,11 @@ controller('ProjectIdeaReviewController',function($scope, $stateParams,ProjectId
 		$scope.newReview = {
 				id:'',
 				projectIdeaId:$scope.projectIdeaId,
-				star:5,
-				remark:''
+				stars:0,
+				remark:'',
+				author:''
 
 		};
-	};
-
-	$scope.hoveringOver = function(value) {
-		$scope.overStar = value;
 	};
 
 	$scope.alerts = [];

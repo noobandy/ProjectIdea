@@ -74,15 +74,17 @@ body {
 						class="icon-bar"></span>
 				</button>
 				<a ui-sref-active="active" class="navbar-brand"
-					ui-sref="home.publishedProjectIdeas"> <spring:message
-						code="Project.title" /> <i class="fa fa-home"></i>
+					ui-sref="home.publishedProjectIdeas"> 
+					<i class="fa fa-home"></i>
+					<spring:message code="Project.title" /> 
 				</a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
 					<li ui-sref-active="active"><a
-						ui-sref="myProjectIdeas.drafted.projectIdeas"> <spring:message
-								code="ProjectIdea.myIdeas" /><i class="fa fa-paper-plane-o"></i>
+						ui-sref="myProjectIdeas.drafted.projectIdeas"> 
+						<i class="fa fa-paper-plane-o"></i>
+						<spring:message code="ProjectIdea.myIdeas" />
 					</a></li>
 				</ul>
 				<ul ng-if="isLoggedIn()" class="nav navbar-nav navbar-right">
@@ -91,15 +93,16 @@ body {
 					</a></li>
 
 					<li class="dropdown"><a href="javascript();"
-						class="dropdown-toggle" data-toggle="dropdown">{{authenticatedUser()}}&nbsp;<i
-							class="fa fa-cog"></i> <span class="caret"></span></a>
+						class="dropdown-toggle" data-toggle="dropdown">
+						<i class="fa fa-gears"></i> {{authenticatedUser()}}
+						 <span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="#" ng-click="showProfile()"> <i
-									class="fa fa-user"></i>Profile
+									class="fa fa-user"></i> Profile
 							</a></li>
 
 							<li ui-sref-active="active"><a ui-sref="logout"> <i
-									class="fa fa-sign-out"></i>Log Out
+									class="fa fa-sign-out"></i> Log Out
 							</a></li>
 						</ul></li>
 				</ul>

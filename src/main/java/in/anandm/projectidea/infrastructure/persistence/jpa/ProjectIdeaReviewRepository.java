@@ -21,11 +21,13 @@ public class ProjectIdeaReviewRepository extends
 	@Override
 	@Transactional
 	public void saveProjectIdeaReview(ProjectIdeaReview projectIdeaReview) {
+		save(projectIdeaReview);
 	}
 
 	@Override
 	@Transactional
 	public void removeProjectIdeaReviewById(Long id) {
+		removeById(id);
 	}
 
 }

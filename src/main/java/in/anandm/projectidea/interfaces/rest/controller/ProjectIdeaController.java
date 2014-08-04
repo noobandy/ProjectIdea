@@ -10,6 +10,7 @@ import in.anandm.projectidea.domain.model.User;
 import in.anandm.projectidea.domain.repository.IProjectIdeaRepository;
 import in.anandm.projectidea.domain.repository.IUserRepository;
 import in.anandm.projectidea.interfaces.rest.helper.RestResourceHelper;
+import in.anandm.projectidea.interfaces.rest.resource.EstimatedTime;
 import in.anandm.projectidea.interfaces.rest.resource.Page;
 import in.anandm.projectidea.interfaces.rest.resource.ProjectIdeaDraft;
 import in.anandm.projectidea.interfaces.rest.resource.ProjectIdeaSummary;
@@ -159,6 +160,21 @@ public class ProjectIdeaController {
 
 		return new ResponseEntity<ProjectIdeaDraft>(projectIdeaDraft,
 				HttpStatus.CREATED);
+	}
+
+	@RequestMapping(value = "/{id}/updateEstimatedTime")
+	public @ResponseBody
+	ResponseEntity<EstimatedTime> updateTimeEstimate(
+			@PathVariable(value = "id") Long id,
+			@RequestBody EstimatedTime estimatedTime) {
+
+		ProjectIdea projectIdea = projectIdeaRepository.findProjectIdeaById(id);
+		
+		projectIdea.updateEstimatedTime(estimatedTime);
+		
+		projectIdeaRepository.saveProjectIdea(projectIdea);
+		
+		return new ResponseEntity<EstimatedTime>(HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/publishedProjectIdeaTagCount")

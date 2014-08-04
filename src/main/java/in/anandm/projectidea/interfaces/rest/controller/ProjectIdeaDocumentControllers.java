@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author anandm
@@ -45,12 +46,13 @@ public class ProjectIdeaDocumentControllers {
 	public @ResponseBody
 	ResponseEntity<ProjectIdeaDocument> addProjectIdeaDocument(
 			@PathVariable(value = "projectIdeaId") Long projectIdeaId,
-			@RequestBody ProjectIdeaDocument projectIdeaDocument) {
+			@RequestBody MultipartFile fileData) {
 
-		projectIdeaDocumentRepository
-				.saveProjectIdeaDocument(projectIdeaDocument);
+		ProjectIdeaDocument document = new ProjectIdeaDocument(projectIdeaId,
+				fileData.getOriginalFilename(), "", fileData.getSize());
+		projectIdeaDocumentRepository.saveProjectIdeaDocument(document);
 
-		return new ResponseEntity<ProjectIdeaDocument>(projectIdeaDocument,
+		return new ResponseEntity<ProjectIdeaDocument>(document,
 				HttpStatus.CREATED);
 	}
 

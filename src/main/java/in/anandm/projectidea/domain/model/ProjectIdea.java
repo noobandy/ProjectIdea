@@ -3,6 +3,8 @@
  */
 package in.anandm.projectidea.domain.model;
 
+import in.anandm.projectidea.interfaces.rest.resource.EstimatedTime;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -62,10 +64,10 @@ public class ProjectIdea {
 		return idea;
 	}
 
-	public void updateEstimatedTime(Long estimatedTimeInMillisecond) {
-		this.estimatedTimeInMilliseconds = estimatedTimeInMillisecond;
+	public void updateEstimatedTime(EstimatedTime estimatedTime) {
+		this.estimatedTimeInMilliseconds = estimatedTime.timeInMilliseconds();
+		this.estimatedTimeInWords = estimatedTime.toString();
 		lastModified = new Date();
-		// change time in words
 	}
 
 	public void updateDescription(String description) {

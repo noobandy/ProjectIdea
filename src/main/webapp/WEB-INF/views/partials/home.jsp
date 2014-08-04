@@ -1,4 +1,7 @@
 <div class="row">
+<!-- 	<ol class="breadcrumb">
+		<li><a ui-sref="home.publishedProjectIdeas"><i class="fa fa-home"></i>Project Idea</a></li>
+	</ol> -->
 	<div class="col-md-3">
 		<div class="list-group">
 			<a ui-sref-active="active" ng-repeat="tag in tags"

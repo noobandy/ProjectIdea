@@ -65,6 +65,10 @@ value('version', '0.1').service('ChatService',function($http){
 	this.draftProjectIdea = function(projectIdeaDraft){
 		return $http.post('projectIdea/new',projectIdeaDraft);
 	};
+	
+	this.updateEstimatedTime = function(projectIdeaId,projectIdeaEstimatedTime){
+		return $http.put('projectIdea/'+projectIdeaId+'/updateEstimatedTime',projectIdeaEstimatedTime);
+	};
 
 	this.publishProjectIdea = function(id){
 
