@@ -97,7 +97,7 @@ body {
 						<i class="fa fa-gears"></i> {{authenticatedUser()}}
 						 <span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="#" ng-click="showProfile()"> <i
+							<li><a ui-sref="userProfile({username:authenticatedUser()})"> <i
 									class="fa fa-user"></i> Profile
 							</a></li>
 
@@ -110,6 +110,7 @@ body {
 			<!--/.nav-collapse -->
 		</div>
 	</div>
+	<img id="spinner" ng-src="resources/img/loading1.gif" style="display:none;">
 	<div class="container-fluid" ui-view></div>
 	<div class="footer">
 		<div class="container">

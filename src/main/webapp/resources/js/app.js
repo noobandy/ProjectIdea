@@ -40,6 +40,15 @@ angular.module(
 
 			  $httpProvider.responseInterceptors.push(logsOutUserOn401);
 
+			  $httpProvider.responseInterceptors.push('myHttpInterceptor');
+
+			  var spinnerFunction = function spinnerFunction(data, headersGetter) {
+				  $("#spinner").show();
+				  return data;
+			  };
+
+			  $httpProvider.defaults.transformRequest.push(spinnerFunction);
+
 			  $urlRouterProvider.otherwise('/publishedProjectIdeas');
 
 			  $stateProvider.state('login', {
@@ -81,7 +90,72 @@ angular.module(
 				  data : {
 					  isSecure : true
 				  }
-			  }).state('home', {
+			  }).
+			  state("userProfile", {
+				  url: "/user/{username}",
+				  onEnter: ['$stateParams', '$rootScope', '$state', '$modal', '$http', function($stateParams,$rootScope, $state, $modal, $http) {
+					  $modal.open({
+						  templateUrl: 'partials/userProfile',
+						  resolve: {
+							  userProfile: function ($q){
+								  var deferred = $q.defer();
+
+								  $http.get('user/'+$stateParams.username).success(function(data){
+									  deferred.resolve(data);
+								  });
+								  return deferred.promise;
+
+							  }
+						  },
+						  controller: function($scope,$modalInstance,userProfile){
+
+							  $scope.userProfile = userProfile;
+
+							  $scope.cancel = function () {
+								  $modalInstance.dismiss('cancel');
+							  };
+
+							  $scope.updatePasswordCommand = {
+									  oldPassword:'',
+									  newPassword:'',
+									  confirmPassword:''
+							  };
+
+							  $scope.alerts = [];
+
+							  $scope.closeAlert = function(index) {
+								  $scope.alerts.splice(index, 1);
+							  };
+
+							  $scope.clearUpdatePasswordCommand = function(){
+								  $scope.updatePasswordCommand = {
+										  oldPassword:'',
+										  newPassword:'',
+										  confirmPassword:''
+								  };
+							  };
+
+							  $scope.updatePassword = function(){
+								  $http.put('user/'+$stateParams.username+'/updatePassword',$scope.updatePasswordCommand).success(function(data){
+									  $scope.clearUpdatePasswordCommand();
+									  $scope.alerts.push({ type: 'success', msg: 'Password updated' });
+								  }).error(function(){
+									  $scope.clearUpdatePasswordCommand();
+									  $scope.alerts.push({ type: 'danger', msg: 'Failed to update password' });
+								  });
+							  };
+						  }
+					  }).result.then(function(result) {
+						  $state.go($rootScope.previousState_name,$rootScope.previousState_params);
+					  },function(result) {
+						  $state.go($rootScope.previousState_name,$rootScope.previousState_params);
+					  });
+				  }],
+				  data : {
+					  isSecure : false,
+				  }
+			  }).
+			  state('home', {
 				  abstract: true,
 				  url : '/publishedProjectIdeas',
 				  templateUrl : 'partials/home',
@@ -177,8 +251,8 @@ angular.module(
 
 					  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 
-
 					  $rootScope.$on('$stateChangeStart', function(event, next, current) {
+
 						  if (next.data.isSecure) {
 							  if (!AuthService.isAuthenticated()) {
 								  event.preventDefault();
@@ -188,6 +262,12 @@ angular.module(
 						  }
 					  });
 
+
+					  $rootScope.$on("$stateChangeSuccess",  function(event, toState, toParams, fromState, fromParams) {
+						  // to be used for back button //won't work when page is reloaded.
+						  $rootScope.previousState_name = fromState.name;
+						  $rootScope.previousState_params = fromParams;
+					  });
 
 					  $rootScope.$on('$viewContentLoaded', function() {
 						  $templateCache.remove('partials/projectIdeaReviews');

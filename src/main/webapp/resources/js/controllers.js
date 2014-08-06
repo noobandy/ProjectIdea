@@ -110,7 +110,7 @@ controller('UserDraftedProjectIdeaController',function($scope,$stateParams,Proje
 	};
 
 }).
-controller('UpdateProjectIdeaController',function($scope,$stateParams,$upload,ProjectIdeaService,TagService){
+controller('UpdateProjectIdeaController',function($location,$scope,$stateParams,$upload,ProjectIdeaService,ProjectIdeaDocumentService,TagService){
 
 	$scope.draftId = $stateParams.draftId;
 
@@ -127,16 +127,20 @@ controller('UpdateProjectIdeaController',function($scope,$stateParams,$upload,Pr
 			tags: []
 	};
 
-	$scope.projectIdeaEstimatedTime = {
-			years: '',
-			months: '',
-			days: ''
-	};
+
+	$scope.projectIdeaDocuments = [];
 
 	$scope.select2Options = {
 			'multiple': true,
 			'simple_tags': true,
 			'tags': []   // Can be empty list.
+	};
+
+
+	$scope.publishProjectIdea = function(){
+		ProjectIdeaService.publishProjectIdea($scope.draftId).success(function(){
+			 $location.path('/myProjectIdeas/drafted').replace();
+		});
 	};
 
 
@@ -149,12 +153,29 @@ controller('UpdateProjectIdeaController',function($scope,$stateParams,$upload,Pr
 		});
 	});
 
+	ProjectIdeaService.getEstimatedTime($scope.draftId).success(function(data){
+		$scope.projectIdeaEstimatedTime = data;
+	});
+
 	TagService.getAllTags().success(function(data){
 		angular.forEach(data,function(key,value){
 			$scope.select2Options.tags.push(key.tag);
 		});
 	});
 
+
+	ProjectIdeaDocumentService.getProjectIdeaDocuments($scope.draftId).success(function(data){
+		$scope.projectIdeaDocuments = data;
+	});
+
+	$scope.deleteProjectIdeaDocument = function(projectIdeaDocument){
+		ProjectIdeaDocumentService.deleteProjectIdeaDocument($scope.draftId,projectIdeaDocument.id).success(function(){
+			$scope.alerts.push({ type: 'success', msg: 'Document deleted Successfully' });
+			//remove deleted document from the view model
+			var index = $scope.projectIdeaDocuments.indexOf(projectIdeaDocument);
+			$scope.projectIdeaDocuments.splice(index, 1);
+		});
+	};
 
 	$scope.updateDraft = function(projectIdeaDraft){
 		ProjectIdeaService.draftProjectIdea(projectIdeaDraft).success(function(data){
@@ -168,37 +189,49 @@ controller('UpdateProjectIdeaController',function($scope,$stateParams,$upload,Pr
 
 	$scope.updateEstimatedTime = function(projectIdeaEstimatedTime){
 		ProjectIdeaService.updateEstimatedTime($scope.draftId,projectIdeaEstimatedTime).success(function(){
-
+			$scope.alerts.push({ type: 'success', msg: 'Estimated Time update successfully.' });
 		});
 	};
 
+	$scope.maxProgress = 100;
 
 	$scope.onFileSelect = function($files) {
+		$scope.currentProgress = 0;
 		//$files: an array of files selected, each file has name, size, and type.
 		for (var i = 0; i < $files.length; i++) {
 			var file = $files[i];
-			$scope.upload = $upload.upload({
-				url: 'projectIdea/'+$scope.draftId+'/documents', //upload.php script, node.js route, or servlet url
-				method:'PUT',
-				headers: {'Content-Type': 'multipart/form-data'},
-				//withCredentials: true,
-				//data: {myObj: $scope.myModelObj},
-				file: file, // or list of files ($files) for html5 only
-				//fileName: 'doc.jpg' or ['1.jpg', '2.jpg', ...] // to modify the name of the file(s)
-				// customize file formData name ('Content-Desposition'), server side file variable name. 
-				//fileFormDataName: myFile, //or a list of names for multiple files (html5). Default is 'file' 
-				// customize how data is added to formData. See #40#issuecomment-28612000 for sample code
-				//formDataAppender: function(formData, key, val){}
-			}).progress(function(evt) {
-				console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-			}).success(function(data, status, headers, config) {
-				// file is uploaded successfully
-				console.log(data);
-			});
-			//.error(...)
-			//.then(success, error, progress); 
-			// access or attach event listeners to the underlying XMLHttpRequest.
-			//.xhr(function(xhr){xhr.upload.addEventListener(...)})
+			if(file.size <= 1000000){
+				$scope.upload = $upload.upload({
+					url: 'projectIdea/'+$scope.draftId+'/documents', //upload.php script, node.js route, or servlet url
+					method:'POST',
+					headers: {'Content-Type': 'multipart/form-data'},
+					//withCredentials: true,
+					//data: {myObj: $scope.myModelObj},
+					file: file, // or list of files ($files) for html5 only
+					//fileName: 'doc.jpg' or ['1.jpg', '2.jpg', ...] // to modify the name of the file(s)
+					// customize file formData name ('Content-Desposition'), server side file variable name. 
+					//fileFormDataName: myFile, //or a list of names for multiple files (html5). Default is 'file' 
+					// customize how data is added to formData. See #40#issuecomment-28612000 for sample code
+					//formDataAppender: function(formData, key, val){}
+				}).progress(function(evt) {
+					$scope.currentProgress = parseInt(100.0 * evt.loaded / evt.total);
+				}).success(function(data, status, headers, config) {
+					// file is uploaded successfully
+					$scope.alerts.push({ type: 'success', msg: 'File successfully uploaded' });
+					angular.forEach(data,function(key,value){
+						$scope.projectIdeaDocuments.push(key);
+					});
+				}).error(function(data){
+					$scope.alerts.push({ type: 'danger', msg: 'Failed to upload file' });
+				});
+				//.error(...)
+				//.then(success, error, progress); 
+				// access or attach event listeners to the underlying XMLHttpRequest.
+				//.xhr(function(xhr){xhr.upload.addEventListener(...)})
+
+			}else{
+				$scope.alerts.push({ type: 'warning', msg: 'Only files of size less than 1MB are allowed' });
+			}
 		}
 		/* alternative way of uploading, send the file binary with the file's content-type.
 	       Could be used to upload files to CouchDB, imgur, etc... html5 FileReader is needed. 
@@ -229,12 +262,13 @@ controller('UserPublishedProjectIdeaController',function($scope,$stateParams,Pro
 	});
 })
 .controller('ProjectIdeaController',
-		function($scope, $stateParams,ProjectIdeaService) {
+		function($scope, $stateParams,ProjectIdeaService,ProjectIdeaDocumentService) {
 
 	$scope.projectIdeaId = $stateParams.id;
 
-	$scope.projectIdea = {
-	};
+	ProjectIdeaDocumentService.getProjectIdeaDocuments($scope.projectIdeaId).success(function(data){
+		$scope.projectIdeaDocuments = data;
+	});
 
 	ProjectIdeaService.getProjectIdea($scope.projectIdeaId).success(function(data){
 		$scope.projectIdea = data;

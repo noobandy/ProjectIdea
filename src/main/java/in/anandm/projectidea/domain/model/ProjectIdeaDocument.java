@@ -10,7 +10,7 @@ import javax.persistence.Id;
 
 /**
  * @author Anand
- *
+ * 
  */
 
 @Entity
@@ -37,6 +37,26 @@ public class ProjectIdeaDocument {
 		this.documentTitle = documentTitle;
 		this.documentPath = documentPath;
 		this.sizeInBytes = sizeInBytes;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public Long getProjectIdeaId() {
+		return projectIdeaId;
+	}
+
+	public String getDocumentTitle() {
+		return documentTitle;
+	}
+
+	public String getDocumentPath() {
+		return documentPath;
+	}
+
+	public Long getSizeInBytes() {
+		return sizeInBytes;
 	}
 
 }

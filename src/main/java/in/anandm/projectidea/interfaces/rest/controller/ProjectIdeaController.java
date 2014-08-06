@@ -136,6 +136,16 @@ public class ProjectIdeaController {
 		return new ResponseEntity<ProjectIdea>(projectIdea, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/{id}/publish", method = RequestMethod.PUT)
+	public @ResponseBody
+	ResponseEntity<ProjectIdea> publishProjectIdea(
+			@PathVariable(value = "id") Long id) {
+		ProjectIdea projectIdea = projectIdeaRepository.findProjectIdeaById(id);
+		projectIdea.publishIdea();
+		projectIdeaRepository.saveProjectIdea(projectIdea);
+		return new ResponseEntity<ProjectIdea>(projectIdea, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
 	public @ResponseBody
 	ResponseEntity<ProjectIdeaDraft> draftNewProjectIdea(
@@ -162,19 +172,35 @@ public class ProjectIdeaController {
 				HttpStatus.CREATED);
 	}
 
-	@RequestMapping(value = "/{id}/updateEstimatedTime")
+	@RequestMapping(value = "/{id}/estimatedTime", method = RequestMethod.GET)
+	public @ResponseBody
+	ResponseEntity<EstimatedTime> getTimeEstimate(
+			@PathVariable(value = "id") Long id) {
+
+		ProjectIdea projectIdea = projectIdeaRepository.findProjectIdeaById(id);
+		EstimatedTime estimatedTime = null;
+
+		if (projectIdea.getEstimatedTimeInMilliseconds() != null) {
+			estimatedTime = EstimatedTime.valueOf(projectIdea
+					.getEstimatedTimeInMilliseconds());
+		}
+
+		return new ResponseEntity<EstimatedTime>(estimatedTime, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{id}/estimatedTime", method = RequestMethod.PUT)
 	public @ResponseBody
 	ResponseEntity<EstimatedTime> updateTimeEstimate(
 			@PathVariable(value = "id") Long id,
 			@RequestBody EstimatedTime estimatedTime) {
 
 		ProjectIdea projectIdea = projectIdeaRepository.findProjectIdeaById(id);
-		
+
 		projectIdea.updateEstimatedTime(estimatedTime);
-		
+
 		projectIdeaRepository.saveProjectIdea(projectIdea);
-		
-		return new ResponseEntity<EstimatedTime>(HttpStatus.OK);
+
+		return new ResponseEntity<EstimatedTime>(estimatedTime, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/publishedProjectIdeaTagCount")

@@ -28,10 +28,14 @@
 	<button type="button" ng-if="editProjectideaForm.$dirty"
 		class="btn btn-success"
 		ng-click="editProjectideaForm.$valid && updateDraft(projectIdeaDraft)">Update</button>
+	<button type="button" class="btn btn-success"
+		ng-click="publishProjectIdea()">Publish</button>
 </div>
 </tab> <tab> <tab-heading> <i class="fa fa-clock-o"></i>
 Time Estimation </tab-heading>
 <div ng-form="updateEstimatedTimeForm">
+	<alert ng-repeat="alert in alerts" type="{{alert.type}}"
+		close="closeAlert($index)"> {{alert.msg}} </alert>
 	<div class="form-group">
 		<label for="years">Years</label> <select class="form-control"
 			ng-model="projectIdeaEstimatedTime.years">
@@ -102,18 +106,49 @@ Time Estimation </tab-heading>
 	</div>
 </div>
 </tab> <tab> <tab-heading> <i class="fa fa-file-text"></i>
-Documents </tab-heading>
+Documents </tab-heading> <!-- Alert messages --> <alert ng-repeat="alert in alerts"
+	type="{{alert.type}}" close="closeAlert($index)"> {{alert.msg}}
+</alert> <!-- New Document Form -->
 <div ng-form="projectIdeaDocumentForm">
+	<div ng-show="currentProgress > 0 && currentProgress < 100"
+		class="form-group">
+		<progressbar class="progress-striped" max="maxProgress"
+			value="currentProgress" type="success">{{currentProgress}}%</progressbar>
+	</div>
 
 	<div class="form-group">
 		<label class="label">Documents</label> <input class="form-control"
-			type="file" ng-file-select="onFileSelect($files)">
+			type="file" ng-file-select="onFileSelect($files)" multiple>
 	</div>
-	<div class="form-group">
-		<button ng-if="projectIdeaDocumentForm.$dirty" class="btn btn-success"
-			type="button"
-			ng-click="projectIdeaDocumentForm.$valid && updateProjectIdeaDocuments()"></button>
-	</div>
+	<%-- <div ng-show='currentProgress > 0 && currentProgress < 100' class="form-group">
+		<button class="btn btn-danger" ng-click="upload.abort()">Cancel
+			Upload</button>
+	</div> --%>
 
 </div>
+<!--  Documents Table -->
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Size</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="document in projectIdeaDocuments">
+			<td>{{document.documentTitle}}</td>
+			<td>{{document.sizeInBytes}} bytes</td>
+			<td>
+				<button type="button" class="btn btn-danger"
+					ng-click="deleteProjectIdeaDocument(document)">
+					<i class="fa fa-trash-o"></i>
+				</button> <a target="_blank"
+				href="projectIdea/{{document.projectIdeaId}}/documents/{{document.id}}"
+				class="btn btn-primary"> <i class="fa fa-download"></i>
+			</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
 </tab> </tabset>

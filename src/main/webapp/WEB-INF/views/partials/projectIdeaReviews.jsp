@@ -26,8 +26,7 @@
 
 </security:authorize>
 <div class="list-group">
-	<div ng-repeat="review in projectIdeaReviews"
-		class="list-group-item">
+	<div ng-repeat="review in projectIdeaReviews" class="list-group-item">
 		<div class="list-group-item-heading">
 			<rating ng-model="review.stars" max="5" state-on="'fa fa-star'"
 				state-off="'fa fa-star-o'" readonly="true"></rating>
@@ -35,7 +34,9 @@
 		<blockquote class="list-group-item-text">
 			<p>{{review.remark}}</p>
 			<footer>
-				<cite title="Source Title">{{review.author}}</cite>
+				<a ui-sref="userProfile({username:review.author})"> <cite
+					title="{{review.author}}">{{review.author}}</cite>
+				</a>
 			</footer>
 		</blockquote>
 	</div>

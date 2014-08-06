@@ -65,13 +65,17 @@ value('version', '0.1').service('ChatService',function($http){
 	this.draftProjectIdea = function(projectIdeaDraft){
 		return $http.post('projectIdea/new',projectIdeaDraft);
 	};
-	
+
+	this.getEstimatedTime = function(projectIdeaId,projectIdeaEstimatedTime){
+		return $http.get('projectIdea/'+projectIdeaId+'/estimatedTime');
+	};
+
 	this.updateEstimatedTime = function(projectIdeaId,projectIdeaEstimatedTime){
-		return $http.put('projectIdea/'+projectIdeaId+'/updateEstimatedTime',projectIdeaEstimatedTime);
+		return $http.put('projectIdea/'+projectIdeaId+'/estimatedTime',projectIdeaEstimatedTime);
 	};
 
 	this.publishProjectIdea = function(id){
-
+		return $http.put('projectIdea/'+id+'/publish');
 	};
 
 }).service('ProjectIdeaReviewService',function($http){
@@ -94,12 +98,24 @@ value('version', '0.1').service('ChatService',function($http){
 	};
 
 }).
+service('ProjectIdeaDocumentService',function($http){
+
+	this.getProjectIdeaDocuments = function(projectIdeaId){
+		return $http.get('projectIdea/'+projectIdeaId+'/documents');
+
+	};
+
+	this.deleteProjectIdeaDocument = function(projectIdeaId,documentId){
+		return $http.delete('projectIdea/'+projectIdeaId+'/documents/'+documentId);
+	};
+
+}).
 service('TagService',function($http){
 	this.getAllTags = function(){
 		return $http.get('tag/tags');
 	};
-})
-.service('Session', function () {
+}).
+service('Session', function () {
 
 	this.create = function (username) {
 		sessionStorage.setItem('username',username);
