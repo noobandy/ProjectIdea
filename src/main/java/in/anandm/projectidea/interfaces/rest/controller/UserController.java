@@ -7,6 +7,8 @@ import in.anandm.projectidea.domain.model.ProjectIdeaStatus;
 import in.anandm.projectidea.domain.model.User;
 import in.anandm.projectidea.domain.repository.IUserRepository;
 import in.anandm.projectidea.interfaces.rest.helper.RestResourceHelper;
+import in.anandm.projectidea.interfaces.rest.helper.UserHelper;
+import in.anandm.projectidea.interfaces.rest.resource.Page;
 import in.anandm.projectidea.interfaces.rest.resource.TagCount;
 import in.anandm.projectidea.interfaces.rest.resource.UpdatePasswordCommand;
 import in.anandm.projectidea.interfaces.rest.resource.UserProfile;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -36,6 +39,18 @@ public class UserController {
 
 	@Autowired
 	private IUserRepository userRepository;
+
+	@Autowired
+	private UserHelper userHelper;
+
+
+	@RequestMapping(value="/users",method=RequestMethod.GET)
+	public ResponseEntity<Page<User>> getUsers(@RequestParam(value = "page") Integer pageNumber,
+			@RequestParam(value = "itemsPerPage") Integer itemsPerPage){
+
+		Page<User> page = new Page<User>(page, itemsPerPage);
+		return null;
+	}
 
 	@RequestMapping(value = "/{username}", method = RequestMethod.GET)
 	public @ResponseBody
