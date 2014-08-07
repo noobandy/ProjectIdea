@@ -5,7 +5,7 @@
 <html>
 <head>
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/bootstrap-readable.min.css"></link>
+	href="${pageContext.request.contextPath}/resources/css/bootstrap-cerulean.min.css"></link>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css"></link>
 <link rel="stylesheet"
@@ -34,20 +34,22 @@ body {
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  position: relative;
-  min-height: 100%;
+	position: relative;
+	min-height: 100%;
 }
+
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
 }
+
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  background-color: #f5f5f5;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	/* Set the fixed height of the footer here */
+	height: 60px;
+	background-color: #f5f5f5;
 }
 
 .select2>.select2-choice.ui-select-match {
@@ -74,17 +76,16 @@ body {
 						class="icon-bar"></span>
 				</button>
 				<a ui-sref-active="active" class="navbar-brand"
-					ui-sref="home.publishedProjectIdeas"> 
-					<i class="fa fa-home"></i>
-					<spring:message code="Project.title" /> 
+					ui-sref="home.publishedProjectIdeas"> <i class="fa fa-home"></i>
+					<spring:message code="Project.title" />
 				</a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
 					<li ui-sref-active="active"><a
-						ui-sref="myProjectIdeas.drafted.projectIdeas"> 
-						<i class="fa fa-paper-plane-o"></i>
-						<spring:message code="ProjectIdea.myIdeas" />
+						ui-sref="myProjectIdeas.drafted.projectIdeas"> <i
+							class="fa fa-paper-plane-o"></i> <spring:message
+								code="ProjectIdea.myIdeas" />
 					</a></li>
 				</ul>
 				<ul ng-if="isLoggedIn()" class="nav navbar-nav navbar-right">
@@ -93,12 +94,12 @@ body {
 					</a></li>
 
 					<li class="dropdown"><a href="javascript();"
-						class="dropdown-toggle" data-toggle="dropdown">
-						<i class="fa fa-gears"></i> {{authenticatedUser()}}
-						 <span class="caret"></span></a>
+						class="dropdown-toggle" data-toggle="dropdown"> <i
+							class="fa fa-gears"></i> {{authenticatedUser()}} <span
+							class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a ui-sref="userProfile({username:authenticatedUser()})"> <i
-									class="fa fa-user"></i> Profile
+							<li><a ui-sref="userProfile({username:authenticatedUser()})">
+									<i class="fa fa-user"></i> Profile
 							</a></li>
 
 							<li ui-sref-active="active"><a ui-sref="logout"> <i
@@ -110,11 +111,14 @@ body {
 			<!--/.nav-collapse -->
 		</div>
 	</div>
-	<img id="spinner" ng-src="resources/img/loading1.gif" style="display:none;">
+	<img id="spinner" ng-src="resources/img/loading1.gif"
+		style="display: none;">
 	<div class="container-fluid" ui-view></div>
 	<div class="footer">
 		<div class="container">
-			<p class="text-muted">&copy;<a href="//anandm.in" target="_blank">Anand Mohan</a></p>
+			<p class="text-muted">
+				&copy;<a href="//anandm.in" target="_blank">Anand Mohan</a>
+			</p>
 		</div>
 	</div>
 

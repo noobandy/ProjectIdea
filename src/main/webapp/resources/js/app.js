@@ -83,7 +83,58 @@ angular.module(
 				  data : {
 					  isSecure : false
 				  }
-			  }).state('chat', {
+			  }).
+			  state('dashboard',{
+				  abstract: true,
+				  url: '/dashboard',
+				  templateUrl: 'partials/dashboard',
+				  controller: 'DashBoardController',
+				  data: {
+					  isSecure: true
+				  }
+			  }).
+			  state('dashboard.users',{
+				  url: '/users',
+				  templateUrl: 'partials/users',
+				  controller: 'UserController',
+				  data: {
+					  isSecure: true
+				  }
+			  }).
+			  state('dashboard.users.user',{
+				  url: '/{username}',
+				  templateUrl: 'partials/user',
+				  controller: 'UserController',
+				  data: {
+					  isSecure: true
+				  }
+			  }).
+			  state('dashboard.groups',{
+				  url: '/groups',
+				  templateUrl: 'partials/groups',
+				  controller: 'GroupController',
+				  data: {
+					  isSecure: true
+				  }
+			  }).
+			  state('dashboard.groups.group',{
+				  url: '/{groupName}',
+				  templateUrl: 'partials/group',
+				  controller: 'GroupController',
+				  data: {
+					  isSecure: true
+				  }
+			  }).
+			  state('dashboard.analytics',{
+				  url: '/analytics',
+				  templateUrl: 'partials/analytics',
+				  controller: 'AnalyticsController',
+				  data: {
+					  isSecure: true
+				  }
+			  })
+			  .
+			  state('chat', {
 				  url : '/chat',
 				  templateUrl : 'partials/chat',
 				  controller : 'ChatController',

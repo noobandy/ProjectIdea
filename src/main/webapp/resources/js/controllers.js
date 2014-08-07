@@ -139,7 +139,7 @@ controller('UpdateProjectIdeaController',function($location,$scope,$stateParams,
 
 	$scope.publishProjectIdea = function(){
 		ProjectIdeaService.publishProjectIdea($scope.draftId).success(function(){
-			 $location.path('/myProjectIdeas/drafted').replace();
+			$location.path('/myProjectIdeas/drafted').replace();
 		});
 	};
 
@@ -423,6 +423,55 @@ controller('NavBarController',
 		});
 	};
 
+
+}).
+controller('DashBoardController',function($scope,$stateParams,ProjectIdeaService){
+	ProjectIdeaService.getPublishedTagBadges().success(function(data){
+		$scope.tags = data;
+	});
+}).
+controller('UserController',function($scope,$stateParams,$http){
+	if($stateParams.username){
+
+		$scope.username = $stateParams.username;
+
+		$http.get('user/'+$scope.username).success(function(data){
+			$scope.user = data;
+		});
+	}else{
+		$scope.totalItems = 0;
+		$scope.currentPage = 1;
+		$scope.itemsPerPage = 10;
+		$scope.maxSize = 5;
+
+
+		$scope.pageChanged = function() {
+
+		};
+
+	}
+}).
+controller('GroupController',function($scope,$stateParams){
+	if($stateParams.groupName){
+
+		$scope.groupName = $stateParams.groupName;
+
+		$http.get('group/'+$scope.groupName).success(function(data){
+			$scope.group = data;
+		});
+	}else{
+		$scope.totalItems = 0;
+		$scope.currentPage = 1;
+		$scope.itemsPerPage = 10;
+		$scope.maxSize = 5;
+
+
+		$scope.pageChanged = function() {
+
+		};
+	}
+}).
+controller('AnalyticsController',function($scope,$stateParams){
 
 }).
 controller('ChatController',
