@@ -3,6 +3,7 @@
  */
 package in.anandm.projectidea.domain.repository;
 
+import in.anandm.projectidea.domain.model.Page;
 import in.anandm.projectidea.domain.model.User;
 
 import java.io.InputStream;
@@ -19,4 +20,5 @@ public interface IUserRepository {
 
 	InputStream getProfilePicOfUser(String username);
 
+	Page<User> page(Integer pageNumber,Integer itemsPerPage);
 }

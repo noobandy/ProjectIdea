@@ -1,6 +1,5 @@
 <div class="row">
-	<div class="col-md-3"></div>
-	<div class="col-md-3">
+	<div class="col-md-6">
 		<div class="panel panel-success">
 			<!-- Default panel contents -->
 			<div class="panel-heading">Published Ideas</div>
@@ -41,6 +40,7 @@
 		<ul class="nav nav-pills nav-stacked">
 			<li ui-sref-active="active"><a ui-sref="dashboard.users">User</a></li>
 			<li ui-sref-active="active"><a ui-sref="dashboard.groups">Group</a></li>
+			<li ui-sref-active="active"><a ui-sref="dashboard.authorities">Authorities</a></li>
 			<li ui-sref-active="active"><a ui-sref="dashboard.analytics">Analytics</a></li>
 		</ul>
 	</div>

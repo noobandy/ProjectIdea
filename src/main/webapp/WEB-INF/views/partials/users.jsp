@@ -11,11 +11,11 @@
 	<tbody>
 		<tr ng-repeat="user in users">
 			<td>{{user.completeName}}</td>
-			<td ui-sref="dashboard.users.user({username:user.username})">{{user.username}}</td>
+			<td><a ui-sref="dashboard.users.user({username:user.username})">{{user.username}}</a></td>
 			<td>{{user.emailId}}</td>
-			<td ng-if="user.enabled"><input type="checkbox"
+			<td ng-if="user.enabled"><input ng-disabled="true" type="checkbox"
 				checked="checked"></td>
-			<td ng-if="!user.enabled"><input type="checkbox"></td>
+			<td ng-if="!user.enabled"><input ng-disabled="true" type="checkbox"></td>
 			<td>{{user.credentialExpiredAt | date}}</td>
 		</tr>
 	</tbody>

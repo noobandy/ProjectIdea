@@ -60,6 +60,10 @@ body {
 .selectize-control>.selectize-dropdown {
 	top: 36px;
 }
+.chart {
+  height: 400px;
+  width: 800px;
+}
 </style>
 <title><spring:message code="Project.title" /></title>
 </head>
@@ -128,6 +132,12 @@ body {
 		src="${pageContext.request.contextPath}/resources/js/angular-file-upload-shim.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/angular.min.js"></script>
+		
+		<script
+		src="${pageContext.request.contextPath}/resources/js/d3.min.js"></script>
+		<script
+		src="${pageContext.request.contextPath}/resources/js/angular-charts.min.js"></script>
+	
 	<script
 		src="${pageContext.request.contextPath}/resources/js/angular-file-upload.min.js"></script>
 	<script type="text/javascript"

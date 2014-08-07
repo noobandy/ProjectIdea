@@ -3,12 +3,11 @@
  */
 package in.anandm.projectidea.interfaces.rest.controller;
 
+import in.anandm.projectidea.domain.model.Page;
 import in.anandm.projectidea.domain.model.ProjectIdeaStatus;
 import in.anandm.projectidea.domain.model.User;
 import in.anandm.projectidea.domain.repository.IUserRepository;
 import in.anandm.projectidea.interfaces.rest.helper.RestResourceHelper;
-import in.anandm.projectidea.interfaces.rest.helper.UserHelper;
-import in.anandm.projectidea.interfaces.rest.resource.Page;
 import in.anandm.projectidea.interfaces.rest.resource.TagCount;
 import in.anandm.projectidea.interfaces.rest.resource.UpdatePasswordCommand;
 import in.anandm.projectidea.interfaces.rest.resource.UserProfile;
@@ -40,21 +39,18 @@ public class UserController {
 	@Autowired
 	private IUserRepository userRepository;
 
-	@Autowired
-	private UserHelper userHelper;
+	@RequestMapping(value = "/users", method = RequestMethod.GET)
+	public ResponseEntity<Page<User>> getUsers(
+			@RequestParam(value = "page") Integer pageNumber,
+			@RequestParam(value = "itemsPerPage") Integer itemsPerPage) {
+		
+		Page<User> page = userRepository.page(pageNumber, itemsPerPage);
 
-
-	@RequestMapping(value="/users",method=RequestMethod.GET)
-	public ResponseEntity<Page<User>> getUsers(@RequestParam(value = "page") Integer pageNumber,
-			@RequestParam(value = "itemsPerPage") Integer itemsPerPage){
-
-		Page<User> page = new Page<User>(page, itemsPerPage);
-		return null;
+		return new ResponseEntity<Page<User>>(page, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{username}", method = RequestMethod.GET)
-	public @ResponseBody
-	ResponseEntity<UserProfile> getUser(
+	public @ResponseBody ResponseEntity<UserProfile> getUser(
 			@PathVariable(value = "username") String username) {
 
 		User user = userRepository.findUserByUserName(username);
@@ -82,8 +78,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/{username}/updatePassword", method = RequestMethod.PUT)
-	public @ResponseBody
-	ResponseEntity<String> updatePassword(
+	public @ResponseBody ResponseEntity<String> updatePassword(
 			@PathVariable(value = "username") String username,
 			@RequestBody UpdatePasswordCommand command) {
 

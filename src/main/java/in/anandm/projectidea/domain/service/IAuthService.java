@@ -12,7 +12,8 @@ import in.anandm.projectidea.domain.model.AuthorityConstants;
  */
 public interface IAuthService {
 
-	
+
 	boolean isAllowed(AuthorityConstants authority);
-	
+
+	int initOrUpdate();
 }

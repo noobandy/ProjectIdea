@@ -4,7 +4,7 @@
 angular.module(
 		'ProjectIdeaApp',
 		[ 'ui.router', 'ngTable', 'ui.bootstrap', 'xeditable',,'ui.select2',
-		  'angularFileUpload'
+		  'angularFileUpload','angularCharts'
 		  , 'ProjectIdeaApp.filters', 'ProjectIdeaApp.services',
 		  'ProjectIdeaApp.factories', 'ProjectIdeaApp.directives',
 		  'ProjectIdeaApp.controllers' ]).constant('AUTH_EVENTS', {
@@ -121,6 +121,22 @@ angular.module(
 				  url: '/{groupName}',
 				  templateUrl: 'partials/group',
 				  controller: 'GroupController',
+				  data: {
+					  isSecure: true
+				  }
+			  }).
+			  state('dashboard.authorities',{
+				  url: '/authorities',
+				  templateUrl: 'partials/authorities',
+				  controller: 'AuthorityController',
+				  data: {
+					  isSecure: true
+				  }
+			  }).
+			  state('dashboard.authorities.authority',{
+				  url: '/{authority}',
+				  templateUrl: 'partials/authority',
+				  controller: 'AuthorityController',
 				  data: {
 					  isSecure: true
 				  }

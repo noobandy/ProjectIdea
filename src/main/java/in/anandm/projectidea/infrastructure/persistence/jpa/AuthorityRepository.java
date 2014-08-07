@@ -3,6 +3,8 @@
  */
 package in.anandm.projectidea.infrastructure.persistence.jpa;
 
+import java.util.List;
+
 import in.anandm.projectidea.domain.model.Authority;
 import in.anandm.projectidea.domain.model.AuthorityConstants;
 import in.anandm.projectidea.domain.repository.IAuthorityRepository;
@@ -28,7 +30,7 @@ public class AuthorityRepository extends BaseRepository<Authority, Long>
 	 * in.anandm.projectidea.domain.repository.IAuthorityRepository#addAuthority
 	 * (in.anandm.projectidea.domain.model.Authority)
 	 */
-	
+
 	@Transactional
 	@Override
 	public void saveAuthority(Authority authority) {
@@ -37,13 +39,18 @@ public class AuthorityRepository extends BaseRepository<Authority, Long>
 	}
 
 	@Override
-	@Transactional(readOnly=true)
+	@Transactional(readOnly = true)
 	public Authority findAuthorityByName(AuthorityConstants authorityName) {
 
 		Search search = new Search(Authority.class);
 		search.addFilter(Filter.equal("authority", authorityName));
 
 		return super.searchUnique(search);
+	}
+
+	@Override
+	public List<Authority> findAllAuthority() {
+		return findAll();
 	}
 
 }

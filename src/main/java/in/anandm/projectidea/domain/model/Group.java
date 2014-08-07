@@ -42,4 +42,13 @@ public class Group {
 		return id;
 	}
 
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public boolean isDenyGroup() {
+		return denyGroup;
+	}
+
+	
 }

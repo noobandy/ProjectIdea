@@ -446,12 +446,24 @@ controller('UserController',function($scope,$stateParams,$http){
 
 
 		$scope.pageChanged = function() {
-
+			$scope.loadData();
 		};
 
+		$scope.loadData = function(){
+			var page = {
+					page: $scope.currentPage,
+					itemsPerPage: $scope.itemsPerPage
+			};
+			return $http.get('user/users',{params: page}).success(function(page){
+				$scope.totalItems = page.totalItems;
+				$scope.users = page.data;
+			});
+		};
+
+		$scope.loadData();
 	}
 }).
-controller('GroupController',function($scope,$stateParams){
+controller('GroupController',function($scope,$stateParams,$http){
 	if($stateParams.groupName){
 
 		$scope.groupName = $stateParams.groupName;
@@ -467,11 +479,96 @@ controller('GroupController',function($scope,$stateParams){
 
 
 		$scope.pageChanged = function() {
+			$scope.loadData();
+		};
 
+		$scope.loadData = function(){
+			var page = {
+					page: $scope.currentPage,
+					itemsPerPage: $scope.itemsPerPage
+			};
+			return $http.get('group/groups',{params: page}).success(function(page){
+				$scope.totalItems = page.totalItems;
+				$scope.groups = page.data;
+			});
+		};
+
+		$scope.loadData();
+	}
+}).
+controller('AuthorityController',function($scope,$stateParams,$http){
+	if($stateParams.authority){
+
+		$scope.authorityName = $stateParams.authority;
+
+		$http.get('authority/'+$scope.authorityName).success(function(data){
+			$scope.authority = data;
+		});
+	}else{
+		$scope.totalItems = 0;
+		$scope.currentPage = 1;
+		$scope.itemsPerPage = 10;
+		$scope.maxSize = 5;
+
+
+		$scope.pageChanged = function() {
+			$scope.loadData();
+		};
+
+		$scope.loadData = function(){
+			var page = {
+					page: $scope.currentPage,
+					itemsPerPage: $scope.itemsPerPage
+			};
+			return $http.get('authority/authorities',{params: page}).success(function(page){
+				$scope.totalItems = page.totalItems;
+				$scope.authorities = page.data;
+			});
+		};
+
+		$scope.loadData();
+
+		$scope.generateAuthorities = function(){
+			$http.post('authority/bootstrap').success(function(){
+				$scope.loadData();
+			});
 		};
 	}
 }).
-controller('AnalyticsController',function($scope,$stateParams){
+controller('AnalyticsController',function($scope,$stateParams,ProjectIdeaService){
+
+
+	$scope.selectedChartType = 'pie';
+
+	$scope.chartConfig = {
+			title: 'Project Ideas',
+			tooltips: false,
+			labels: false,
+			mouseover: function() {},
+			mouseout: function() {},
+			click: function() {},
+			legend: {
+				display: true,
+				//could be 'left, right'
+				position: 'right'
+			},
+			innerRadius: 0, // applicable on pieCharts, can be a percentage like '50%'
+			lineLegend: 'lineEnd' // can be also 'traditional'
+	};
+
+	$scope.chartData = {
+			"series": [
+			           "Project Ideass"
+			           ],
+			           "data": []          
+
+	};
+
+	ProjectIdeaService.getPublishedTagBadges().success(function(tagCounts){
+		angular.forEach(tagCounts,function(key,value){
+			$scope.chartData.data.push({"x":key.tag,"y":[key.count]});
+		});
+	});
 
 }).
 controller('ChatController',

@@ -3,6 +3,7 @@
  */
 package in.anandm.projectidea.domain.repository;
 
+import in.anandm.projectidea.domain.model.Page;
 import in.anandm.projectidea.domain.model.ProjectIdeaReview;
 
 /**
@@ -15,4 +16,5 @@ public interface IProjectIdeaReviewRepository {
 
 	void removeProjectIdeaReviewById(Long id);
 
+	Page<ProjectIdeaReview> page(Integer pageNumber,Integer itemsPerPage);
 }
