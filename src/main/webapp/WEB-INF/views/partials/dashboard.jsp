@@ -38,10 +38,10 @@
 <div class="row">
 	<div class="col-md-3">
 		<ul class="nav nav-pills nav-stacked">
-			<li ui-sref-active="active"><a ui-sref="dashboard.users">User</a></li>
-			<li ui-sref-active="active"><a ui-sref="dashboard.groups">Group</a></li>
-			<li ui-sref-active="active"><a ui-sref="dashboard.authorities">Authorities</a></li>
-			<li ui-sref-active="active"><a ui-sref="dashboard.analytics">Analytics</a></li>
+			<li ui-sref-active="active"><a ui-sref="dashboard.users"><i class="fa fa-user"></i> User</a></li>
+			<li ui-sref-active="active"><a ui-sref="dashboard.groups"><i class="fa fa-users"></i> Group</a></li>
+			<li ui-sref-active="active"><a ui-sref="dashboard.authorities"><i class="fa fa-key"></i> Authorities</a></li>
+			<li ui-sref-active="active"><a ui-sref="dashboard.analytics"><i class="fa fa-bar-chart-o"></i> Analytics</a></li>
 		</ul>
 	</div>
 	<div class="col-md-9">

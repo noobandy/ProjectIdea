@@ -91,6 +91,10 @@ body {
 							class="fa fa-paper-plane-o"></i> <spring:message
 								code="ProjectIdea.myIdeas" />
 					</a></li>
+					<li ui-sref-active="active"><a
+						ui-sref="dashboard.users"> <i
+							class="fa fa-dashboard"></i> Dashboard
+					</a></li>
 				</ul>
 				<ul ng-if="isLoggedIn()" class="nav navbar-nav navbar-right">
 					<li ui-sref-active="active"><a ui-sref="chat"> <i
