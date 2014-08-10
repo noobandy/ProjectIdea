@@ -572,16 +572,12 @@ controller('AnalyticsController',function($scope,$stateParams,ProjectIdeaService
 
 }).
 controller('ChatController',
-		function($scope, ChatService, AuthService, Session) {
+		function($scope,$http,ChatService, AuthService, Session) {
+	
 	$scope.messages = [];
-	$scope.recentMessagesOfAuthor = [];
 
-	ChatService.list().success(function(data) {
-		$scope.messages = data;
-	});
-
-	ChatService.recentMessagesOfAuthor().success(function(data) {
-		$scope.recentMessagesOfAuthor = data;
-	});
-
+	
+	$scope.messageReceived = function(message){
+		$scope.messages.push(message);
+	};
 });

@@ -6,9 +6,17 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
 
-	<mvc:annotation-driven />
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<mvc:annotation-driven>
+		<mvc:argument-resolvers>
+			<bean class="in.anandm.projectidea.interfaces.rest.helper.AtmosphereResolver">
+
+			</bean>
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
 	<!-- location to search for annotation -->
-	<context:component-scan base-package="in.anandm.projectidea.interfaces.rest.controller">
+	<context:component-scan
+		base-package="in.anandm.projectidea.interfaces.rest.controller">
 	</context:component-scan>
 
 	<mvc:resources location="/resources/" mapping="/resources/**"
@@ -40,40 +48,20 @@
 	<!-- <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver"> 
 		<property name="defaultLocale" value="en_US"></property> </bean> -->
 
-	<!-- <bean
-		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-		<property name="order" value="1" />
-		<property name="contentNegotiationManager" ref="contentNegotiationManager"></property>
-		<property name="defaultViews">
-			<list>
-				JSON View
-				<bean
-					class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
-					<property name="contentType" value="application/json;charset=UTF-8" />
-					<property name="objectMapper" ref="objectMapper" />
-					<property name="extractValueFromSingleKeyModel" value="true" />
-				</bean>
-			</list>
-		</property>
-	</bean>
-	<bean id="contentNegotiationManager"
-		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-		<property name="mediaTypes">
-			<value>
-				json=application/json
-				csv=text/csv
-				xml=application/xml
-				htm=text/html
-				multipart=multipart/form-data
-				rss=application/rss+xml
-				pdf=application/pdf
+	<!-- <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"> 
+		<property name="order" value="1" /> <property name="contentNegotiationManager" 
+		ref="contentNegotiationManager"></property> <property name="defaultViews"> 
+		<list> JSON View <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"> 
+		<property name="contentType" value="application/json;charset=UTF-8" /> <property 
+		name="objectMapper" ref="objectMapper" /> <property name="extractValueFromSingleKeyModel" 
+		value="true" /> </bean> </list> </property> </bean> <bean id="contentNegotiationManager" 
+		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean"> 
+		<property name="mediaTypes"> <value> json=application/json csv=text/csv xml=application/xml 
+		htm=text/html multipart=multipart/form-data rss=application/rss+xml pdf=application/pdf 
+		</value> </property> </bean> <bean id="objectMapper" class="org.codehaus.jackson.map.ObjectMapper"> 
+		</bean> -->
 
-			</value>
-		</property>
-	</bean>
-
-	<bean id="objectMapper" class="org.codehaus.jackson.map.ObjectMapper">
-	</bean> -->
+	
 
 	<!-- If no extension matched, use JSP view -->
 	<bean
