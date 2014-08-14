@@ -92,7 +92,7 @@ body {
 							class="fa fa-paper-plane-o"></i> <spring:message
 								code="ProjectIdea.myIdeas" />
 					</a></li>
-					<li ui-sref-active="active"><a ui-sref="dashboard.users">
+					<li ui-sref-active="active"><a ui-sref="dashboard">
 							<i class="fa fa-dashboard"></i> Dashboard
 					</a></li>
 				</ul>
