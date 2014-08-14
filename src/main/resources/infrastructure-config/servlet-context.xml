@@ -62,6 +62,7 @@
 		</bean> -->
 
 	
+	
 
 	<!-- If no extension matched, use JSP view -->
 	<bean

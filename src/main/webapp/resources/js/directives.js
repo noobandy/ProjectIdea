@@ -51,6 +51,7 @@ angular.module('ProjectIdeaApp.directives', []).
 				        	socket.info("Reconnecting");
 				        },
 				        onMessage: function(response){
+				        	console.log(response);
 				        	var responseBody = response.responseBody;
 				        	try{
 				        		var message = JSON.parse(responseBody);

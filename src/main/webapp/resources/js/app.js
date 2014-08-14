@@ -4,7 +4,7 @@
 angular.module(
 		'ProjectIdeaApp',
 		[ 'ui.router', 'ngTable', 'ui.bootstrap', 'xeditable',,'ui.select2',
-		  'angularFileUpload','angularCharts'
+		  'angularFileUpload','angularCharts','ncy-angular-breadcrumb'
 		  , 'ProjectIdeaApp.filters', 'ProjectIdeaApp.services',
 		  'ProjectIdeaApp.factories', 'ProjectIdeaApp.directives',
 		  'ProjectIdeaApp.controllers' ]).constant('AUTH_EVENTS', {
@@ -56,7 +56,8 @@ angular.module(
 				  templateUrl : 'partials/login',
 				  controller : 'LoginController',
 				  data : {
-					  isSecure : false
+					  isSecure : false,
+					  ncyBreadcrumbSkip: true
 				  },
 				  resolve : {
 					  message : function() {
@@ -68,7 +69,8 @@ angular.module(
 				  templateUrl : 'partials/login',
 				  controller : 'LoginController',
 				  data : {
-					  isSecure : false
+					  isSecure : false,
+					  ncyBreadcrumbSkip: true
 				  },
 				  resolve : {
 					  message : function(AuthService) {
@@ -81,16 +83,17 @@ angular.module(
 				  url : '/accessDenied',
 				  template : 'accessDenied',
 				  data : {
-					  isSecure : false
+					  isSecure : false,
+					  ncyBreadcrumbSkip: true
 				  }
 			  }).
 			  state('dashboard',{
-				  abstract: true,
 				  url: '/dashboard',
 				  templateUrl: 'partials/dashboard',
 				  controller: 'DashBoardController',
 				  data: {
-					  isSecure: true
+					  isSecure: true,
+					  ncyBreadcrumbLabel: 'Dashboard'
 				  }
 			  }).
 			  state('dashboard.users',{
@@ -98,7 +101,9 @@ angular.module(
 				  templateUrl: 'partials/users',
 				  controller: 'UserController',
 				  data: {
-					  isSecure: true
+					  isSecure: true,
+					  ncyBreadcrumbLabel: 'Users',
+					  ncyBreadcrumbParent: 'dashboard'
 				  }
 			  }).
 			  state('dashboard.users.user',{
@@ -106,7 +111,9 @@ angular.module(
 				  templateUrl: 'partials/user',
 				  controller: 'UserController',
 				  data: {
-					  isSecure: true
+					  isSecure: true,
+					  ncyBreadcrumbParent: 'dashboard.users',
+					  ncyBreadcrumbLabel: '{{user.username}}'
 				  }
 			  }).
 			  state('dashboard.groups',{
@@ -114,7 +121,9 @@ angular.module(
 				  templateUrl: 'partials/groups',
 				  controller: 'GroupController',
 				  data: {
-					  isSecure: true
+					  isSecure: true,
+					  ncyBreadcrumbLabel: 'Groups',
+					  ncyBreadcrumbParent: 'dashboard'
 				  }
 			  }).
 			  state('dashboard.groups.group',{
@@ -122,7 +131,9 @@ angular.module(
 				  templateUrl: 'partials/group',
 				  controller: 'GroupController',
 				  data: {
-					  isSecure: true
+					  isSecure: true,
+					  ncyBreadcrumbParent: 'dashboard.groups',
+					  ncyBreadcrumbLabel: '{{group.groupName}}'
 				  }
 			  }).
 			  state('dashboard.authorities',{
@@ -130,7 +141,9 @@ angular.module(
 				  templateUrl: 'partials/authorities',
 				  controller: 'AuthorityController',
 				  data: {
-					  isSecure: true
+					  isSecure: true,
+					  ncyBreadcrumbLabel: 'Authorities',
+					  ncyBreadcrumbParent: 'dashboard'
 				  }
 			  }).
 			  state('dashboard.authorities.authority',{
@@ -138,7 +151,9 @@ angular.module(
 				  templateUrl: 'partials/authority',
 				  controller: 'AuthorityController',
 				  data: {
-					  isSecure: true
+					  isSecure: true,
+					  ncyBreadcrumbParent: 'dashboard.authorities',
+					  ncyBreadcrumbLabel: '{{authority.authority}}'
 				  }
 			  }).
 			  state('dashboard.analytics',{
@@ -146,7 +161,9 @@ angular.module(
 				  templateUrl: 'partials/analytics',
 				  controller: 'AnalyticsController',
 				  data: {
-					  isSecure: true
+					  isSecure: true,
+					  ncyBreadcrumbLabel: 'Analytics',
+					  ncyBreadcrumbParent: 'dashboard'
 				  }
 			  })
 			  .
@@ -155,7 +172,8 @@ angular.module(
 				  templateUrl : 'partials/chat',
 				  controller : 'ChatController',
 				  data : {
-					  isSecure : true
+					  isSecure : true,
+					  ncyBreadcrumbLabel: 'Chat'
 				  }
 			  }).
 			  state("userProfile", {
@@ -229,6 +247,7 @@ angular.module(
 				  controller : 'HomeController',
 				  data : {
 					  isSecure : false,
+					  ncyBreadcrumbLabel: 'Home'
 				  }
 
 			  }).state('home.publishedProjectIdeas', {
@@ -237,6 +256,9 @@ angular.module(
 				  controller : 'PublishedProjectIdeaController',
 				  data : {
 					  isSecure : false,
+					  ncyBreadcrumbParent: 'home',
+					  ncyBreadcrumbLabel: 'Published Project Ideas {{activeTag}}'
+					  
 				  }
 
 			  }).state('projectIdea', {
@@ -245,6 +267,7 @@ angular.module(
 				  controller : 'ProjectIdeaController',
 				  data : {
 					  isSecure : false,
+					  ncyBreadcrumbLabel: 'Project Idea {{projectIdea.title}}'
 				  }
 
 			  }).
@@ -254,6 +277,8 @@ angular.module(
 				  controller : 'ProjectIdeaReviewController',
 				  data : {
 					  isSecure : false,
+					  ncyBreadcrumbParent: 'projectIdea',
+					  ncyBreadcrumbLabel: 'Reviews'
 				  }
 
 			  })
@@ -263,6 +288,7 @@ angular.module(
 				  templateUrl : 'partials/myProjectIdeas',
 				  data : {
 					  isSecure : true,
+					  ncyBreadcrumbLabel: 'My Project Ideas'
 				  }
 			  }).state('myProjectIdeas.drafted', {
 				  abstract: true,
@@ -271,6 +297,8 @@ angular.module(
 				  controller : 'MyDraftedProjectIdeaController',
 				  data : {
 					  isSecure : true,
+					  ncyBreadcrumbParent: 'myProjectIdeas',
+					  ncyBreadcrumbLabel: 'Draft'
 				  }
 			  }).state('myProjectIdeas.published', {
 				  abstract: true,
@@ -279,6 +307,8 @@ angular.module(
 				  controller : 'MyPublishedProjectIdeaController',
 				  data : {
 					  isSecure : true,
+					  ncyBreadcrumbParent: 'myProjectIdeas',
+					  ncyBreadcrumbLabel: 'Published'
 				  }
 			  }).state('myProjectIdeas.drafted.projectIdeas', {
 				  url : '?tag',
@@ -286,6 +316,8 @@ angular.module(
 				  controller : 'UserDraftedProjectIdeaController',
 				  data : {
 					  isSecure : true,
+					  ncyBreadcrumbParent: 'myProjectIdeas.drafted',
+					  ncyBreadcrumbLabel: 'Draft {{activeTag}}'
 				  }
 			  }).
 			  state('myProjectIdeas.drafted.new', {
@@ -294,6 +326,8 @@ angular.module(
 				  controller : 'NewProjectIdeaController',
 				  data : {
 					  isSecure : true,
+					  ncyBreadcrumbParent: 'myProjectIdeas.drafted.projectIdeas',
+					  ncyBreadcrumbLabel: 'New'
 				  }
 			  }).
 			  state('myProjectIdeas.drafted.edit', {
@@ -302,6 +336,8 @@ angular.module(
 				  controller : 'UpdateProjectIdeaController',
 				  data : {
 					  isSecure : true,
+					  ncyBreadcrumbParent: 'myProjectIdeas.drafted.projectIdeas',
+					  ncyBreadcrumbLabel: 'Edit'
 				  }
 			  })
 			  .state('myProjectIdeas.published.projectIdeas', {
@@ -310,6 +346,8 @@ angular.module(
 				  controller : 'UserPublishedProjectIdeaController',
 				  data : {
 					  isSecure : true,
+					  ncyBreadcrumbParent: 'myProjectIdeas.published',
+					  ncyBreadcrumbLabel: 'Published {{activeTag}}'
 				  }
 			  });
 		  }).run(

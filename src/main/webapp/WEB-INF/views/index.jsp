@@ -60,9 +60,10 @@ body {
 .selectize-control>.selectize-dropdown {
 	top: 36px;
 }
+
 .chart {
-  height: 400px;
-  width: 800px;
+	height: 400px;
+	width: 800px;
 }
 </style>
 <title><spring:message code="Project.title" /></title>
@@ -91,9 +92,8 @@ body {
 							class="fa fa-paper-plane-o"></i> <spring:message
 								code="ProjectIdea.myIdeas" />
 					</a></li>
-					<li ui-sref-active="active"><a
-						ui-sref="dashboard.users"> <i
-							class="fa fa-dashboard"></i> Dashboard
+					<li ui-sref-active="active"><a ui-sref="dashboard.users">
+							<i class="fa fa-dashboard"></i> Dashboard
 					</a></li>
 				</ul>
 				<ul ng-if="isLoggedIn()" class="nav navbar-nav navbar-right">
@@ -121,6 +121,13 @@ body {
 	</div>
 	<img id="spinner" ng-src="resources/img/loading1.gif"
 		style="display: none;">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div ncy-breadcrumb></div>
+			</div>
+		</div>
+	</div>
 	<div class="container-fluid" ui-view></div>
 	<div class="footer">
 		<div class="container">
@@ -136,12 +143,11 @@ body {
 		src="${pageContext.request.contextPath}/resources/js/angular-file-upload-shim.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/angular.min.js"></script>
-		
-		<script
-		src="${pageContext.request.contextPath}/resources/js/d3.min.js"></script>
-		<script
+
+	<script src="${pageContext.request.contextPath}/resources/js/d3.min.js"></script>
+	<script
 		src="${pageContext.request.contextPath}/resources/js/angular-charts.min.js"></script>
-	
+
 	<script
 		src="${pageContext.request.contextPath}/resources/js/angular-file-upload.min.js"></script>
 	<script type="text/javascript"
@@ -158,7 +164,8 @@ body {
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/js/xeditable.min.js"></script>
 
-
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/js/angular-breadcrumb.min.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/js/app.js"></script>
 	<script type="text/javascript"
