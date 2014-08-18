@@ -3,8 +3,8 @@
  */
 package in.anandm.projectidea.infrastructure.persistence.jpa;
 
-import in.anandm.projectidea.domain.model.GroupUser;
-import in.anandm.projectidea.domain.repository.IGroupUserRepository;
+import in.anandm.projectidea.domain.model.group.GroupUser;
+import in.anandm.projectidea.domain.model.group.IGroupUserRepository;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

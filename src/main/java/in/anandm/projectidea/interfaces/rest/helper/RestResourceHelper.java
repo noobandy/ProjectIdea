@@ -3,10 +3,10 @@
  */
 package in.anandm.projectidea.interfaces.rest.helper;
 
-import in.anandm.projectidea.domain.model.ProjectIdea;
-import in.anandm.projectidea.domain.model.ProjectIdeaStatus;
-import in.anandm.projectidea.domain.model.User;
-import in.anandm.projectidea.domain.repository.IUserRepository;
+import in.anandm.projectidea.domain.model.projectidea.ProjectIdea;
+import in.anandm.projectidea.domain.model.projectidea.Status;
+import in.anandm.projectidea.domain.model.user.UserRepository;
+import in.anandm.projectidea.domain.model.user.User;
 import in.anandm.projectidea.infrastructure.persistence.jpa.BaseRepository;
 import in.anandm.projectidea.interfaces.rest.resource.Page;
 import in.anandm.projectidea.interfaces.rest.resource.ProjectIdeaSummary;
@@ -33,14 +33,14 @@ import com.googlecode.genericdao.search.Search;
 public class RestResourceHelper extends BaseRepository<ProjectIdea, Long> {
 
 	@Autowired
-	private IUserRepository userRepository;
+	private UserRepository userRepository;
 
 	public Page<ProjectIdeaSummary> getPage(Page<ProjectIdeaSummary> page) {
 		Search search = new Search(ProjectIdea.class);
 
 		search.addField("id");
-		search.addField("title");
-		search.addField("description");
+		search.addField("specifications.title");
+		search.addField("specifications.description");
 
 		Filter finalFilter = Filter.and();
 
@@ -92,8 +92,7 @@ public class RestResourceHelper extends BaseRepository<ProjectIdea, Long> {
 		return page;
 	}
 
-
-	public List<TagCount> getTagCount(ProjectIdeaStatus status) {
+	public List<TagCount> getTagCount(Status status) {
 		Query query = em().createNativeQuery(
 				"SELECT " + "  t.tag AS tag," + "  COUNT(pidt.tags) AS count "
 						+ "FROM" + "  tag t "
@@ -109,7 +108,7 @@ public class RestResourceHelper extends BaseRepository<ProjectIdea, Long> {
 	}
 
 	public List<TagCount> getTagCountOfUser(String author,
-			ProjectIdeaStatus status) {
+			Status status) {
 
 		User user = userRepository.findUserByUserName(author);
 		if (user != null) {

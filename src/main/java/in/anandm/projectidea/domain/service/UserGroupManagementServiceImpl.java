@@ -3,19 +3,19 @@
  */
 package in.anandm.projectidea.domain.service;
 
-import in.anandm.projectidea.domain.model.Authority;
-import in.anandm.projectidea.domain.model.AuthorityConstants;
-import in.anandm.projectidea.domain.model.Group;
-import in.anandm.projectidea.domain.model.GroupAuthority;
-import in.anandm.projectidea.domain.model.GroupUser;
-import in.anandm.projectidea.domain.model.User;
-import in.anandm.projectidea.domain.model.UserAuthority;
-import in.anandm.projectidea.domain.repository.IAuthorityRepository;
-import in.anandm.projectidea.domain.repository.IGroupAuthorityRepository;
-import in.anandm.projectidea.domain.repository.IGroupRepository;
-import in.anandm.projectidea.domain.repository.IGroupUserRepository;
-import in.anandm.projectidea.domain.repository.IUserAuthorityRepository;
-import in.anandm.projectidea.domain.repository.IUserRepository;
+import in.anandm.projectidea.domain.model.authority.Authority;
+import in.anandm.projectidea.domain.model.authority.AuthorityConstants;
+import in.anandm.projectidea.domain.model.authority.AuthorityRepository;
+import in.anandm.projectidea.domain.model.group.Group;
+import in.anandm.projectidea.domain.model.group.GroupAuthority;
+import in.anandm.projectidea.domain.model.group.GroupUser;
+import in.anandm.projectidea.domain.model.group.IGroupAuthorityRepository;
+import in.anandm.projectidea.domain.model.group.IGroupRepository;
+import in.anandm.projectidea.domain.model.group.IGroupUserRepository;
+import in.anandm.projectidea.domain.model.user.UserAuthorityRepository;
+import in.anandm.projectidea.domain.model.user.UserRepository;
+import in.anandm.projectidea.domain.model.user.User;
+import in.anandm.projectidea.domain.model.user.UserAuthority;
 
 import java.util.List;
 
@@ -30,21 +30,21 @@ import org.springframework.stereotype.Service;
 public class UserGroupManagementServiceImpl implements
 		IUserGroupManagementService {
 
-	private IUserRepository userRepository;
+	private UserRepository userRepository;
 	private IGroupRepository groupRepository;
 	private IGroupUserRepository groupUserRepository;
-	private IAuthorityRepository authorityRepository;
-	private IUserAuthorityRepository userAuthorityRepository;
+	private AuthorityRepository authorityRepository;
+	private UserAuthorityRepository userAuthorityRepository;
 	private IGroupAuthorityRepository groupAuthorityRepository;
 
 	
 
 	@Autowired
-	public UserGroupManagementServiceImpl(IUserRepository userRepository,
+	public UserGroupManagementServiceImpl(UserRepository userRepository,
 			IGroupRepository groupRepository,
 			IGroupUserRepository groupUserRepository,
-			IAuthorityRepository authorityRepository,
-			IUserAuthorityRepository userAuthorityRepository,
+			AuthorityRepository authorityRepository,
+			UserAuthorityRepository userAuthorityRepository,
 			IGroupAuthorityRepository groupAuthorityRepository) {
 		super();
 		this.userRepository = userRepository;

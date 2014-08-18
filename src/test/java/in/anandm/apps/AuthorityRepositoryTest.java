@@ -3,9 +3,9 @@
  */
 package in.anandm.apps;
 
-import in.anandm.projectidea.domain.model.Authority;
-import in.anandm.projectidea.domain.model.AuthorityConstants;
-import in.anandm.projectidea.domain.repository.IAuthorityRepository;
+import in.anandm.projectidea.domain.model.authority.Authority;
+import in.anandm.projectidea.domain.model.authority.AuthorityConstants;
+import in.anandm.projectidea.domain.model.authority.AuthorityRepository;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,10 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class AuthorityRepositoryTest extends BaseTest {
 
 	@Autowired
-	private IAuthorityRepository fixture; 
+	private AuthorityRepository fixture; 
 	
 	/**
-	 * Test method for {@link in.anandm.projectidea.infrastructure.persistence.jpa.AuthorityRepository#saveAuthority(in.anandm.projectidea.domain.model.Authority)}.
+	 * Test method for {@link in.anandm.projectidea.infrastructure.persistence.jpa.AuthorityRepositoryImpl#saveAuthority(in.anandm.projectidea.domain.model.authority.Authority)}.
 	 */
 	@Test
 	public void testAuthority() {

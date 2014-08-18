@@ -3,10 +3,12 @@
  */
 package in.anandm.projectidea.interfaces.rest.controller;
 
-import in.anandm.projectidea.domain.model.Page;
-import in.anandm.projectidea.domain.model.ProjectIdeaStatus;
-import in.anandm.projectidea.domain.model.User;
-import in.anandm.projectidea.domain.repository.IUserRepository;
+import in.anandm.projectidea.application.util.PaginationUtility;
+import in.anandm.projectidea.domain.model.projectidea.QueryResult;
+import in.anandm.projectidea.domain.model.projectidea.Status;
+import in.anandm.projectidea.domain.model.user.User;
+import in.anandm.projectidea.domain.model.user.UserQuery;
+import in.anandm.projectidea.domain.model.user.UserRepository;
 import in.anandm.projectidea.interfaces.rest.helper.RestResourceHelper;
 import in.anandm.projectidea.interfaces.rest.resource.TagCount;
 import in.anandm.projectidea.interfaces.rest.resource.UpdatePasswordCommand;
@@ -37,26 +39,32 @@ public class UserController {
 	private RestResourceHelper resourceHelper;
 
 	@Autowired
-	private IUserRepository userRepository;
+	private UserRepository userRepository;
 
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
-	public ResponseEntity<Page<User>> getUsers(
-			@RequestParam(value = "page") Integer pageNumber,
-			@RequestParam(value = "itemsPerPage") Integer itemsPerPage) {
-		
-		Page<User> page = userRepository.page(pageNumber, itemsPerPage);
+	public ResponseEntity<QueryResult<User>> getUsers(
+			@RequestParam(value = "page", required = true) int pageNumber,
+			@RequestParam(value = "recordsPerPage", required = true) int pageSize,
+			@RequestParam(value = "searchText", required = false) String searchText) {
 
-		return new ResponseEntity<Page<User>>(page, HttpStatus.OK);
+		UserQuery query = new UserQuery();
+		query.search(searchText);
+		query.start(PaginationUtility.start(pageNumber, pageSize));
+		query.maxResult(pageSize);
+		QueryResult<User> result = userRepository.query(query);
+
+		return new ResponseEntity<QueryResult<User>>(result, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{username}", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<UserProfile> getUser(
+	public @ResponseBody
+	ResponseEntity<UserProfile> getUser(
 			@PathVariable(value = "username") String username) {
 
 		User user = userRepository.findUserByUserName(username);
 		if (user != null) {
 			List<TagCount> tagCounts = resourceHelper.getTagCountOfUser(
-					username, ProjectIdeaStatus.PUBLISHED);
+					username, Status.PUBLISHED);
 
 			UserProfile userProfile = new UserProfile(user, tagCounts);
 
@@ -78,7 +86,8 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/{username}/updatePassword", method = RequestMethod.PUT)
-	public @ResponseBody ResponseEntity<String> updatePassword(
+	public @ResponseBody
+	ResponseEntity<String> updatePassword(
 			@PathVariable(value = "username") String username,
 			@RequestBody UpdatePasswordCommand command) {
 

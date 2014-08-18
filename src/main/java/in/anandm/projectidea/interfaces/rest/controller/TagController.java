@@ -3,8 +3,8 @@
  */
 package in.anandm.projectidea.interfaces.rest.controller;
 
-import in.anandm.projectidea.domain.model.Tag;
-import in.anandm.projectidea.domain.repository.ITagRepository;
+import in.anandm.projectidea.domain.model.tag.TagRepository;
+import in.anandm.projectidea.domain.model.tag.Tag;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class TagController {
 	
 	@Autowired
-	private ITagRepository tagRepository;
+	private TagRepository tagRepository;
 
 	@RequestMapping(value = "/tags", method = RequestMethod.GET)
 	public ResponseEntity<List<Tag>> getAllTags() {

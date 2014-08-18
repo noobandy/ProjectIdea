@@ -3,7 +3,7 @@
  */
 package in.anandm.projectidea.interfaces.rest.resource;
 
-import in.anandm.projectidea.domain.model.ProjectIdeaStatus;
+import in.anandm.projectidea.domain.model.projectidea.Status;
 
 import java.io.Serializable;
 import java.util.List;
@@ -22,7 +22,7 @@ public class Page<T> implements Serializable {
 	// optional tag filter
 	private String tag;
 
-	private ProjectIdeaStatus status;
+	private Status status;
 
 	private String author;
 
@@ -54,11 +54,11 @@ public class Page<T> implements Serializable {
 		this.tag = tag;
 	}
 
-	public ProjectIdeaStatus getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(ProjectIdeaStatus status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 

@@ -3,15 +3,13 @@
  */
 package in.anandm.projectidea.domain.model.projectidea;
 
-import in.anandm.projectidea.domain.model.Tag;
-import in.anandm.projectidea.domain.model.User;
+import in.anandm.projectidea.domain.model.tag.Tag;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 
 /**
  * @author anandm
@@ -25,21 +23,16 @@ public class Specifications {
 	private Long timeInMilliseconds;
 	private String timeInWords;
 
-	@ManyToOne
-	private User author;
-
 	@ManyToMany
 	private Set<Tag> tags = new HashSet<Tag>();
 
-	
 	/**
 	 * 
 	 */
 	Specifications() {
 		super();
-		
+
 	}
-	
 
 	/**
 	 * @param title
@@ -50,14 +43,12 @@ public class Specifications {
 	 * @param tags
 	 */
 	private Specifications(String title, String description,
-			Long timeInMilliseconds, String timeInWords, User author,
-			Set<Tag> tags) {
+			Long timeInMilliseconds, String timeInWords, Set<Tag> tags) {
 		super();
 		this.title = title;
 		this.description = description;
 		this.timeInMilliseconds = timeInMilliseconds;
 		this.timeInWords = timeInWords;
-		this.author = author;
 		this.tags = tags;
 	}
 
@@ -69,7 +60,7 @@ public class Specifications {
 		Tag[] tagArray = new Tag[this.tags.size()];
 		EstimatedTime estimatedTime = EstimatedTime.valueOf(timeInMilliseconds);
 		return new Builder().title(title).description(description)
-				.author(author).tag(this.tags.toArray(tagArray))
+				.tag(this.tags.toArray(tagArray))
 				.years(estimatedTime.getYears())
 				.months(estimatedTime.getMonths())
 				.days(estimatedTime.getDays());
@@ -80,7 +71,6 @@ public class Specifications {
 		private String description;
 		private Long timeInMilliseconds;
 		private String timeInWords;
-		private User author;
 
 		private Set<Tag> tags = new HashSet<Tag>();
 
@@ -102,11 +92,6 @@ public class Specifications {
 
 		public Builder description(String description) {
 			this.description = description;
-			return this;
-		}
-
-		public Builder author(User author) {
-			this.author = author;
 			return this;
 		}
 
@@ -140,7 +125,7 @@ public class Specifications {
 			this.timeInMilliseconds = estimatedTime.timeInMilliseconds();
 			this.timeInWords = estimatedTime.timeInWords();
 			return new Specifications(title, description, timeInMilliseconds,
-					timeInWords, author, tags);
+					timeInWords, tags);
 		}
 	}
 }

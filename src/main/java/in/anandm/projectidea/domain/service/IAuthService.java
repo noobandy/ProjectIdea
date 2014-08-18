@@ -3,7 +3,7 @@
  */
 package in.anandm.projectidea.domain.service;
 
-import in.anandm.projectidea.domain.model.AuthorityConstants;
+import in.anandm.projectidea.domain.model.authority.AuthorityConstants;
 
 
 /**

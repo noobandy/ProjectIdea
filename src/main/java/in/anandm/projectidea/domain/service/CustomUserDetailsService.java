@@ -3,8 +3,8 @@
  */
 package in.anandm.projectidea.domain.service;
 
-import in.anandm.projectidea.domain.model.AuthorityConstants;
-import in.anandm.projectidea.domain.repository.IUserRepository;
+import in.anandm.projectidea.domain.model.authority.AuthorityConstants;
+import in.anandm.projectidea.domain.model.user.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,11 +27,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public class CustomUserDetailsService implements UserDetailsService {
 
 
-	private IUserRepository userRepository;
+	private UserRepository userRepository;
 	
 
 	@Autowired
-	public CustomUserDetailsService(IUserRepository userRepository) {
+	public CustomUserDetailsService(UserRepository userRepository) {
 		super();
 		this.userRepository = userRepository;
 	}
@@ -41,7 +41,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
 		
-		in.anandm.projectidea.domain.model.User foundUser = userRepository.findUserByUserName(username);
+		in.anandm.projectidea.domain.model.user.User foundUser = userRepository.findUserByUserName(username);
 
 		if (foundUser == null) {
 			throw new UsernameNotFoundException(username);

@@ -3,7 +3,7 @@
  */
 package in.anandm.projectidea.interfaces.rest.helper;
 
-import in.anandm.projectidea.domain.model.ProjectIdeaReview;
+import in.anandm.projectidea.domain.model.review.Review;
 import in.anandm.projectidea.infrastructure.persistence.jpa.BaseRepository;
 import in.anandm.projectidea.interfaces.rest.resource.Page;
 
@@ -21,13 +21,12 @@ import com.googlecode.genericdao.search.SearchResult;
  * 
  */
 @Component
-public class ProjectIdeaReviewHelper extends
-		BaseRepository<ProjectIdeaReview, Long> {
+public class ProjectIdeaReviewHelper extends BaseRepository<Review, Long> {
 
 	public Page<in.anandm.projectidea.interfaces.rest.resource.ProjectIdeaReview> getProjectIdeaReviewPage(
 			Page<in.anandm.projectidea.interfaces.rest.resource.ProjectIdeaReview> page,
 			Long projectIdeaId) {
-		Search search = new Search(ProjectIdeaReview.class);
+		Search search = new Search(Review.class);
 
 		search.addField("id");
 		search.addField("projectIdeaId");
@@ -46,7 +45,7 @@ public class ProjectIdeaReviewHelper extends
 
 		search.setResultMode(Search.RESULT_ARRAY);
 
-		SearchResult<ProjectIdeaReview> result = searchAndCount(search);
+		SearchResult<Review> result = searchAndCount(search);
 
 		page.setTotlaItems(result.getTotalCount());
 

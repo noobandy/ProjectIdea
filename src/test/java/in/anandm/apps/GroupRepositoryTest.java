@@ -3,8 +3,8 @@
  */
 package in.anandm.apps;
 
-import in.anandm.projectidea.domain.model.Group;
-import in.anandm.projectidea.domain.repository.IGroupRepository;
+import in.anandm.projectidea.domain.model.group.Group;
+import in.anandm.projectidea.domain.model.group.IGroupRepository;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class GroupRepositoryTest extends BaseTest {
 	private IGroupRepository fixture;
 	
 	/**
-	 * Test method for {@link in.anandm.projectidea.infrastructure.persistence.jpa.GroupRepository#saveGroup(in.anandm.projectidea.domain.model.Group)}.
+	 * Test method for {@link in.anandm.projectidea.infrastructure.persistence.jpa.GroupRepository#saveGroup(in.anandm.projectidea.domain.model.group.Group)}.
 	 */
 	@Test
 	public void testSaveGroup() {

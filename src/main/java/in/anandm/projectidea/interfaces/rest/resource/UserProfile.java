@@ -3,7 +3,7 @@
  */
 package in.anandm.projectidea.interfaces.rest.resource;
 
-import in.anandm.projectidea.domain.model.User;
+import in.anandm.projectidea.domain.model.user.User;
 
 import java.io.Serializable;
 import java.util.List;

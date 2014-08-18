@@ -3,9 +3,9 @@
  */
 package in.anandm.projectidea.domain.service;
 
-import in.anandm.projectidea.domain.model.Authority;
-import in.anandm.projectidea.domain.model.AuthorityConstants;
-import in.anandm.projectidea.domain.repository.IAuthorityRepository;
+import in.anandm.projectidea.domain.model.authority.Authority;
+import in.anandm.projectidea.domain.model.authority.AuthorityConstants;
+import in.anandm.projectidea.domain.model.authority.AuthorityRepository;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,12 +22,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthServiceImpl implements IAuthService {
 
-	private IAuthorityRepository authorityRepository;
+	private AuthorityRepository authorityRepository;
 
 	private boolean initialized = false;
 
 	@Autowired
-	public AuthServiceImpl(IAuthorityRepository authorityRepository) {
+	public AuthServiceImpl(AuthorityRepository authorityRepository) {
 		super();
 		this.authorityRepository = authorityRepository;
 	}
