@@ -3,10 +3,10 @@
  */
 package in.anandm.projectidea.infrastructure.persistence.jpa;
 
-import in.anandm.projectidea.domain.model.projectidea.QueryResult;
 import in.anandm.projectidea.domain.model.review.Review;
 import in.anandm.projectidea.domain.model.review.ReviewQuery;
 import in.anandm.projectidea.domain.model.review.ReviewRepository;
+import in.anandm.projectidea.domain.shared.QueryResult;
 
 import java.util.List;
 

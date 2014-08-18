@@ -6,7 +6,7 @@ package in.anandm.projectidea.infrastructure.persistence.jpa;
 import in.anandm.projectidea.domain.model.projectidea.ProjectIdea;
 import in.anandm.projectidea.domain.model.projectidea.ProjectIdeaQuery;
 import in.anandm.projectidea.domain.model.projectidea.ProjectIdeaRepository;
-import in.anandm.projectidea.domain.model.projectidea.QueryResult;
+import in.anandm.projectidea.domain.shared.QueryResult;
 
 import java.util.List;
 

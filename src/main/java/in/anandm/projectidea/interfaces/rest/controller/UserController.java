@@ -4,11 +4,11 @@
 package in.anandm.projectidea.interfaces.rest.controller;
 
 import in.anandm.projectidea.application.util.PaginationUtility;
-import in.anandm.projectidea.domain.model.projectidea.QueryResult;
 import in.anandm.projectidea.domain.model.projectidea.Status;
 import in.anandm.projectidea.domain.model.user.User;
 import in.anandm.projectidea.domain.model.user.UserQuery;
 import in.anandm.projectidea.domain.model.user.UserRepository;
+import in.anandm.projectidea.domain.shared.QueryResult;
 import in.anandm.projectidea.interfaces.rest.helper.RestResourceHelper;
 import in.anandm.projectidea.interfaces.rest.resource.TagCount;
 import in.anandm.projectidea.interfaces.rest.resource.UpdatePasswordCommand;

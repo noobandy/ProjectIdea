@@ -3,6 +3,8 @@
  */
 package in.anandm.projectidea.domain.model.projectidea;
 
+import in.anandm.projectidea.domain.shared.QueryResult;
+
 import java.util.List;
 
 /**

@@ -3,7 +3,7 @@
  */
 package in.anandm.projectidea.domain.model.review;
 
-import in.anandm.projectidea.domain.model.projectidea.QueryResult;
+import in.anandm.projectidea.domain.shared.QueryResult;
 
 import java.util.List;
 

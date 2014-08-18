@@ -1,7 +1,7 @@
 /**
  * 
  */
-package in.anandm.projectidea.domain.model.projectidea;
+package in.anandm.projectidea.domain.shared;
 
 import java.util.List;
 

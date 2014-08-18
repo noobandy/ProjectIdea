@@ -3,10 +3,10 @@
  */
 package in.anandm.projectidea.infrastructure.persistence.jpa;
 
-import in.anandm.projectidea.domain.model.projectidea.QueryResult;
 import in.anandm.projectidea.domain.model.user.User;
 import in.anandm.projectidea.domain.model.user.UserQuery;
 import in.anandm.projectidea.domain.model.user.UserRepository;
+import in.anandm.projectidea.domain.shared.QueryResult;
 
 import java.util.List;
 
