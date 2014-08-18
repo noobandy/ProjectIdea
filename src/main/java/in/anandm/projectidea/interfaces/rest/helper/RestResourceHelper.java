@@ -8,7 +8,7 @@ import in.anandm.projectidea.domain.model.projectidea.Status;
 import in.anandm.projectidea.domain.model.user.User;
 import in.anandm.projectidea.domain.model.user.UserRepository;
 import in.anandm.projectidea.infrastructure.persistence.jpa.BaseRepository;
-import in.anandm.projectidea.interfaces.rest.resource.TagCount;
+import in.anandm.projectidea.interfaces.rest.dto.TagCount;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

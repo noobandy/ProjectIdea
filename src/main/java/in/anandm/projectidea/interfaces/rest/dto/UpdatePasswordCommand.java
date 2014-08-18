@@ -1,7 +1,7 @@
 /**
  * 
  */
-package in.anandm.projectidea.interfaces.rest.resource;
+package in.anandm.projectidea.interfaces.rest.dto;
 
 import java.io.Serializable;
 

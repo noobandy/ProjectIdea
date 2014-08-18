@@ -16,8 +16,8 @@ import in.anandm.projectidea.domain.model.review.Review;
 import in.anandm.projectidea.domain.model.review.ReviewQuery;
 import in.anandm.projectidea.domain.model.review.ReviewRepository;
 import in.anandm.projectidea.domain.shared.QueryResult;
+import in.anandm.projectidea.interfaces.rest.dto.TagCount;
 import in.anandm.projectidea.interfaces.rest.helper.RestResourceHelper;
-import in.anandm.projectidea.interfaces.rest.resource.TagCount;
 import in.anandm.projectidea.interfaces.rest.validator.ReviewCommandValidator;
 
 import java.util.ArrayList;

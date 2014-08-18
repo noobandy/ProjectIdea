@@ -1,9 +1,9 @@
 package in.anandm.apps;
 
 import in.anandm.projectidea.domain.model.ProjectIdeaStatus;
+import in.anandm.projectidea.interfaces.rest.dto.Page;
+import in.anandm.projectidea.interfaces.rest.dto.ProjectIdeaSummary;
 import in.anandm.projectidea.interfaces.rest.helper.RestResourceHelper;
-import in.anandm.projectidea.interfaces.rest.resource.Page;
-import in.anandm.projectidea.interfaces.rest.resource.ProjectIdeaSummary;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

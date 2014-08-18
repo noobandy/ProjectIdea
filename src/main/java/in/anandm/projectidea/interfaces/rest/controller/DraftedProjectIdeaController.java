@@ -15,9 +15,9 @@ import in.anandm.projectidea.domain.model.projectidea.Status;
 import in.anandm.projectidea.domain.model.tag.Tag;
 import in.anandm.projectidea.domain.model.tag.TagRepository;
 import in.anandm.projectidea.domain.shared.QueryResult;
+import in.anandm.projectidea.interfaces.rest.dto.ProjectIdeaCommand;
+import in.anandm.projectidea.interfaces.rest.dto.TagCount;
 import in.anandm.projectidea.interfaces.rest.helper.RestResourceHelper;
-import in.anandm.projectidea.interfaces.rest.resource.ProjectIdeaCommand;
-import in.anandm.projectidea.interfaces.rest.resource.TagCount;
 import in.anandm.projectidea.interfaces.rest.validator.ProjectIdeaCommandValidator;
 
 import java.util.ArrayList;
