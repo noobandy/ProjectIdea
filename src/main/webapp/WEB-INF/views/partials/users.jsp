@@ -1,4 +1,5 @@
-<table class="table table-striped">
+
+<table class="table table-striped table-bordered">
 	<thead>
 		<tr>
 			<th>Complete Name</th>
@@ -13,9 +14,10 @@
 			<td>{{user.completeName}}</td>
 			<td><a ui-sref="dashboard.users.user({username:user.username})">{{user.username}}</a></td>
 			<td>{{user.emailId}}</td>
-			<td ng-if="user.enabled"><input ng-disabled="true" type="checkbox"
-				checked="checked"></td>
-			<td ng-if="!user.enabled"><input ng-disabled="true" type="checkbox"></td>
+			<td ng-if="user.enabled"><input ng-disabled="true"
+				type="checkbox" checked="checked"></td>
+			<td ng-if="!user.enabled"><input ng-disabled="true"
+				type="checkbox"></td>
 			<td>{{user.credentialExpiredAt | date}}</td>
 		</tr>
 	</tbody>
@@ -25,3 +27,4 @@
 	max-size="maxSize" class="pagination-sm" boundary-links="true"
 	rotate="false" num-pages="numPages" ng-change="pageChanged()"></pagination>
 <pre ng-show="totalItems > itemsPerPage">Page: {{currentPage}} / {{numPages}}</pre>
+

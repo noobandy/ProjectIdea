@@ -1,3 +1,12 @@
+<tabset justified="true" type="pills">
+ <tab>
+  <tab-heading>Newest </tab-heading>
+  </tab>
+   <tab>
+    <tab-heading>
+	Top Rated	
+		</tab-heading>
+		</tab> </tabset>
 <div class="list-group">
 	<project-idea-summary ng-repeat="projectIdea in projectIdeas" project-idea="projectIdea">
 	

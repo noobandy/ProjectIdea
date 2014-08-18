@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
  * @author anandm
  * 
  */
-@Entity(name = "Idea")
+@Entity
 public class ProjectIdea {
 
 	@Id

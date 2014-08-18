@@ -5,11 +5,9 @@ package in.anandm.projectidea.interfaces.rest.helper;
 
 import in.anandm.projectidea.domain.model.projectidea.ProjectIdea;
 import in.anandm.projectidea.domain.model.projectidea.Status;
-import in.anandm.projectidea.domain.model.user.UserRepository;
 import in.anandm.projectidea.domain.model.user.User;
+import in.anandm.projectidea.domain.model.user.UserRepository;
 import in.anandm.projectidea.infrastructure.persistence.jpa.BaseRepository;
-import in.anandm.projectidea.interfaces.rest.resource.Page;
-import in.anandm.projectidea.interfaces.rest.resource.ProjectIdeaSummary;
 import in.anandm.projectidea.interfaces.rest.resource.TagCount;
 
 import java.math.BigInteger;
@@ -22,9 +20,6 @@ import javax.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.googlecode.genericdao.search.Filter;
-import com.googlecode.genericdao.search.Search;
-
 /**
  * @author anandm
  * 
@@ -34,63 +29,6 @@ public class RestResourceHelper extends BaseRepository<ProjectIdea, Long> {
 
 	@Autowired
 	private UserRepository userRepository;
-
-	public Page<ProjectIdeaSummary> getPage(Page<ProjectIdeaSummary> page) {
-		Search search = new Search(ProjectIdea.class);
-
-		search.addField("id");
-		search.addField("specifications.title");
-		search.addField("specifications.description");
-
-		Filter finalFilter = Filter.and();
-
-		if (page.getAuthor() != null && !"".equals(page.getAuthor().trim())) {
-
-			Filter authorFilter = Filter.equal("author.username", page
-					.getAuthor().trim());
-
-			finalFilter.add(authorFilter);
-		}
-
-		if (page.getStatus() != null) {
-
-			Filter statusFilter = Filter.equal("status", page.getStatus());
-
-			finalFilter.add(statusFilter);
-		}
-
-		if (page.getTag() != null && !"".equals(page.getTag().trim())) {
-
-			Filter tagFilter = Filter.some("tags",
-					Filter.equal("tag", page.getTag().trim()));
-
-			finalFilter.add(tagFilter);
-		}
-
-		search.addFilter(finalFilter);
-
-		page.setTotlaItems(count(search));
-
-		int start = (page.getPage() - 1) * page.getItemsPerPage();
-
-		search.setFirstResult(start);
-		search.setMaxResults(page.getItemsPerPage());
-
-		search.setResultMode(Search.RESULT_ARRAY);
-
-		List<ProjectIdeaSummary> ideaSummaries = new ArrayList<ProjectIdeaSummary>();
-		for (Object result : search(search)) {
-
-			Object[] row = (Object[]) result;
-			ideaSummaries.add(new ProjectIdeaSummary((Long) row[0],
-					(String) row[1], (String) row[2]));
-
-		}
-
-		page.setData(ideaSummaries);
-
-		return page;
-	}
 
 	public List<TagCount> getTagCount(Status status) {
 		Query query = em().createNativeQuery(
