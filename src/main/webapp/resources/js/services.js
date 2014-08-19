@@ -25,7 +25,7 @@ value('version', '0.1').service('ChatService',function($http){
 				itemsPerPage: itemsPerPage
 		};
 
-		return $http.get('projectIdea/publishedProjectIdeas',{params: page});
+		return $http.get('api/publishedProjectIdeas',{params: page});
 	};
 
 	this.getDraftedProjectIdeasOfUser = function(tag,pageNumber,itemsPerPage){
@@ -51,7 +51,7 @@ value('version', '0.1').service('ChatService',function($http){
 	};	
 
 	this.getPublishedTagBadges = function(){
-		return $http.get('projectIdea/publishedProjectIdeaTagCount');
+		return $http.get('api/publishedProjectIdeas/tagCounts');
 	};
 
 	this.getPublishedTagBadgesOfUser = function(){
