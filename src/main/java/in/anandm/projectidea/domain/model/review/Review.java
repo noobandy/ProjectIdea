@@ -75,4 +75,9 @@ public class Review {
 		return user;
 	}
 
+	public ProjectIdea getProjectIdea() {
+		return projectIdea;
+	}
+
+	
 }

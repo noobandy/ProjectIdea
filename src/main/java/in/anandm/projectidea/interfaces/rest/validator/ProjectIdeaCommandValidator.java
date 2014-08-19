@@ -5,6 +5,7 @@ package in.anandm.projectidea.interfaces.rest.validator;
 
 import in.anandm.projectidea.interfaces.rest.dto.ProjectIdeaCommand;
 
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 
@@ -12,6 +13,7 @@ import org.springframework.validation.ValidationUtils;
  * @author Anand
  *
  */
+@Component
 public class ProjectIdeaCommandValidator extends BaseValidator {
 
 	@Override

@@ -3,11 +3,13 @@
  */
 package in.anandm.projectidea.infrastructure.persistence.jpa;
 
+import in.anandm.projectidea.application.util.StringUtility;
 import in.anandm.projectidea.domain.model.user.User;
 import in.anandm.projectidea.domain.model.user.UserQuery;
 import in.anandm.projectidea.domain.model.user.UserRepository;
 import in.anandm.projectidea.domain.shared.QueryResult;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -15,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.googlecode.genericdao.search.Filter;
 import com.googlecode.genericdao.search.Search;
+import com.googlecode.genericdao.search.SearchResult;
+import com.googlecode.genericdao.search.Sort;
 
 /**
  * @author Anand
@@ -56,20 +60,53 @@ public class UserRepositoryImpl extends BaseRepository<User, Long> implements
 
 	@Override
 	public QueryResult<User> query(UserQuery query) {
-		
-		return null;
+
+		Search search = queryToSearch(query);
+		SearchResult<User> searchResult = searchAndCount(search);
+		return new QueryResult<User>(searchResult.getResult(),
+				searchResult.getTotalCount());
 	}
 
 	@Override
 	public List<User> list(UserQuery query) {
-		
-		return null;
+
+		Search search = queryToSearch(query);
+		return search(search);
 	}
 
 	@Override
 	public long count(UserQuery query) {
-		
-		return 0;
+
+		Search search = queryToSearch(query);
+		return count(search);
 	}
 
+	private Search queryToSearch(UserQuery query) {
+		Search search = new Search(User.class);
+		Integer start = query.getStart();
+		Integer maxResults = query.getMaxResults();
+		String searchText = query.getSearchText();
+		List<Filter> filters = new ArrayList<Filter>();
+
+		Sort sort = Sort.desc("lastModified");
+
+		if (StringUtility.hasText(searchText)) {
+			Filter titleFilter = Filter.ilike("username",
+					StringUtility.toLikeString(searchText));
+			filters.add(titleFilter);
+		}
+
+		Filter[] filterArray = new Filter[filters.size()];
+		filterArray = filters.toArray(filterArray);
+
+		search.addFilterAnd(filterArray);
+
+		search.addSort(sort);
+
+		if (start != null && maxResults != null) {
+			search.setFirstResult(start);
+			search.setMaxResults(maxResults);
+		}
+		return search;
+	}
 }

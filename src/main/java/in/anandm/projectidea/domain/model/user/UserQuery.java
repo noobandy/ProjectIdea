@@ -3,7 +3,6 @@
  */
 package in.anandm.projectidea.domain.model.user;
 
-
 /**
  * @author anandm
  * 
@@ -38,6 +37,18 @@ public class UserQuery {
 		this.searchText = searchText;
 
 		return this;
+	}
+
+	public Integer getStart() {
+		return start;
+	}
+
+	public Integer getMaxResults() {
+		return maxResults;
+	}
+
+	public String getSearchText() {
+		return searchText;
 	}
 
 }

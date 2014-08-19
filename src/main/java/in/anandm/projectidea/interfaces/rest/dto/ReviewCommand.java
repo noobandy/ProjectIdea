@@ -1,7 +1,7 @@
 /**
  * 
  */
-package in.anandm.projectidea.interfaces.rest.controller;
+package in.anandm.projectidea.interfaces.rest.dto;
 
 /**
  * @author anandm

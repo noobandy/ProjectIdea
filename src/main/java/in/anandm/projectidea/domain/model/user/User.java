@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
@@ -20,9 +22,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
  */
 @Entity
 @Table(name = "act_user")
-@JsonIgnoreProperties(value={
-		"password"
-})
+@JsonIgnoreProperties(value = { "password" })
 public class User {
 
 	@Id
@@ -34,7 +34,12 @@ public class User {
 	private String username;
 	private String password;
 	private boolean enabled;
+
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date credentialExpiredAt;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date lastModified;
 
 	@Embedded
 	private UserProfilePic profilePic;
@@ -83,7 +88,7 @@ public class User {
 		}
 	}
 
-	//getters
+	// getters
 	public Long getId() {
 		return id;
 	}
@@ -110,6 +115,10 @@ public class User {
 
 	public UserProfilePic getProfilePic() {
 		return profilePic;
+	}
+
+	public Date getLastModified() {
+		return lastModified;
 	}
 
 	@Override
