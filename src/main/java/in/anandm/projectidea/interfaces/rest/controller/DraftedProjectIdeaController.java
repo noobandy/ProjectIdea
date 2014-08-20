@@ -5,6 +5,7 @@ package in.anandm.projectidea.interfaces.rest.controller;
 
 import in.anandm.projectidea.application.ProjectIdeaService;
 import in.anandm.projectidea.application.util.PaginationUtility;
+import in.anandm.projectidea.application.util.SecurityUtility;
 import in.anandm.projectidea.domain.model.attachment.Attachment;
 import in.anandm.projectidea.domain.model.attachment.AttachmentRepository;
 import in.anandm.projectidea.domain.model.projectidea.ProjectIdea;
@@ -196,7 +197,6 @@ public class DraftedProjectIdeaController {
 	@RequestMapping(value = "/draftedProjectIdeas/{id}/attachments", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<List<Attachment>> addDraftedProjectIdeaAttachment(
 			@PathVariable(value = "id") long projectIdeaId,
-			@RequestParam(value = "author", required = true) String author,
 			MultipartRequest multipartRequest) {
 
 		List<Attachment> attachments = new ArrayList<Attachment>();
@@ -204,7 +204,7 @@ public class DraftedProjectIdeaController {
 		Map<String, MultipartFile> map = multipartRequest.getFileMap();
 		for (Entry<String, MultipartFile> multiPartFileEntry : map.entrySet()) {
 			MultipartFile file = multiPartFileEntry.getValue();
-			Attachment attachment = projectIdeaService.addAttachment(author,
+			Attachment attachment = projectIdeaService.addAttachment(SecurityUtility.authenticatedUser(),
 					projectIdeaId, file);
 			attachments.add(attachment);
 		}

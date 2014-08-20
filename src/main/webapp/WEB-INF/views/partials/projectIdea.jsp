@@ -2,13 +2,13 @@
 	<div class="col-md-12">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h4>{{projectIdea.title}}</h4>
-				<span ng-repeat-start="tag in projectIdea.tags" ng-bind="tag.tag"
+				<h4>{{projectIdea.specifications.title}}</h4>
+				<span ng-repeat-start="tag in projectIdea.specifications.tags" ng-bind="tag.tag"
 					class="label label-primary"></span> <span ng-repeat-end></span>
 			</div>
 			<div class="panel-body">
 				<div class="col-md-10">
-					<p>{{projectIdea.description}}</p>
+					<p>{{projectIdea.specifications.description}}</p>
 				</div>
 				<div class="col-md-2">
 					<a class="thumbnail" ui-sref="userProfile({username:projectIdea.author.username})"> <img

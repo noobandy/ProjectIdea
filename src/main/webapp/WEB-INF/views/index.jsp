@@ -9,10 +9,6 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css"></link>
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/xeditable.css"></link>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/ng-table.min.css"></link>
-<link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/chat.css"></link>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/select2.css"></link>
@@ -80,20 +76,19 @@ body {
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a ui-sref-active="active" class="navbar-brand"
-					ui-sref="home.publishedProjectIdeas"> <i class="fa fa-home"></i>
-					<spring:message code="Project.title" />
+				<a ui-sref-active="active" class="navbar-brand" ui-sref="home">
+					<i class="fa fa-home"></i> <spring:message code="Project.title" />
 				</a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
 					<li ui-sref-active="active"><a
-						ui-sref="myProjectIdeas.drafted.projectIdeas"> <i
+						ui-sref="myProjectIdeas.drafted"> <i
 							class="fa fa-paper-plane-o"></i> <spring:message
 								code="ProjectIdea.myIdeas" />
 					</a></li>
-					<li ui-sref-active="active"><a ui-sref="dashboard">
-							<i class="fa fa-dashboard"></i> Dashboard
+					<li ui-sref-active="active"><a ui-sref="dashboard"> <i
+							class="fa fa-dashboard"></i> Dashboard
 					</a></li>
 				</ul>
 				<ul ng-if="isLoggedIn()" class="nav navbar-nav navbar-right">
@@ -156,14 +151,8 @@ body {
 		src="${pageContext.request.contextPath}/resources/js/select2.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/js/angular-ui-router.js"></script>
-
-	<script
-		src='${pageContext.request.contextPath}/resources/js/ng-table.min.js'></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/js/ui-bootstrap-tpls-0.11.0.min.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/js/xeditable.min.js"></script>
-
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/js/angular-breadcrumb.min.js"></script>
 	<script type="text/javascript"

@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 
  */
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/api")
 public class UserController {
 
 	@Autowired
@@ -56,7 +56,7 @@ public class UserController {
 		return new ResponseEntity<QueryResult<User>>(result, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/{username}", method = RequestMethod.GET)
+	@RequestMapping(value = "/users/{username}", method = RequestMethod.GET)
 	public @ResponseBody
 	ResponseEntity<UserProfile> getUser(
 			@PathVariable(value = "username") String username) {
@@ -75,17 +75,17 @@ public class UserController {
 
 	}
 
-	@RequestMapping(value = "/{username}/profilePic", method = RequestMethod.GET)
+	@RequestMapping(value = "/users/{username}/profilePic", method = RequestMethod.GET)
 	public void getProfilePic() {
 
 	}
 
-	@RequestMapping(value = "/{username}/profilePic", method = RequestMethod.PUT)
+	@RequestMapping(value = "/users/{username}/profilePic", method = RequestMethod.PUT)
 	public void updateProfilePic() {
 
 	}
 
-	@RequestMapping(value = "/{username}/updatePassword", method = RequestMethod.PUT)
+	@RequestMapping(value = "/users/{username}/updatePassword", method = RequestMethod.PUT)
 	public @ResponseBody
 	ResponseEntity<String> updatePassword(
 			@PathVariable(value = "username") String username,

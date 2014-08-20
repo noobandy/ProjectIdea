@@ -5,7 +5,7 @@
 			<div class="panel-heading">Published Ideas</div>
 			<div class="panel-body">
 				<a ui-sref-active="active" ng-repeat="tag in tags"
-					ui-sref="home.publishedProjectIdeas({tag:tag.tag})"><span
+					ui-sref="home({tag:tag.tag})"><span
 					class="badge">{{tag.tag}} &times; {{tag.count}}</span></a>
 			</div>
 		</div>

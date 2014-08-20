@@ -32,8 +32,8 @@ public class ReviewCommandValidator extends BaseValidator {
 	@Override
 	public void validate(Object target, Errors errors) {
 
-		ValidationUtils.rejectIfEmpty(errors, "starts",
-				"ReviewCommand.starts.required");
+		ValidationUtils.rejectIfEmpty(errors, "stars",
+				"ReviewCommand.stars.required");
 		ValidationUtils.rejectIfEmpty(errors, "remarks",
 				"ReviewCommand.remarks.required");
 		ValidationUtils.rejectIfEmpty(errors, "author",

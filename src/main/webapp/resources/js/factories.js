@@ -28,6 +28,10 @@ angular.module('ProjectIdeaApp.factories', []).factory('AuthService', function (
 		return (Session.getAuthenticatedUser() !== null);
 	};
 
+	authService.getAuthenticatedUser = function(){
+		return Session.getAuthenticatedUser();
+	};
+
 	return authService;
 }).
 factory('myHttpInterceptor', function ($q, $window) {

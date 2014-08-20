@@ -5,6 +5,7 @@ package in.anandm.projectidea.interfaces.rest.controller;
 
 import in.anandm.projectidea.application.ProjectIdeaService;
 import in.anandm.projectidea.application.util.PaginationUtility;
+import in.anandm.projectidea.application.util.SecurityUtility;
 import in.anandm.projectidea.application.util.StringUtility;
 import in.anandm.projectidea.domain.model.attachment.Attachment;
 import in.anandm.projectidea.domain.model.attachment.AttachmentRepository;
@@ -27,7 +28,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,7 +64,8 @@ public class PublishedProjectIdeaController {
 	private RestResourceHelper restResourceHelper;
 
 	@RequestMapping(value = "/publishedProjectIdeas/tagCounts", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<TagCount>> getPublishedProjectIdeasTagCounts(
+	public @ResponseBody
+	ResponseEntity<List<TagCount>> getPublishedProjectIdeasTagCounts(
 			@RequestParam(value = "author", required = false) String author) {
 
 		List<TagCount> counts = new ArrayList<TagCount>();
@@ -80,7 +81,8 @@ public class PublishedProjectIdeaController {
 	}
 
 	@RequestMapping(value = "/publishedProjectIdeas", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<QueryResult<ProjectIdea>> getPublishedProjectIdeas(
+	public @ResponseBody
+	ResponseEntity<QueryResult<ProjectIdea>> getPublishedProjectIdeas(
 			@RequestParam(value = "page", required = true) int pageNumber,
 			@RequestParam(value = "recordsPerPage", required = true) int pageSize,
 			@RequestParam(value = "tag", required = false) String tag,
@@ -101,7 +103,8 @@ public class PublishedProjectIdeaController {
 	}
 
 	@RequestMapping(value = "/publishedProjectIdeas/{id}", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<ProjectIdea> getPublishedProjectIdea(
+	public @ResponseBody
+	ResponseEntity<ProjectIdea> getPublishedProjectIdea(
 			@PathVariable(value = "id") long projectIdeaId) {
 
 		ProjectIdea projectIdea = projectIdeaRepository
@@ -114,7 +117,8 @@ public class PublishedProjectIdeaController {
 	}
 
 	@RequestMapping(value = "/publishedProjectIdeas/{id}/attachments", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<Attachment>> getPublishedProjectIdeaAttachments(
+	public @ResponseBody
+	ResponseEntity<List<Attachment>> getPublishedProjectIdeaAttachments(
 			@PathVariable(value = "id") long projectIdeaId) {
 
 		List<Attachment> attachments = attachmentRepository
@@ -123,7 +127,8 @@ public class PublishedProjectIdeaController {
 	}
 
 	@RequestMapping(value = "/publishedProjectIdeas/{id}/reviews", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<QueryResult<Review>> getPublishedProjectIdeaReviews(
+	public @ResponseBody
+	ResponseEntity<QueryResult<Review>> getPublishedProjectIdeaReviews(
 			@PathVariable(value = "id") long projectIdeaId,
 			@RequestParam(value = "page", required = true) int pageNumber,
 			@RequestParam(value = "recordsPerPage", required = true) int pageSize) {
@@ -137,18 +142,20 @@ public class PublishedProjectIdeaController {
 		return new ResponseEntity<QueryResult<Review>>(result, HttpStatus.OK);
 	}
 
-	@Secured(value = { "isAuthenticated()" })
 	@RequestMapping(value = "/publishedProjectIdeas/{id}/reviews", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<Review> postPublishedProjectIdeaReviews(
+	public @ResponseBody
+	ResponseEntity<Review> postPublishedProjectIdeaReviews(
 			@PathVariable(value = "id") long projectIdeaId,
 			@RequestBody ReviewCommand command, BindingResult errors) {
+
+		command.setAuthor(SecurityUtility.authenticatedUser());
 
 		reviewCommandValidator.validate(command, errors);
 		if (errors.hasErrors()) {
 			return new ResponseEntity<Review>(HttpStatus.BAD_REQUEST);
 		} else {
 			Review review = projectIdeaService.addReview(command.getAuthor(),
-					command.getProjectIdeaId(), command.getStarts(),
+					command.getProjectIdeaId(), command.getStars(),
 					command.getRemarks());
 			return new ResponseEntity<Review>(review, HttpStatus.CREATED);
 		}
@@ -156,7 +163,8 @@ public class PublishedProjectIdeaController {
 	}
 
 	@RequestMapping(value = "/publishedProjectIdeas/{projectIdeaId}/reviews/{reviewId}", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<Review> getPublishedProjectIdeaReview(
+	public @ResponseBody
+	ResponseEntity<Review> getPublishedProjectIdeaReview(
 			@PathVariable(value = "projectIdeaId") long projectIdeaId,
 			@PathVariable(value = "reviewId") long reviewId) {
 
@@ -170,7 +178,8 @@ public class PublishedProjectIdeaController {
 	}
 
 	@RequestMapping(value = "/publishedProjectIdeas/{projectIdeaId}/reviews/{reviewId}", method = RequestMethod.DELETE)
-	public @ResponseBody ResponseEntity<Review> deletePublishedProjectIdeaReview(
+	public @ResponseBody
+	ResponseEntity<Review> deletePublishedProjectIdeaReview(
 			@PathVariable(value = "projectIdeaId") long projectIdeaId,
 			@PathVariable(value = "reviewId") long reviewId) {
 

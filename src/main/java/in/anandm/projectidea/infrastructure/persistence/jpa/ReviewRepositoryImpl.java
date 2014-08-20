@@ -85,7 +85,7 @@ public class ReviewRepositoryImpl extends BaseRepository<Review, Long>
 		}
 		if (StringUtility.hasText(author)) {
 			Filter authorFilter = Filter
-					.equal("author.username", author.trim());
+					.equal("user.username", author.trim());
 			filters.add(authorFilter);
 		}
 

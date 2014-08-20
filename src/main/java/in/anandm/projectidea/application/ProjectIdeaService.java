@@ -27,7 +27,8 @@ public interface ProjectIdeaService {
 
 	public void deleteReview(String author, long reviewid);
 
-	public Attachment addAttachment(String author, long projectIdea,MultipartFile file);
+	public Attachment addAttachment(String author, long projectIdea,
+			MultipartFile file);
 
 	public void deleteAttachment(String author, long attachementId);
 

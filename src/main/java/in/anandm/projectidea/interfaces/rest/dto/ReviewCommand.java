@@ -3,14 +3,16 @@
  */
 package in.anandm.projectidea.interfaces.rest.dto;
 
+
 /**
  * @author anandm
- *
+ * 
  */
 public class ReviewCommand {
 
+	
 	private long projectIdeaId;
-	private int starts;
+	private int stars;
 	private String remarks;
 	private String author;
 
@@ -22,12 +24,12 @@ public class ReviewCommand {
 
 	}
 
-	public int getStarts() {
-		return starts;
+	public int getStars() {
+		return stars;
 	}
 
-	public void setStarts(int starts) {
-		this.starts = starts;
+	public void setStars(int stars) {
+		this.stars = stars;
 	}
 
 	public String getRemarks() {
@@ -56,9 +58,10 @@ public class ReviewCommand {
 
 	@Override
 	public String toString() {
-		return "ReviewCommand [projectIdeaId=" + projectIdeaId + ", starts="
-				+ starts + ", remarks=" + remarks + ", author=" + author + "]";
+		return "ReviewCommand [projectIdeaId=" + projectIdeaId + ", stars="
+				+ stars + ", remarks=" + remarks + ", author=" + author + "]";
 	}
 
 	
+
 }

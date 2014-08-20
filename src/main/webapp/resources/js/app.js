@@ -3,8 +3,8 @@
 //Declare app level module which depends on filters, and services
 angular.module(
 		'ProjectIdeaApp',
-		[ 'ui.router', 'ngTable', 'ui.bootstrap', 'xeditable',,'ui.select2',
-		  'angularFileUpload','angularCharts','ncy-angular-breadcrumb'
+		[ 'ui.router', 'ui.bootstrap','ui.select2',
+		  'angularFileUpload','angularCharts','ncy-angular-breadcrumb',
 		  , 'ProjectIdeaApp.filters', 'ProjectIdeaApp.services',
 		  'ProjectIdeaApp.factories', 'ProjectIdeaApp.directives',
 		  'ProjectIdeaApp.controllers' ]).constant('AUTH_EVENTS', {
@@ -49,7 +49,7 @@ angular.module(
 
 			  $httpProvider.defaults.transformRequest.push(spinnerFunction);
 
-			  $urlRouterProvider.otherwise('/publishedProjectIdeas');
+			  $urlRouterProvider.otherwise('/home');
 
 			  $stateProvider.state('login', {
 				  url : '/login',
@@ -146,16 +146,6 @@ angular.module(
 					  ncyBreadcrumbParent: 'dashboard'
 				  }
 			  }).
-			  state('dashboard.authorities.authority',{
-				  url: '/{authority}',
-				  templateUrl: 'partials/authority',
-				  controller: 'AuthorityController',
-				  data: {
-					  isSecure: true,
-					  ncyBreadcrumbParent: 'dashboard.authorities',
-					  ncyBreadcrumbLabel: '{{authority.authority}}'
-				  }
-			  }).
 			  state('dashboard.analytics',{
 				  url: '/analytics',
 				  templateUrl: 'partials/analytics',
@@ -185,7 +175,7 @@ angular.module(
 							  userProfile: function ($q){
 								  var deferred = $q.defer();
 
-								  $http.get('user/'+$stateParams.username).success(function(data){
+								  $http.get('api/users/'+$stateParams.username).success(function(data){
 									  deferred.resolve(data);
 								  });
 								  return deferred.promise;
@@ -221,7 +211,7 @@ angular.module(
 							  };
 
 							  $scope.updatePassword = function(){
-								  $http.put('user/'+$stateParams.username+'/updatePassword',$scope.updatePasswordCommand).success(function(data){
+								  $http.put('api/users/'+$stateParams.username+'/updatePassword',$scope.updatePasswordCommand).success(function(data){
 									  $scope.clearUpdatePasswordCommand();
 									  $scope.alerts.push({ type: 'success', msg: 'Password updated' });
 								  }).error(function(){
@@ -241,24 +231,12 @@ angular.module(
 				  }
 			  }).
 			  state('home', {
-				  abstract: true,
-				  url : '/publishedProjectIdeas',
+				  url : '/home?tag',
 				  templateUrl : 'partials/home',
 				  controller : 'HomeController',
 				  data : {
 					  isSecure : false,
 					  ncyBreadcrumbLabel: 'Home'
-				  }
-
-			  }).state('home.publishedProjectIdeas', {
-				  url : '?tag',
-				  templateUrl : 'partials/publishedProjectIdeas',
-				  controller : 'PublishedProjectIdeaController',
-				  data : {
-					  isSecure : false,
-					  ncyBreadcrumbParent: 'home',
-					  ncyBreadcrumbLabel: 'Published Project Ideas {{activeTag}}'
-					  
 				  }
 
 			  }).state('projectIdea', {
@@ -291,8 +269,7 @@ angular.module(
 					  ncyBreadcrumbLabel: 'My Project Ideas'
 				  }
 			  }).state('myProjectIdeas.drafted', {
-				  abstract: true,
-				  url : '/drafted',
+				  url : '/drafted?tag',
 				  templateUrl : 'partials/myDraftedProjectIdeas',
 				  controller : 'MyDraftedProjectIdeaController',
 				  data : {
@@ -301,8 +278,7 @@ angular.module(
 					  ncyBreadcrumbLabel: 'Draft'
 				  }
 			  }).state('myProjectIdeas.published', {
-				  abstract: true,
-				  url : '/published',
+				  url : '/published?tag',
 				  templateUrl : 'partials/myPublishedProjectIdeas',
 				  controller : 'MyPublishedProjectIdeaController',
 				  data : {
@@ -310,51 +286,30 @@ angular.module(
 					  ncyBreadcrumbParent: 'myProjectIdeas',
 					  ncyBreadcrumbLabel: 'Published'
 				  }
-			  }).state('myProjectIdeas.drafted.projectIdeas', {
-				  url : '?tag',
-				  templateUrl : 'partials/draftedProjectIdeas',
-				  controller : 'UserDraftedProjectIdeaController',
-				  data : {
-					  isSecure : true,
-					  ncyBreadcrumbParent: 'myProjectIdeas.drafted',
-					  ncyBreadcrumbLabel: 'Draft {{activeTag}}'
-				  }
 			  }).
-			  state('myProjectIdeas.drafted.new', {
+			  state('myProjectIdeas.new', {
 				  url : '/new',
 				  templateUrl : 'partials/newProjectIdea',
 				  controller : 'NewProjectIdeaController',
 				  data : {
 					  isSecure : true,
-					  ncyBreadcrumbParent: 'myProjectIdeas.drafted.projectIdeas',
+					  ncyBreadcrumbParent: 'myProjectIdeas',
 					  ncyBreadcrumbLabel: 'New'
 				  }
 			  }).
-			  state('myProjectIdeas.drafted.edit', {
+			  state('myProjectIdeas.edit', {
 				  url : '/edit/{draftId}',
 				  templateUrl : 'partials/editProjectIdea',
 				  controller : 'UpdateProjectIdeaController',
 				  data : {
 					  isSecure : true,
-					  ncyBreadcrumbParent: 'myProjectIdeas.drafted.projectIdeas',
+					  ncyBreadcrumbParent: 'myProjectIdeas',
 					  ncyBreadcrumbLabel: 'Edit'
-				  }
-			  })
-			  .state('myProjectIdeas.published.projectIdeas', {
-				  url : '?tag',
-				  templateUrl : 'partials/publishedProjectIdeas',
-				  controller : 'UserPublishedProjectIdeaController',
-				  data : {
-					  isSecure : true,
-					  ncyBreadcrumbParent: 'myProjectIdeas.published',
-					  ncyBreadcrumbLabel: 'Published {{activeTag}}'
 				  }
 			  });
 		  }).run(
-				  function($location, $rootScope,$templateCache, editableOptions, AUTH_EVENTS,
+				  function($location, $rootScope, AUTH_EVENTS,
 						  AuthService) {
-
-					  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 
 					  $rootScope.$on('$stateChangeStart', function(event, next, current) {
 
@@ -366,15 +321,11 @@ angular.module(
 							  }
 						  }
 					  });
-
-
+					  
 					  $rootScope.$on("$stateChangeSuccess",  function(event, toState, toParams, fromState, fromParams) {
 						  // to be used for back button //won't work when page is reloaded.
 						  $rootScope.previousState_name = fromState.name;
 						  $rootScope.previousState_params = fromParams;
 					  });
 
-					  $rootScope.$on('$viewContentLoaded', function() {
-						  $templateCache.remove('partials/projectIdeaReviews');
-					  });
 				  });

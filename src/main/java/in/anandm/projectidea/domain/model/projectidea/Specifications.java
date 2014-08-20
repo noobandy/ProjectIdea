@@ -128,4 +128,26 @@ public class Specifications {
 					timeInWords, tags);
 		}
 	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public Long getTimeInMilliseconds() {
+		return timeInMilliseconds;
+	}
+
+	public String getTimeInWords() {
+		return timeInWords;
+	}
+
+	public Set<Tag> getTags() {
+		return tags;
+	}
+	
+	
 }

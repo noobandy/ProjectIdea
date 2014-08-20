@@ -15,13 +15,10 @@ angular.module('ProjectIdeaApp.directives', []).
 		 scope: {
 			 projectIdea: '=projectIdea'
 		 },
-		 template: '<a ui-sref="projectIdea({id:projectIdea.id})" class="list-group-item">'
-			+'<h4 class="list-group-item-heading">{{projectIdea.title}}</h4>'
-			+'<p class="list-group-item-text">{{projectIdea.description}}</p>'
-		+'</a>'
+		 templateUrl: 'partials/projectIdeaSummary'
 	 };
   }).
-  directive('chat',function(Session){
+  directive('chat',function(AuthService){
 	  return {
 		  restrict:'E',
 		  template: '<textarea ng-model="message.message" class="form-control send-message" rows="3" placeholder="Write a reply..." required></textarea>',
@@ -29,7 +26,7 @@ angular.module('ProjectIdeaApp.directives', []).
 		  link: function(scope,element,attrs){
 			  var socket = $.atmosphere;
 			  scope.message = {
-					  author : Session.getAuthenticatedUser(),
+					  author : AuthService.getAuthenticatedUser(),
 					  message: ''
 			  };
 			  

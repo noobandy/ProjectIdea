@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * 
  */
 @Controller
-@RequestMapping(value = "/authority")
+@RequestMapping(value = "/api")
 public class AuthorityController {
 
 	@Autowired
@@ -39,7 +39,7 @@ public class AuthorityController {
 
 	// bootstrap
 
-	@RequestMapping(value = "/bootstrap", method = RequestMethod.POST)
+	@RequestMapping(value = "/authorities/bootstrap", method = RequestMethod.POST)
 	public ResponseEntity<Integer> bootstrapAuthorities() {
 		Integer count = authService.initOrUpdate();
 		return new ResponseEntity<Integer>(count, HttpStatus.CREATED);

@@ -9,6 +9,8 @@ import in.anandm.projectidea.domain.model.user.User;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,6 +31,7 @@ public class ProjectIdea {
 	private Specifications specifications;
 	@ManyToOne
 	private User author;
+	@Enumerated(EnumType.STRING)
 	private Status status;
 
 	@Temporal(TemporalType.TIMESTAMP)

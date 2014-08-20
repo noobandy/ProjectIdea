@@ -3,78 +3,139 @@
 /* Controllers */
 
 angular.module('ProjectIdeaApp.controllers', []).
-controller('HomeController',function($scope,ProjectIdeaService){
+controller('HomeController',['$scope','$http','$stateParams',function($scope,$http,$stateParams){
 
 	$scope.tags = [];
-
-	ProjectIdeaService.getPublishedTagBadges().success(function(data){
-		$scope.tags = data;
-	});
-
-
-}).
-controller('PublishedProjectIdeaController',function($scope,$stateParams,ProjectIdeaService){
+	$scope.projectIdeas = [];
 
 	$scope.activeTag = $stateParams.tag;
-
-	$scope.projectIdeas = [];
 
 	$scope.itemsPerPage = 10;
 	$scope.currentPage = 1;
 	$scope.maxSize = 5;
 	$scope.totalItems = 0;
+
 
 	$scope.pageChanged = function(){
-		ProjectIdeaService.getPublishedProjectIdeas($scope.activeTag,$scope.currentPage,$scope.itemsPerPage).success(function(page){
-			$scope.projectIdeas = page.data;
-		});
+		loadPublushedprojectIdeas();
 	};
 
+	function loadPublushedprojectIdeas(){
+		var params = {
+				page : $scope.currentPage,
+				recordsPerPage: $scope.itemsPerPage ,
+				tag : $scope.activeTag
+		};
 
-	ProjectIdeaService.getPublishedProjectIdeas($scope.activeTag,$scope.currentPage,$scope.itemsPerPage).success(function(page){
-		$scope.projectIdeas = page.data;
-		$scope.totalItems = page.totlaItems;
+		$http.get('api/publishedProjectIdeas',{params:params}).success(function(data){
+			$scope.totalItems = data.count;
+			$scope.projectIdeas = data.items;
+		}).error(function(data){
+			//handle error
+		});
+	}
+
+	$http.get('api/publishedProjectIdeas/tagCounts').success(function(data){
+		$scope.tags = data;
+	}).error(function(data){
+		//handle error
 	});
 
-}).
-controller('MyDraftedProjectIdeaController',function($scope,ProjectIdeaService){
+	//load data
+	loadPublushedprojectIdeas();
+
+}]).
+controller('MyDraftedProjectIdeaController',['$scope','$http','$stateParams','AuthService',function($scope,$http,$stateParams,AuthService){
 
 	$scope.tags = [];
-	ProjectIdeaService.getDraftedTagBadgesOfUser().success(function(data){
-		$scope.tags = data;
-	});
-}).
-controller('MyPublishedProjectIdeaController',function($scope,ProjectIdeaService){
-
-	$scope.tags = [];
-	ProjectIdeaService.getPublishedTagBadgesOfUser().success(function(data){
-		$scope.tags = data;
-	});
-}).
-controller('UserDraftedProjectIdeaController',function($scope,$stateParams,ProjectIdeaService){
+	$scope.projectIdeas = [];
 
 	$scope.activeTag = $stateParams.tag;
 
-	$scope.projectIdeas = [];
+	$scope.author = AuthService.getAuthenticatedUser();
 
-	$scope.totalItems = 0;
-	$scope.currentPage = 1;
 	$scope.itemsPerPage = 10;
+	$scope.currentPage = 1;
 	$scope.maxSize = 5;
-	$scope.numPages;
+	$scope.totalItems = 0;
 
-	$scope.pageChanged = function() {
-		ProjectIdeaService.getDraftedProjectIdeasOfUser($scope.activeTag,$scope.currentPage,$scope.itemsPerPage).success(function(page){
-			$scope.projectIdeas = page.data;
+
+	$scope.pageChanged = function(){
+		loadMyDraftedProjectIdeas();
+	};
+
+	function loadMyDraftedProjectIdeas(){
+		var params = {
+				page : $scope.currentPage,
+				recordsPerPage: $scope.itemsPerPage ,
+				tag : $scope.activeTag,
+				author: $scope.author	
+		};
+
+		$http.get('api/draftedProjectIdeas',{params:params}).success(function(data){
+			$scope.totalItems = data.count;
+			$scope.projectIdeas = data.items;
+		}).error(function(data){
+			//handle error
 		});
 	};
 
-	ProjectIdeaService.getDraftedProjectIdeasOfUser($scope.activeTag,$scope.currentPage,$scope.itemsPerPage).success(function(page){
-		$scope.projectIdeas = page.data;
-		$scope.totalItems = page.totlaItems;
+	$http.get('api/draftedProjectIdeas/tagCounts',{params:{author:$scope.author}}).success(function(data){
+		$scope.tags = data;
+	}).error(function(data){
+		//handle error
 	});
-})
-.controller('NewProjectIdeaController',function($scope,ProjectIdeaService,TagService){
+
+	//load data
+	loadMyDraftedProjectIdeas();
+
+}]).
+controller('MyPublishedProjectIdeaController',['$scope','$http','$stateParams','AuthService',function($scope,$http,$stateParams,AuthService){
+
+	$scope.tags = [];
+	$scope.projectIdeas = [];
+
+	$scope.activeTag = $stateParams.tag;
+
+	$scope.author = AuthService.getAuthenticatedUser();
+
+	$scope.itemsPerPage = 10;
+	$scope.currentPage = 1;
+	$scope.maxSize = 5;
+	$scope.totalItems = 0;
+
+
+	$scope.pageChanged = function(){
+		loadMyPublishedProjectIdeas();
+	};
+
+	function loadMyPublishedProjectIdeas(){
+		var params = {
+				page : $scope.currentPage,
+				recordsPerPage: $scope.itemsPerPage ,
+				tag : $scope.activeTag,
+				author: $scope.author	
+		};
+
+		$http.get('api/publishedProjectIdeas',{params:params}).success(function(data){
+			$scope.totalItems = data.count;
+			$scope.projectIdeas = data.items;
+		}).error(function(data){
+			//handle error
+		});
+	};
+
+	$http.get('api/publishedProjectIdeas/tagCounts',{params:{author:$scope.author}}).success(function(data){
+		$scope.tags = data;
+	}).error(function(data){
+		//handle error
+	});
+
+	//load data
+	loadMyPublishedProjectIdeas();
+
+}])
+.controller('NewProjectIdeaController',['$scope','$http','AuthService',function($scope,$http,AuthService){
 	$scope.alerts = [];
 
 	$scope.closeAlert = function(index) {
@@ -82,9 +143,13 @@ controller('UserDraftedProjectIdeaController',function($scope,$stateParams,Proje
 	};
 
 	$scope.newProjectidea = {
+			author: $scope.author,
 			title: '',
 			description: '',
-			tags: []
+			tags: [],
+			years: 0,
+			months: 0,
+			days: 0
 	};
 
 	$scope.select2Options = {
@@ -93,15 +158,17 @@ controller('UserDraftedProjectIdeaController',function($scope,$stateParams,Proje
 			'tags': []   // Can be empty list.
 	};
 
-	TagService.getAllTags().success(function(data){
+	$http.get('api/tags').success(function(data){
 		angular.forEach(data,function(key,value){
 			$scope.select2Options.tags.push(key.tag);
 		});
+	}).error(function(data){
+		//handle error
 	});
 
 
 	$scope.saveDraft = function(projectIdeaDraft){
-		ProjectIdeaService.draftProjectIdea(projectIdeaDraft).success(function(data){
+		$http.post('api/draftedProjectIdeas',projectIdeaDraft).success(function(data){
 			$scope.newProjectidea = data;
 			$scope.alerts.push({ type: 'success', msg: 'Draft Saved successfully' });
 		}).error(function(data){
@@ -109,10 +176,8 @@ controller('UserDraftedProjectIdeaController',function($scope,$stateParams,Proje
 		});
 	};
 
-}).
-controller('UpdateProjectIdeaController',function($location,$scope,$stateParams,$upload,ProjectIdeaService,ProjectIdeaDocumentService,TagService){
-
-	$scope.draftId = $stateParams.draftId;
+}]).
+controller('UpdateProjectIdeaController',['$location','$scope','$stateParams','$http','$upload','AuthService',function($location,$scope,$stateParams,$http,$upload,AuthService){
 
 	$scope.alerts = [];
 
@@ -120,15 +185,17 @@ controller('UpdateProjectIdeaController',function($location,$scope,$stateParams,
 		$scope.alerts.splice(index, 1);
 	};
 
+	$scope.draftId = $stateParams.draftId;
+
 	$scope.projectIdeaDraft = {
-			id:'',
-			title:'',
-			description:'',
-			tags: []
+			author: $scope.author,
+			title: '',
+			description: '',
+			tags: [],
+			years: 0,
+			months: 0,
+			days: 0
 	};
-
-
-	$scope.projectIdeaDocuments = [];
 
 	$scope.select2Options = {
 			'multiple': true,
@@ -136,40 +203,45 @@ controller('UpdateProjectIdeaController',function($location,$scope,$stateParams,
 			'tags': []   // Can be empty list.
 	};
 
+	$http.get('api/draftedProjectIdeas/'+$scope.draftId).success(function(data){
+		$scope.projectIdeaDraft.author =  data.author.username;
+		$scope.projectIdeaDraft.title =  data.specifications.title;
+		$scope.projectIdeaDraft.description =  data.specifications.description;
 
-	$scope.publishProjectIdea = function(){
-		ProjectIdeaService.publishProjectIdea($scope.draftId).success(function(){
-			$location.path('/myProjectIdeas/drafted').replace();
-		});
-	};
-
-
-	ProjectIdeaService.getProjectIdea($scope.draftId).success(function(data){
-		$scope.projectIdeaDraft.id = data.id;
-		$scope.projectIdeaDraft.title = data.title;
-		$scope.projectIdeaDraft.description = data.description;
-		angular.forEach(data.tags,function(key,value){
+		angular.forEach(data.specifications.tags,function(key,value){
 			$scope.projectIdeaDraft.tags.push(key.tag);
 		});
+	}).error(function(data){
+		//handle error
 	});
 
-	ProjectIdeaService.getEstimatedTime($scope.draftId).success(function(data){
-		$scope.projectIdeaEstimatedTime = data;
-	});
-
-	TagService.getAllTags().success(function(data){
+	$http.get('api/tags').success(function(data){
 		angular.forEach(data,function(key,value){
 			$scope.select2Options.tags.push(key.tag);
 		});
+	}).error(function(data){
+		//handle error
 	});
 
+	$scope.saveDraft = function(projectIdeaDraft){
+		$http.put('api/draftedProjectIdeas/'+$scope.draftId,projectIdeaDraft).success(function(data){
+			$scope.newProjectidea = data;
+			$scope.alerts.push({ type: 'success', msg: 'Draft updated successfully' });
+		}).error(function(data){
+			$scope.alerts.push({ type: 'danger', msg: 'Failed to update draft' });
+		});
+	};
 
-	ProjectIdeaDocumentService.getProjectIdeaDocuments($scope.draftId).success(function(data){
-		$scope.projectIdeaDocuments = data;
+	$scope.projectIdeaDocuments = [];
+
+	$http.get('api/draftedProjectIdeas/'+$scope.draftId+'/attachments').success(function(data){
+		$scope.projectIdeaDocuments = data.items;
+	}).error(function(data){
+		//handle error
 	});
 
 	$scope.deleteProjectIdeaDocument = function(projectIdeaDocument){
-		ProjectIdeaDocumentService.deleteProjectIdeaDocument($scope.draftId,projectIdeaDocument.id).success(function(){
+		$http.delete('api/draftedProjectIdeas/'+$scope.draftId+'/attachments/'+projectIdeaDocument.id).success(function(){
 			$scope.alerts.push({ type: 'success', msg: 'Document deleted Successfully' });
 			//remove deleted document from the view model
 			var index = $scope.projectIdeaDocuments.indexOf(projectIdeaDocument);
@@ -177,21 +249,6 @@ controller('UpdateProjectIdeaController',function($location,$scope,$stateParams,
 		});
 	};
 
-	$scope.updateDraft = function(projectIdeaDraft){
-		ProjectIdeaService.draftProjectIdea(projectIdeaDraft).success(function(data){
-			$scope.newProjectidea = data;
-			$scope.alerts.push({ type: 'success', msg: 'Draft Saved successfully' });
-		}).error(function(data){
-			$scope.alerts.push({ type: 'danger', msg: 'Failed to Save draft' });
-		});
-	};
-
-
-	$scope.updateEstimatedTime = function(projectIdeaEstimatedTime){
-		ProjectIdeaService.updateEstimatedTime($scope.draftId,projectIdeaEstimatedTime).success(function(){
-			$scope.alerts.push({ type: 'success', msg: 'Estimated Time update successfully.' });
-		});
-	};
 
 	$scope.maxProgress = 100;
 
@@ -202,7 +259,7 @@ controller('UpdateProjectIdeaController',function($location,$scope,$stateParams,
 			var file = $files[i];
 			if(file.size <= 1000000){
 				$scope.upload = $upload.upload({
-					url: 'projectIdea/'+$scope.draftId+'/documents', //upload.php script, node.js route, or servlet url
+					url: 'api/draftedProjectIdeas/'+$scope.draftId+'/attachments', //upload.php script, node.js route, or servlet url
 					method:'POST',
 					headers: {'Content-Type': 'multipart/form-data'},
 					//withCredentials: true,
@@ -238,43 +295,24 @@ controller('UpdateProjectIdeaController',function($location,$scope,$stateParams,
 	       It could also be used to monitor the progress of a normal http post/put request with large data*/
 		// $scope.upload = $upload.http({...})  see 88#issuecomment-31366487 for sample code.
 	};
-})
-.
-controller('UserPublishedProjectIdeaController',function($scope,$stateParams,ProjectIdeaService){
-
-	$scope.activeTag = $stateParams.tag;
-	$scope.projectIdeas = [];
-
-	$scope.totalItems = 0;
-	$scope.currentPage = 1;
-	$scope.itemsPerPage = 10;
-	$scope.maxSize = 5;
-
-	$scope.pageChanged = function() {
-		ProjectIdeaService.getPublishedProjectIdeasOfUser($scope.activeTag,$scope.currentPage,$scope.itemsPerPage).success(function(page){
-			$scope.projectIdeas = page.data;
-		});
-	};
-
-	ProjectIdeaService.getPublishedProjectIdeasOfUser($scope.activeTag,$scope.currentPage,$scope.itemsPerPage).success(function(page){
-		$scope.projectIdeas = page.data;
-		$scope.totalItems = page.totlaItems;
-	});
-})
-.controller('ProjectIdeaController',
-		function($scope, $stateParams,ProjectIdeaService,ProjectIdeaDocumentService) {
+}]).
+controller('ProjectIdeaController',['$scope','$stateParams','$http',function($scope, $stateParams,$http) {
 
 	$scope.projectIdeaId = $stateParams.id;
 
-	ProjectIdeaDocumentService.getProjectIdeaDocuments($scope.projectIdeaId).success(function(data){
-		$scope.projectIdeaDocuments = data;
-	});
-
-	ProjectIdeaService.getProjectIdea($scope.projectIdeaId).success(function(data){
+	$http.get('api/publishedProjectIdeas/'+$scope.projectIdeaId).success(function(data){
 		$scope.projectIdea = data;
+	}).error(function(data){
+		//handle error
 	});
 
-}).
+	$http.get('api/publishedProjectIdeas/'+$scope.projectIdeaId+"/attachments").success(function(data){
+		$scope.projectIdeaDocuments = data;
+	}).error(function(data){
+		//handle error
+	});
+
+}]).
 controller('ProjectIdeaReviewController',function($scope, $stateParams,ProjectIdeaReviewService){
 	$scope.projectIdeaId = $stateParams.id;
 
@@ -287,33 +325,33 @@ controller('ProjectIdeaReviewController',function($scope, $stateParams,ProjectId
 
 
 	$scope.pageChanged = function() {
-		ProjectIdeaReviewService.getProjectIdeaReviews($scope.projectIdeaId,$scope.currentPage,$scope.itemsPerPage).success(function(page){
-			$scope.projectIdeaReviews = page.data;
-		});
+		loadData();
 	};
 
-	ProjectIdeaReviewService.getProjectIdeaReviews($scope.projectIdeaId,$scope.currentPage,$scope.itemsPerPage).success(function(page){
-		$scope.projectIdeaReviews = page.data;
-		$scope.totalItems = page.totlaItems;
-	});
+	function loadData(){
+		ProjectIdeaReviewService.getProjectIdeaReviews($scope.projectIdeaId,$scope.currentPage,$scope.itemsPerPage).success(function(page){
+			$scope.projectIdeaReviews = page.items;
+			$scope.totalItems = page.count;
+		});
 
+	}
+
+	loadData();
 
 	$scope.newReview = {
-			id:'',
 			projectIdeaId:$scope.projectIdeaId,
 			stars:0,
-			remark:'',
-			author:''
+			remarks:'',
+			author:'anand'
 
 	};
 
 	$scope.clearReviewForm = function(){
 		$scope.newReview = {
-				id:'',
 				projectIdeaId:$scope.projectIdeaId,
 				stars:0,
-				remark:'',
-				author:''
+				remarks:'',
+				author:'anand'
 
 		};
 	};
@@ -344,10 +382,8 @@ controller('ProjectIdeaReviewController',function($scope, $stateParams,ProjectId
 	};
 
 	$scope.login = function() {
-		var loginSuccess = function() {
-			$timeout(function() {
-				$location.path("/notes");
-			}, 100);
+		var loginSuccess = function() { 
+			$location.path('/home').replace();
 		};
 
 		var loginError = function() {
@@ -358,17 +394,17 @@ controller('ProjectIdeaReviewController',function($scope, $stateParams,ProjectId
 	};
 }).
 controller('NavBarController',
-		function($scope, AuthService, Session,$http,$modal) {
+		function($scope, AuthService,$http,$modal) {
 	$scope.isLoggedIn = function() {
 		return AuthService.isAuthenticated();
 	};
 
 	$scope.authenticatedUser = function() {
-		return Session.getAuthenticatedUser();
+		return AuthService.getAuthenticatedUser();
 	};
 
 
-	$http.get('user/'+Session.getAuthenticatedUser()).success(function(data){
+	$http.get('api/users/'+AuthService.getAuthenticatedUser()).success(function(data){
 		$scope.userProfile = data;
 	});
 
@@ -400,7 +436,7 @@ controller('NavBarController',
 		};
 
 		$scope.updatePassword = function(){
-			$http.put('user/'+Session.getAuthenticatedUser()+'/updatePassword',$scope.updatePasswordCommand).success(function(data){
+			$http.put('api/users/'+AuthService.getAuthenticatedUser()+'/updatePassword',$scope.updatePasswordCommand).success(function(data){
 				$scope.clearUpdatePasswordCommand();
 				$scope.alerts.push({ type: 'success', msg: 'Password updated' });
 			}).error(function(){
@@ -425,17 +461,20 @@ controller('NavBarController',
 
 
 }).
-controller('DashBoardController',function($scope,$stateParams,ProjectIdeaService){
-	ProjectIdeaService.getPublishedTagBadges().success(function(data){
+controller('DashBoardController',['$scope','$stateParams','$http',function($scope,$stateParams,$http){
+	$http.get('api/publishedProjectIdeas/tagCounts').success(function(data){
 		$scope.tags = data;
+	}).error(function(data){
+		//handle error
 	});
-}).
-controller('UserController',function($scope,$stateParams,$http){
+
+}]).
+controller('UserController',['$scope','$stateParams','$http',function($scope,$stateParams,$http){
 	if($stateParams.username){
 
 		$scope.username = $stateParams.username;
 
-		$http.get('user/'+$scope.username).success(function(data){
+		$http.get('api/users/'+$scope.username).success(function(data){
 			$scope.user = data;
 		});
 	}else{
@@ -450,92 +489,62 @@ controller('UserController',function($scope,$stateParams,$http){
 		};
 
 		$scope.loadData = function(){
-			var page = {
+			var params = {
 					page: $scope.currentPage,
-					itemsPerPage: $scope.itemsPerPage
+					recordsPerPage: $scope.itemsPerPage
 			};
-			return $http.get('user/users',{params: page}).success(function(page){
-				$scope.totalItems = page.totalItems;
-				$scope.users = page.data;
+			return $http.get('api/users',{params: params}).success(function(data){
+				$scope.totalItems = data.count;
+				$scope.users = data.items;
+			}).error(function(data){
+				//handle error
 			});
 		};
 
 		$scope.loadData();
 	}
-}).
-controller('GroupController',function($scope,$stateParams,$http){
+}]).
+controller('GroupController',['$scope','$stateParams','$http',function($scope,$stateParams,$http){
 	if($stateParams.groupName){
 
 		$scope.groupName = $stateParams.groupName;
 
-		$http.get('group/'+$scope.groupName).success(function(data){
+		$http.get('api/groups/'+$scope.groupName).success(function(data){
 			$scope.group = data;
 		});
+
 	}else{
-		$scope.totalItems = 0;
-		$scope.currentPage = 1;
-		$scope.itemsPerPage = 10;
-		$scope.maxSize = 5;
-
-
-		$scope.pageChanged = function() {
-			$scope.loadData();
-		};
-
-		$scope.loadData = function(){
-			var page = {
-					page: $scope.currentPage,
-					itemsPerPage: $scope.itemsPerPage
-			};
-			return $http.get('group/groups',{params: page}).success(function(page){
-				$scope.totalItems = page.totalItems;
-				$scope.groups = page.data;
-			});
-		};
-
-		$scope.loadData();
-	}
-}).
-controller('AuthorityController',function($scope,$stateParams,$http){
-	if($stateParams.authority){
-
-		$scope.authorityName = $stateParams.authority;
-
-		$http.get('authority/'+$scope.authorityName).success(function(data){
-			$scope.authority = data;
+		$scope.groups = [];
+		$http.get('api/groups').success(function(data){
+			$scope.groups = data;
 		});
-	}else{
-		$scope.totalItems = 0;
-		$scope.currentPage = 1;
-		$scope.itemsPerPage = 10;
-		$scope.maxSize = 5;
-
-
-		$scope.pageChanged = function() {
-			$scope.loadData();
-		};
-
-		$scope.loadData = function(){
-			var page = {
-					page: $scope.currentPage,
-					itemsPerPage: $scope.itemsPerPage
-			};
-			return $http.get('authority/authorities',{params: page}).success(function(page){
-				$scope.totalItems = page.totalItems;
-				$scope.authorities = page.data;
-			});
-		};
-
-		$scope.loadData();
-
-		$scope.generateAuthorities = function(){
-			$http.post('authority/bootstrap').success(function(){
-				$scope.loadData();
-			});
-		};
 	}
-}).
-controller('AnalyticsController',function($scope,$stateParams,ProjectIdeaService){
+}]).
+controller('AuthorityController',['$scope','$http',function($scope,$http){
+
+	$scope.authorities = [];
+
+	$scope.loadData = function(){
+		$http.get('api/authorities').success(function(data){
+			$scope.authorities = data;
+		}).error(function(data){
+			//handle error
+		});
+	};
+
+
+	$scope.generateAuthorities = function(){
+		$http.post('api/authorities/bootstrap').success(function(data){
+			$scope.loadData();
+		}).error(function(data){
+			//handle error
+		});
+	};
+	
+	$scope.loadData();
+	
+}]).
+controller('AnalyticsController',['$scope','$stateParams','$http',function($scope,$stateParams,$http){
 
 
 	$scope.selectedChartType = 'pie';
@@ -564,20 +573,20 @@ controller('AnalyticsController',function($scope,$stateParams,ProjectIdeaService
 
 	};
 
-	ProjectIdeaService.getPublishedTagBadges().success(function(tagCounts){
-		angular.forEach(tagCounts,function(key,value){
+	$http.get('api/publishedProjectIdeas/tagCounts').success(function(data){
+		angular.forEach(data,function(key,value){
 			$scope.chartData.data.push({"x":key.tag,"y":[key.count]});
 		});
+	}).error(function(data){
+		//handle error
 	});
+}]).
+controller('ChatController',['$scope',function($scope) {
 
-}).
-controller('ChatController',
-		function($scope,$http,ChatService, AuthService, Session) {
-	
 	$scope.messages = [];
 
-	
+
 	$scope.messageReceived = function(message){
 		$scope.messages.push(message);
 	};
-});
+}]);

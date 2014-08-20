@@ -3,8 +3,8 @@
  */
 package in.anandm.projectidea.interfaces.rest.controller;
 
-import in.anandm.projectidea.domain.model.tag.TagRepository;
 import in.anandm.projectidea.domain.model.tag.Tag;
+import in.anandm.projectidea.domain.model.tag.TagRepository;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * 
  */
 @Controller
-@RequestMapping("/tag")
+@RequestMapping("/api")
 public class TagController {
 	
 	@Autowired

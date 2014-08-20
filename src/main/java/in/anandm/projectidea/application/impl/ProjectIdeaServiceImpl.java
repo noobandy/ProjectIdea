@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -34,6 +35,16 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 	private ProjectIdeaRepository projectIdeaRepository;
 	private ReviewRepository reviewRepository;
 	private AttachmentRepository attachmentRepository;
+
+	
+	
+	/**
+	 * 
+	 */
+	ProjectIdeaServiceImpl() {
+		super();
+		
+	}
 
 	@Autowired
 	/**
@@ -53,6 +64,7 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 		this.attachmentRepository = attachmentRepository;
 	}
 
+	@Transactional
 	@Override
 	public ProjectIdea draftProjectidea(String author,
 			Specifications specifications) {
@@ -63,7 +75,8 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 		return projectIdea;
 
 	}
-
+	
+	@Transactional
 	@Override
 	public ProjectIdea updateDraftedProjectIdea(String author,
 			long projectIdeaId, Specifications newSpecifications) {
@@ -83,6 +96,7 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 
 	}
 
+	@Transactional
 	@Override
 	public Review addReview(String author, long projectIdeaId, int starRating,
 			String remark) {
@@ -105,6 +119,7 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 		}
 	}
 
+	@Transactional
 	@Override
 	public void deleteReview(String author, long reviewId) {
 		User user = userRepository.findUserByUserName(author);
@@ -118,6 +133,7 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 		}
 	}
 
+	@Transactional
 	@Override
 	public Attachment addAttachment(String author, long projectIdeaId,
 			MultipartFile file) {
@@ -146,6 +162,7 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 		}
 	}
 
+	@Transactional
 	@Override
 	public void deleteAttachment(String author, long attachementId) {
 		User user = userRepository.findUserByUserName(author);
@@ -168,7 +185,8 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 					+ idea.getId() + ", which is created by some one else");
 		}
 	}
-
+	
+	@Transactional
 	@Override
 	public void publishProjectIdea(String author, long projectIdeaId) {
 		User user = userRepository.findUserByUserName(author);
@@ -184,6 +202,7 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 		}
 	}
 
+	@Transactional
 	@Override
 	public void archiveProjectIdea(String author, long projectIdeaId) {
 		User user = userRepository.findUserByUserName(author);
