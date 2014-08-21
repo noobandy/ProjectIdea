@@ -3,28 +3,9 @@
 		<div class="list-group">
 			<a ui-sref-active="active" ng-repeat="tag in tags"
 				class="list-group-item"
-				ui-sref="myProjectIdeas.drafted({tag:tag.tag})"><span
+				ui-sref="myProjectIdeas.drafted.projectIdeas({tag:tag.tag})"><span
 				class="badge">{{tag.count}}</span> {{tag.tag}}</a>
 		</div>
 	</div>
-	<div class="col-md-9">
-		<a class="btn" ui-sref="myProjectIdeas.new"> <i class="fa fa-plus"></i>
-			New Project Idea
-		</a>
-
-		<div class="list-group">
-			<a ng-repeat="projectIdea in projectIdeas"
-				ui-sref="myProjectIdeas.edit({draftId:projectIdea.id})"
-				class="list-group-item">
-				<h4 class="list-group-item-heading">{{projectIdea.specifications.title}}</h4>
-				<p class="list-group-item-text">{{projectIdea.specifications.description}}</p>
-			</a>
-		</div>
-
-		<pagination ng-show="totalItems > itemsPerPage" ng-model="currentPage"
-			total-items="totalItems" items-per-page="itemsPerPage"
-			max-size="maxSize" class="pagination-sm" boundary-links="true"
-			rotate="false" num-pages="numPages" ng-change="pageChanged()"></pagination>
-		<pre ng-show="totalItems > itemsPerPage">Page: {{currentPage}} / {{numPages}}</pre>
-	</div>
+	<div class="col-md-9" ui-view></div>
 </div>

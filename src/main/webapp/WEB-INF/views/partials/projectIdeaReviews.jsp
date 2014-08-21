@@ -1,4 +1,4 @@
-<form name="reviewForm"
+<form ng-if="isAuthenticated()" name="reviewForm"
 	ng-submit="reviewForm.$valid && addReview(newReview)" novalidate>
 	<alert ng-repeat="alert in alerts" type="{{alert.type}}"
 		close="closeAlert($index)">{{alert.msg}}</alert>
@@ -23,7 +23,7 @@
 <div class="list-group">
 	<div ng-repeat="review in projectIdeaReviews" class="list-group-item">
 		<div class="list-group-item-heading">
-			<rating ng-model="review.stars" max="5" state-on="'fa fa-star'"
+			<rating ng-model="review.star" max="5" state-on="'fa fa-star'"
 				state-off="'fa fa-star-o'" readonly="true"></rating>
 		</div>
 		<blockquote class="list-group-item-text">

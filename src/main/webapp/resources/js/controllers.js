@@ -3,9 +3,17 @@
 /* Controllers */
 
 angular.module('ProjectIdeaApp.controllers', []).
-controller('HomeController',['$scope','$http','$stateParams',function($scope,$http,$stateParams){
+controller('HomeController',['$scope','$http',function($scope,$http){
 
 	$scope.tags = [];
+	$http.get('api/publishedProjectIdeas/tagCounts').success(function(data){
+		$scope.tags = data;
+	}).error(function(data){
+		//handle error
+	});
+}]).
+controller('PublishedProjectIdeaController',['$scope','$http','$stateParams',function($scope,$http,$stateParams){
+
 	$scope.projectIdeas = [];
 
 	$scope.activeTag = $stateParams.tag;
@@ -35,19 +43,19 @@ controller('HomeController',['$scope','$http','$stateParams',function($scope,$ht
 		});
 	}
 
-	$http.get('api/publishedProjectIdeas/tagCounts').success(function(data){
+	loadPublushedprojectIdeas();
+}]).
+controller('MyDraftedProjectIdeaController',['$scope','$http','AuthService',function($scope,$http,AuthService){
+
+	$scope.tags = [];
+	$scope.author = AuthService.getAuthenticatedUser();
+	$http.get('api/draftedProjectIdeas/tagCounts',{params:{author:$scope.author}}).success(function(data){
 		$scope.tags = data;
 	}).error(function(data){
 		//handle error
 	});
-
-	//load data
-	loadPublushedprojectIdeas();
-
 }]).
-controller('MyDraftedProjectIdeaController',['$scope','$http','$stateParams','AuthService',function($scope,$http,$stateParams,AuthService){
-
-	$scope.tags = [];
+controller('DraftController',['$scope','$http','$stateParams','AuthService',function($scope,$http,$stateParams,AuthService){
 	$scope.projectIdeas = [];
 
 	$scope.activeTag = $stateParams.tag;
@@ -79,63 +87,10 @@ controller('MyDraftedProjectIdeaController',['$scope','$http','$stateParams','Au
 			//handle error
 		});
 	};
-
-	$http.get('api/draftedProjectIdeas/tagCounts',{params:{author:$scope.author}}).success(function(data){
-		$scope.tags = data;
-	}).error(function(data){
-		//handle error
-	});
-
 	//load data
 	loadMyDraftedProjectIdeas();
-
 }]).
-controller('MyPublishedProjectIdeaController',['$scope','$http','$stateParams','AuthService',function($scope,$http,$stateParams,AuthService){
-
-	$scope.tags = [];
-	$scope.projectIdeas = [];
-
-	$scope.activeTag = $stateParams.tag;
-
-	$scope.author = AuthService.getAuthenticatedUser();
-
-	$scope.itemsPerPage = 10;
-	$scope.currentPage = 1;
-	$scope.maxSize = 5;
-	$scope.totalItems = 0;
-
-
-	$scope.pageChanged = function(){
-		loadMyPublishedProjectIdeas();
-	};
-
-	function loadMyPublishedProjectIdeas(){
-		var params = {
-				page : $scope.currentPage,
-				recordsPerPage: $scope.itemsPerPage ,
-				tag : $scope.activeTag,
-				author: $scope.author	
-		};
-
-		$http.get('api/publishedProjectIdeas',{params:params}).success(function(data){
-			$scope.totalItems = data.count;
-			$scope.projectIdeas = data.items;
-		}).error(function(data){
-			//handle error
-		});
-	};
-
-	$http.get('api/publishedProjectIdeas/tagCounts',{params:{author:$scope.author}}).success(function(data){
-		$scope.tags = data;
-	}).error(function(data){
-		//handle error
-	});
-
-	//load data
-	loadMyPublishedProjectIdeas();
-
-}])
-.controller('NewProjectIdeaController',['$scope','$http','AuthService',function($scope,$http,AuthService){
+controller('NewProjectIdeaController',['$scope','$http','AuthService',function($scope,$http,AuthService){
 	$scope.alerts = [];
 
 	$scope.closeAlert = function(index) {
@@ -225,7 +180,15 @@ controller('UpdateProjectIdeaController',['$location','$scope','$stateParams','$
 
 	$scope.saveDraft = function(projectIdeaDraft){
 		$http.put('api/draftedProjectIdeas/'+$scope.draftId,projectIdeaDraft).success(function(data){
-			$scope.newProjectidea = data;
+			$scope.alerts.push({ type: 'success', msg: 'Draft updated successfully' });
+		}).error(function(data){
+			$scope.alerts.push({ type: 'danger', msg: 'Failed to update draft' });
+		});
+	};
+
+	$scope.publishProjectIdea = function(){
+		$http.put('api/draftedProjectIdeas/'+$scope.draftId+'/publish').success(function(data){
+
 			$scope.alerts.push({ type: 'success', msg: 'Draft updated successfully' });
 		}).error(function(data){
 			$scope.alerts.push({ type: 'danger', msg: 'Failed to update draft' });
@@ -235,7 +198,8 @@ controller('UpdateProjectIdeaController',['$location','$scope','$stateParams','$
 	$scope.projectIdeaDocuments = [];
 
 	$http.get('api/draftedProjectIdeas/'+$scope.draftId+'/attachments').success(function(data){
-		$scope.projectIdeaDocuments = data.items;
+
+		$scope.projectIdeaDocuments = data;
 	}).error(function(data){
 		//handle error
 	});
@@ -295,6 +259,54 @@ controller('UpdateProjectIdeaController',['$location','$scope','$stateParams','$
 	       It could also be used to monitor the progress of a normal http post/put request with large data*/
 		// $scope.upload = $upload.http({...})  see 88#issuecomment-31366487 for sample code.
 	};
+}]).
+controller('MyPublishedProjectIdeaController',['$scope','$http','AuthService',function($scope,$http,AuthService){
+
+	$scope.tags = [];
+	$scope.author = AuthService.getAuthenticatedUser();
+	$http.get('api/publishedProjectIdeas/tagCounts',{params:{author:$scope.author}}).success(function(data){
+		$scope.tags = data;
+	}).error(function(data){
+		//handle error
+	});
+
+}]).
+controller('PublishedController',['$scope','$http','$stateParams','AuthService',function($scope,$http,$stateParams,AuthService){
+
+	$scope.projectIdeas = [];
+
+	$scope.activeTag = $stateParams.tag;
+
+	$scope.author = AuthService.getAuthenticatedUser();
+
+	$scope.itemsPerPage = 10;
+	$scope.currentPage = 1;
+	$scope.maxSize = 5;
+	$scope.totalItems = 0;
+
+
+	$scope.pageChanged = function(){
+		loadMyPublishedProjectIdeas();
+	};
+
+	function loadMyPublishedProjectIdeas(){
+		var params = {
+				page : $scope.currentPage,
+				recordsPerPage: $scope.itemsPerPage ,
+				tag : $scope.activeTag,
+				author: $scope.author	
+		};
+
+		$http.get('api/publishedProjectIdeas',{params:params}).success(function(data){
+			$scope.totalItems = data.count;
+			$scope.projectIdeas = data.items;
+		}).error(function(data){
+			//handle error
+		});
+	};
+	//load data
+	loadMyPublishedProjectIdeas();
+
 }]).
 controller('ProjectIdeaController',['$scope','$stateParams','$http',function($scope, $stateParams,$http) {
 
@@ -393,72 +405,19 @@ controller('ProjectIdeaReviewController',function($scope, $stateParams,ProjectId
 				loginError);
 	};
 }).
-controller('NavBarController',
-		function($scope, AuthService,$http,$modal) {
-	$scope.isLoggedIn = function() {
+controller('ApplicationController',
+		function($scope, AuthService) {
+	$scope.isAuthenticated = function() {
 		return AuthService.isAuthenticated();
 	};
 
 	$scope.authenticatedUser = function() {
 		return AuthService.getAuthenticatedUser();
 	};
-
-
-	$http.get('api/users/'+AuthService.getAuthenticatedUser()).success(function(data){
-		$scope.userProfile = data;
-	});
-
-	var UserProfileModalController = function($scope,$modalInstance,userProfile){
-		$scope.userProfile = userProfile;
-
-		$scope.cancel = function () {
-			$modalInstance.dismiss('cancel');
-		};
-
-		$scope.updatePasswordCommand = {
-				oldPassword:'',
-				newPassword:'',
-				confirmPassword:''
-		};
-
-		$scope.alerts = [];
-
-		$scope.closeAlert = function(index) {
-			$scope.alerts.splice(index, 1);
-		};
-
-		$scope.clearUpdatePasswordCommand = function(){
-			$scope.updatePasswordCommand = {
-					oldPassword:'',
-					newPassword:'',
-					confirmPassword:''
-			};
-		};
-
-		$scope.updatePassword = function(){
-			$http.put('api/users/'+AuthService.getAuthenticatedUser()+'/updatePassword',$scope.updatePasswordCommand).success(function(data){
-				$scope.clearUpdatePasswordCommand();
-				$scope.alerts.push({ type: 'success', msg: 'Password updated' });
-			}).error(function(){
-				$scope.clearUpdatePasswordCommand();
-				$scope.alerts.push({ type: 'danger', msg: 'Failed to update password' });
-			});
-		};
+	
+	$scope.hasAuthority = function(authority){
+		return true;
 	};
-
-	$scope.showProfile = function(){
-
-		var modalInstance = $modal.open({
-			templateUrl: 'partials/userProfile',
-			controller: UserProfileModalController,
-			resolve: {
-				userProfile: function () {
-					return $scope.userProfile;
-				}
-			}
-		});
-	};
-
 
 }).
 controller('DashBoardController',['$scope','$stateParams','$http',function($scope,$stateParams,$http){
@@ -540,9 +499,9 @@ controller('AuthorityController',['$scope','$http',function($scope,$http){
 			//handle error
 		});
 	};
-	
+
 	$scope.loadData();
-	
+
 }]).
 controller('AnalyticsController',['$scope','$stateParams','$http',function($scope,$stateParams,$http){
 

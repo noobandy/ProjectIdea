@@ -17,16 +17,21 @@ angular.module(
 		  }).config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 
 
-			  var logsOutUserOn401 = [ '$q', '$location', function($q, $location) {
+			  var logsOutUserOn401 = [ '$q', '$location','$rootScope','AUTH_EVENTS', function($q, $location,$rootScope,AUTH_EVENTS) {
 				  var success = function(response) {
 					  return response;
 				  };
 
 				  var error = function(response) {
 					  if (response.status === 401) {
-						  //redirect them back to login page
-						  $location.path('/login');
+						  //broadcast event
 
+						  $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated, response);
+						  return $q.reject(response);
+					  } else if(response.status === 403) {
+						  
+						  $rootScope.$broadcast(AUTH_EVENTS.notAuthorized, response);
+						  
 						  return $q.reject(response);
 					  } else {
 						  return $q.reject(response);
@@ -49,7 +54,7 @@ angular.module(
 
 			  $httpProvider.defaults.transformRequest.push(spinnerFunction);
 
-			  $urlRouterProvider.otherwise('/home');
+			  $urlRouterProvider.otherwise('/home/publishedProjectIdeas');
 
 			  $stateProvider.state('login', {
 				  url : '/login',
@@ -231,7 +236,8 @@ angular.module(
 				  }
 			  }).
 			  state('home', {
-				  url : '/home?tag',
+				  abstract: true,
+				  url : '/home',
 				  templateUrl : 'partials/home',
 				  controller : 'HomeController',
 				  data : {
@@ -239,13 +245,24 @@ angular.module(
 					  ncyBreadcrumbLabel: 'Home'
 				  }
 
-			  }).state('projectIdea', {
+			  }).state('home.publishedProjectIdeas', {
+				  url : '/publishedProjectIdeas?tag',
+				  templateUrl : 'partials/publishedProjectIdeas',
+				  controller : 'PublishedProjectIdeaController',
+				  data : {
+					  isSecure : false,
+					  ncyBreadcrumbLabel: 'Published Project Ideas {{activeTag}}',
+					  ncyBreadcrumbParent: 'home',
+				  }
+
+			  })
+			  .state('projectIdea', {
 				  url : '/projectIdea/{id}',
 				  templateUrl : 'partials/projectIdea',
 				  controller : 'ProjectIdeaController',
 				  data : {
 					  isSecure : false,
-					  ncyBreadcrumbLabel: 'Project Idea {{projectIdea.title}}'
+					  ncyBreadcrumbLabel: 'Project Idea {{projectIdea.specifications.title}}'
 				  }
 
 			  }).
@@ -269,7 +286,8 @@ angular.module(
 					  ncyBreadcrumbLabel: 'My Project Ideas'
 				  }
 			  }).state('myProjectIdeas.drafted', {
-				  url : '/drafted?tag',
+				  abstract: true,
+				  url : '/drafted',
 				  templateUrl : 'partials/myDraftedProjectIdeas',
 				  controller : 'MyDraftedProjectIdeaController',
 				  data : {
@@ -277,8 +295,39 @@ angular.module(
 					  ncyBreadcrumbParent: 'myProjectIdeas',
 					  ncyBreadcrumbLabel: 'Draft'
 				  }
-			  }).state('myProjectIdeas.published', {
-				  url : '/published?tag',
+			  }).state('myProjectIdeas.drafted.projectIdeas', {
+				  url : '/projectIdeas?tag',
+				  templateUrl : 'partials/draftedProjectIdeas',
+				  controller : 'DraftController',
+				  data : {
+					  isSecure : true,
+					  ncyBreadcrumbParent: 'myProjectIdeas.drafted',
+					  ncyBreadcrumbLabel: 'Draft'
+				  }
+			  }).
+			  state('myProjectIdeas.drafted.new', {
+				  url : '/new',
+				  templateUrl : 'partials/newProjectIdea',
+				  controller : 'NewProjectIdeaController',
+				  data : {
+					  isSecure : true,
+					  ncyBreadcrumbParent: 'myProjectIdeas.drafted',
+					  ncyBreadcrumbLabel: 'New'
+				  }
+			  }).
+			  state('myProjectIdeas.drafted.edit', {
+				  url : '/edit/{draftId}',
+				  templateUrl : 'partials/editProjectIdea',
+				  controller : 'UpdateProjectIdeaController',
+				  data : {
+					  isSecure : true,
+					  ncyBreadcrumbParent: 'myProjectIdeas.drafted',
+					  ncyBreadcrumbLabel: 'Edit'
+				  }
+			  })
+			  .state('myProjectIdeas.published', {
+				  abstract:true,
+				  url : '/published',
 				  templateUrl : 'partials/myPublishedProjectIdeas',
 				  controller : 'MyPublishedProjectIdeaController',
 				  data : {
@@ -287,24 +336,14 @@ angular.module(
 					  ncyBreadcrumbLabel: 'Published'
 				  }
 			  }).
-			  state('myProjectIdeas.new', {
-				  url : '/new',
-				  templateUrl : 'partials/newProjectIdea',
-				  controller : 'NewProjectIdeaController',
+			  state('myProjectIdeas.published.projectIdeas', {
+				  url : '/published?tag',
+				  templateUrl : 'partials/publishedProjectIdeas',
+				  controller : 'PublishedController',
 				  data : {
 					  isSecure : true,
-					  ncyBreadcrumbParent: 'myProjectIdeas',
-					  ncyBreadcrumbLabel: 'New'
-				  }
-			  }).
-			  state('myProjectIdeas.edit', {
-				  url : '/edit/{draftId}',
-				  templateUrl : 'partials/editProjectIdea',
-				  controller : 'UpdateProjectIdeaController',
-				  data : {
-					  isSecure : true,
-					  ncyBreadcrumbParent: 'myProjectIdeas',
-					  ncyBreadcrumbLabel: 'Edit'
+					  ncyBreadcrumbParent: 'myProjectIdeas.published',
+					  ncyBreadcrumbLabel: 'Published'
 				  }
 			  });
 		  }).run(
@@ -321,11 +360,14 @@ angular.module(
 							  }
 						  }
 					  });
-					  
+
 					  $rootScope.$on("$stateChangeSuccess",  function(event, toState, toParams, fromState, fromParams) {
 						  // to be used for back button //won't work when page is reloaded.
 						  $rootScope.previousState_name = fromState.name;
 						  $rootScope.previousState_params = fromParams;
 					  });
 
+					  $rootScope.$on(AUTH_EVENTS.notAuthenticated,function(event){
+						  $location.path('/login').replace();
+					  });
 				  });

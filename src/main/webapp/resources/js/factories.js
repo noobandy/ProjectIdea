@@ -44,4 +44,4 @@ factory('myHttpInterceptor', function ($q, $window) {
 			return $q.reject(response);
 		});
 	};
-});;
+});

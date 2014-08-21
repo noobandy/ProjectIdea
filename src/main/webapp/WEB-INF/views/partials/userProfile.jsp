@@ -42,7 +42,7 @@
 
 			</div>
 			<!-- tabs -->
-			<tabset justified="true"> <tab heading="Contact">Contact
+			<tabset ng-if="isAuthenticated() && userProfile.username == authenticatedUser()" justified="true"> <tab heading="Contact">Contact
 			Details</tab> <tab> <tab-heading> <i
 				class="fa fa-security"></i>Security</tab-heading>
 			<div ng-form name="updatePasswordForm">

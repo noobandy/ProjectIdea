@@ -1,16 +1,6 @@
-<tabset justified="true" type="pills">
- <tab>
-  <tab-heading>Newest </tab-heading>
-  </tab>
-   <tab>
-    <tab-heading>
-	Top Rated	
-		</tab-heading>
-		</tab> </tabset>
 <div class="list-group">
-	<project-idea-summary ng-repeat="projectIdea in projectIdeas" project-idea="projectIdea">
-	
-	</project-idea-summary>
+	<project-idea-summary ng-repeat="projectIdea in projectIdeas"
+		project-idea="projectIdea"> </project-idea-summary>
 </div>
 <pagination ng-show="totalItems > itemsPerPage" ng-model="currentPage"
 	total-items="totalItems" items-per-page="itemsPerPage"

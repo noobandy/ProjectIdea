@@ -19,7 +19,8 @@
 			</div>
 		</div>
 		<tabset type="pills"> <tab> <tab-heading>
-		<i class="fa fa-file-text"></i> Documents </tab-heading> <!--  Documents Table -->
+		<i class="fa fa-file-text"></i> Documents </tab-heading> 
+		<!--  Documents Table -->
 		<table class="table table-striped">
 			<thead>
 				<tr>
@@ -30,11 +31,11 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="document in projectIdeaDocuments">
-					<td>{{document.documentTitle}}</td>
+					<td>{{document.path}}</td>
 					<td>{{document.sizeInBytes}} bytes</td>
 					<td>
-						</button> <a target="_blank"
-						href="projectIdea/{{document.projectIdeaId}}/documents/{{document.id}}"
+					<a target="_blank"
+						href="api/draftedProjectIdeas/{{document.projectIdea.id}}/attachments/{{document.id}}"
 						class="btn btn-primary"> <i class="fa fa-download"></i>
 					</a>
 					</td>

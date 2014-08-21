@@ -61,13 +61,42 @@ body {
 	height: 400px;
 	width: 800px;
 }
+
+[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak
+	{
+	display: none !important;
+}
+
+#spinner {  
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:1000;
+    background-color:white;
+    opacity: .8;
+ }
+
+.ajax-loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -32px; /* -1 * image width / 2 */
+    margin-top: -32px;  /* -1 * image height / 2 */
+    display: block;     
+}
+
 </style>
 <title><spring:message code="Project.title" /></title>
 </head>
-<body ng-cloak ng-app="ProjectIdeaApp">
+<body ng-cloak class="ng-cloak" ng-app="ProjectIdeaApp" ng-controller="ApplicationController">
+
+<img id="spinner" class="ajax-loader" ng-src="resources/img/loading1.gif"
+		style="display: none;">
+		
 	<!-- Fixed navbar -->
-	<div class="navbar navbar-default navbar-fixed-top" role="navigation"
-		ng-controller="NavBarController">
+	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -76,14 +105,15 @@ body {
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a ui-sref-active="active" class="navbar-brand" ui-sref="home">
-					<i class="fa fa-home"></i> <spring:message code="Project.title" />
+				<a ui-sref-active="active" class="navbar-brand"
+					ui-sref="home.publishedProjectIdeas"> <i class="fa fa-home"></i>
+					<spring:message code="Project.title" />
 				</a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
 					<li ui-sref-active="active"><a
-						ui-sref="myProjectIdeas.drafted"> <i
+						ui-sref="myProjectIdeas.drafted.projectIdeas"> <i
 							class="fa fa-paper-plane-o"></i> <spring:message
 								code="ProjectIdea.myIdeas" />
 					</a></li>
@@ -91,7 +121,7 @@ body {
 							class="fa fa-dashboard"></i> Dashboard
 					</a></li>
 				</ul>
-				<ul ng-if="isLoggedIn()" class="nav navbar-nav navbar-right">
+				<ul ng-if="isAuthenticated()" class="nav navbar-nav navbar-right">
 					<li ui-sref-active="active"><a ui-sref="chat"> <i
 							class="fa fa-comments-o"></i>
 					</a></li>
@@ -114,8 +144,6 @@ body {
 			<!--/.nav-collapse -->
 		</div>
 	</div>
-	<img id="spinner" ng-src="resources/img/loading1.gif"
-		style="display: none;">
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">

@@ -140,6 +140,21 @@ public class DraftedProjectIdeaController {
 		}
 	}
 
+	@RequestMapping(value = "/draftedProjectIdeas/{id}/publish", method = RequestMethod.PUT)
+	public @ResponseBody ResponseEntity<ProjectIdea> publishDraftedProjectIdea(
+			@PathVariable(value = "id") long projectIdeaId) {
+
+		ProjectIdea idea = projectIdeaRepository.findProjectIdeaById(projectIdeaId);
+		if(idea == null){
+			return new ResponseEntity<ProjectIdea>(HttpStatus.NOT_FOUND);
+		}else{
+			projectIdeaService.publishProjectIdea(SecurityUtility.authenticatedUser(), idea.getId());
+			ProjectIdea projectIdea = projectIdeaRepository.findProjectIdeaById(projectIdeaId);
+			return new ResponseEntity<ProjectIdea>(projectIdea, HttpStatus.OK);
+		}
+
+	}
+
 	@RequestMapping(value = "/draftedProjectIdeas/{id}", method = RequestMethod.PUT)
 	public @ResponseBody ResponseEntity<ProjectIdea> updateDraftedProjectIdea(
 			@PathVariable(value = "id") long projectIdeaId,
@@ -237,6 +252,7 @@ public class DraftedProjectIdeaController {
 		if (attachment == null) {
 			return new ResponseEntity<Attachment>(HttpStatus.NOT_FOUND);
 		} else {
+			attachmentRepository.removeAttachment(attachment.getId());
 			// delete here
 			return new ResponseEntity<Attachment>(HttpStatus.NO_CONTENT);
 		}
