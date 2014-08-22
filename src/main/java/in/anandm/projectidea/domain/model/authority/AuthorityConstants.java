@@ -5,14 +5,10 @@ package in.anandm.projectidea.domain.model.authority;
 
 /**
  * @author anandm
- *
+ * 
  */
 public enum AuthorityConstants {
 
-	NOTE_READ,
-	NOTE_UPDATE,
-	NOTE_DELETE,
-	ROLE_ADMIN,
-	ROLE_USER,
-	NOTE_ADD;
+	DRAFT_IDEA, PUBLISH_IDEA, ARCHIVE_IDEA, ADD_REVIEW, DOWNLOAD_IDEA, DELETE_REVIEW, CHAT, ADMIN;
+
 }

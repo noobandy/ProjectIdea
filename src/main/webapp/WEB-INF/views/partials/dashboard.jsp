@@ -36,7 +36,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-md-3">
+	<div class="col-md-2">
 		<ul class="nav nav-pills nav-stacked">
 			<li ui-sref-active="active"><a ui-sref="dashboard.users"><i class="fa fa-user"></i> User</a></li>
 			<li ui-sref-active="active"><a ui-sref="dashboard.groups"><i class="fa fa-users"></i> Group</a></li>
@@ -44,7 +44,7 @@
 			<li ui-sref-active="active"><a ui-sref="dashboard.analytics"><i class="fa fa-bar-chart-o"></i> Analytics</a></li>
 		</ul>
 	</div>
-	<div class="col-md-9">
+	<div class="col-md-10">
 		<ui-view></ui-view>
 	</div>
 

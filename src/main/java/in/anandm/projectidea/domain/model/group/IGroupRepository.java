@@ -17,5 +17,7 @@ public interface IGroupRepository {
 
 	Group findGroupByName(String groupName);
 
+	Group findgroupById(Long id);
+	
 	List<Group> findAllGroups();
 }

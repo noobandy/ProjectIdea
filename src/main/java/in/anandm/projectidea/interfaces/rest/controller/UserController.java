@@ -3,18 +3,18 @@
  */
 package in.anandm.projectidea.interfaces.rest.controller;
 
+import in.anandm.projectidea.application.UserGroupManagementService;
 import in.anandm.projectidea.application.util.PaginationUtility;
-import in.anandm.projectidea.domain.model.projectidea.Status;
+import in.anandm.projectidea.domain.model.authority.Authority;
+import in.anandm.projectidea.domain.model.authority.AuthorityConstants;
 import in.anandm.projectidea.domain.model.user.User;
 import in.anandm.projectidea.domain.model.user.UserQuery;
 import in.anandm.projectidea.domain.model.user.UserRepository;
 import in.anandm.projectidea.domain.shared.QueryResult;
-import in.anandm.projectidea.interfaces.rest.dto.TagCount;
 import in.anandm.projectidea.interfaces.rest.dto.UpdatePasswordCommand;
-import in.anandm.projectidea.interfaces.rest.dto.UserProfile;
 import in.anandm.projectidea.interfaces.rest.helper.RestResourceHelper;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,6 +41,9 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private UserGroupManagementService userGroupManagementService;
+
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	public ResponseEntity<QueryResult<User>> getUsers(
 			@RequestParam(value = "page", required = true) int pageNumber,
@@ -58,31 +61,61 @@ public class UserController {
 
 	@RequestMapping(value = "/users/{username}", method = RequestMethod.GET)
 	public @ResponseBody
-	ResponseEntity<UserProfile> getUser(
+	ResponseEntity<User> getUser(
 			@PathVariable(value = "username") String username) {
 
 		User user = userRepository.findUserByUserName(username);
 		if (user != null) {
-			List<TagCount> tagCounts = resourceHelper.getTagCountOfUser(
-					username, Status.PUBLISHED);
-
-			UserProfile userProfile = new UserProfile(user, tagCounts);
-
-			return new ResponseEntity<UserProfile>(userProfile, HttpStatus.OK);
+			return new ResponseEntity<User>(user, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<UserProfile>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
 		}
 
 	}
 
-	@RequestMapping(value = "/users/{username}/profilePic", method = RequestMethod.GET)
-	public void getProfilePic() {
+	@RequestMapping(value = "/users/{username}", method = RequestMethod.PUT)
+	public @ResponseBody
+	ResponseEntity<User> updateUser(
+			@PathVariable(value = "username") String username) {
+
+		User user = userRepository.findUserByUserName(username);
+		if (user != null) {
+			return new ResponseEntity<User>(user, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+		}
 
 	}
 
-	@RequestMapping(value = "/users/{username}/profilePic", method = RequestMethod.PUT)
-	public void updateProfilePic() {
+	@RequestMapping(value = "/users/{username}/authorities", method = RequestMethod.GET)
+	public @ResponseBody
+	ResponseEntity<Set<Authority>> getUserAuthorities(
+			@PathVariable(value = "username") String username) {
+		User user = userRepository.findUserByUserName(username);
+		if (user != null) {
+			return new ResponseEntity<Set<Authority>>(user.getAuthorities(),
+					HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Set<Authority>>(HttpStatus.NOT_FOUND);
+		}
+	}
 
+	@RequestMapping(value = "/users/{username}/authorities/{authority}", method = RequestMethod.POST)
+	public @ResponseBody
+	ResponseEntity<String> grantUserAuthority(
+			@PathVariable(value = "username") String username,
+			@PathVariable(value = "authority") String authority) {
+		userGroupManagementService.grantAuthorityToUser(username, AuthorityConstants.valueOf(authority));
+		return new ResponseEntity<String>("Granted", HttpStatus.CREATED);
+	}
+
+	@RequestMapping(value = "/users/{username}/authorities/{authority}", method = RequestMethod.DELETE)
+	public @ResponseBody
+	ResponseEntity<String> revokeUserAuthority(
+			@PathVariable(value = "username") String username,
+			@PathVariable(value = "authority") String authority) {
+		userGroupManagementService.revokeAuthorityOfUser(username, AuthorityConstants.valueOf(authority));
+		return new ResponseEntity<String>("Revoked", HttpStatus.NO_CONTENT);
 	}
 
 	@RequestMapping(value = "/users/{username}/updatePassword", method = RequestMethod.PUT)

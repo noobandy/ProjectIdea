@@ -1,17 +1,17 @@
 /**
  * 
  */
-package in.anandm.projectidea.domain.service;
+package in.anandm.projectidea.application;
 
 import in.anandm.projectidea.domain.model.authority.AuthorityConstants;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author Anand
  *
  */
-public interface IUserGroupManagementService {
+public interface UserGroupManagementService {
 
 	void addUserInGroup(String username,String groupName);
 	
@@ -25,7 +25,7 @@ public interface IUserGroupManagementService {
 	
 	void revokeAuthorityOfGroup(String groupName,AuthorityConstants authority);
 	
-	List<AuthorityConstants> getGrantedAuthoritiesOfUser(String username);
+	Set<AuthorityConstants> getGrantedAuthoritiesOfUser(String username);
 	
 	
 }

@@ -7,12 +7,9 @@ import in.anandm.projectidea.domain.model.authority.Authority;
 import in.anandm.projectidea.domain.model.authority.AuthorityConstants;
 import in.anandm.projectidea.domain.model.authority.AuthorityRepository;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,37 +17,18 @@ import org.springframework.stereotype.Service;
  * 
  */
 @Service
-public class AuthServiceImpl implements IAuthService {
+public class AuthorityServiceImpl implements IAuthorityService {
 
 	private AuthorityRepository authorityRepository;
 
 	private boolean initialized = false;
 
 	@Autowired
-	public AuthServiceImpl(AuthorityRepository authorityRepository) {
+	public AuthorityServiceImpl(AuthorityRepository authorityRepository) {
 		super();
 		this.authorityRepository = authorityRepository;
 	}
-
-	@Override
-	public boolean isAllowed(AuthorityConstants authority) {
-
-		Collection<? extends GrantedAuthority> grantedAuthorities = SecurityContextHolder
-				.getContext().getAuthentication().getAuthorities();
-		for (GrantedAuthority grantedAuthority : grantedAuthorities) {
-			if ("ROLE_ANONYMOUS".equals(grantedAuthority.getAuthority())) {
-				return false;
-			} else {
-				if (authority.equals(AuthorityConstants
-						.valueOf(grantedAuthority.getAuthority()))) {
-					return true;
-				}
-			}
-
-		}
-		return false;
-	}
-
+	
 	@Override
 	public int initOrUpdate() {
 		int createdAuthoritiesCount = 0;

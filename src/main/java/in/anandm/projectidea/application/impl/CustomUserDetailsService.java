@@ -1,15 +1,15 @@
 /**
  * 
  */
-package in.anandm.projectidea.domain.service;
+package in.anandm.projectidea.application.impl;
 
+import in.anandm.projectidea.application.UserGroupManagementService;
 import in.anandm.projectidea.domain.model.authority.AuthorityConstants;
 import in.anandm.projectidea.domain.model.user.UserRepository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,22 +26,27 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public class CustomUserDetailsService implements UserDetailsService {
 
-
 	private UserRepository userRepository;
-	
+	private UserGroupManagementService userGroupManagementService;
 
+	/**
+	 * @param userRepository
+	 * @param userGroupManagementService
+	 */
 	@Autowired
-	public CustomUserDetailsService(UserRepository userRepository) {
+	public CustomUserDetailsService(UserRepository userRepository,
+			UserGroupManagementService userGroupManagementService) {
 		super();
 		this.userRepository = userRepository;
+		this.userGroupManagementService = userGroupManagementService;
 	}
-
 
 	@Override
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
-		
-		in.anandm.projectidea.domain.model.user.User foundUser = userRepository.findUserByUserName(username);
+
+		in.anandm.projectidea.domain.model.user.User foundUser = userRepository
+				.findUserByUserName(username);
 
 		if (foundUser == null) {
 			throw new UsernameNotFoundException(username);
@@ -49,7 +54,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
-		for (AuthorityConstants grantedAuthority : getGrantedAuthorities()) {
+		Set<AuthorityConstants> grantedAuthorities = userGroupManagementService
+				.getGrantedAuthoritiesOfUser(username);
+
+		for (AuthorityConstants grantedAuthority : grantedAuthorities) {
 			authorities.add(new SimpleGrantedAuthority(grantedAuthority
 					.toString()));
 		}
@@ -60,9 +68,4 @@ public class CustomUserDetailsService implements UserDetailsService {
 		return userDetails;
 	}
 
-	
-	private List<AuthorityConstants> getGrantedAuthorities() {
-
-		return Arrays.asList(AuthorityConstants.values());
-	}
 }

@@ -5,7 +5,7 @@ package in.anandm.projectidea.interfaces.rest.controller;
 
 import in.anandm.projectidea.domain.model.authority.Authority;
 import in.anandm.projectidea.domain.model.authority.AuthorityRepository;
-import in.anandm.projectidea.domain.service.IAuthService;
+import in.anandm.projectidea.domain.service.IAuthorityService;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class AuthorityController {
 	private AuthorityRepository authorityRepository;
 
 	@Autowired
-	private IAuthService authService;
+	private IAuthorityService authorityService;
 
 	@RequestMapping(value = "/authorities", method = RequestMethod.GET)
 	public ResponseEntity<List<Authority>> getAuthorities() {
@@ -41,7 +41,7 @@ public class AuthorityController {
 
 	@RequestMapping(value = "/authorities/bootstrap", method = RequestMethod.POST)
 	public ResponseEntity<Integer> bootstrapAuthorities() {
-		Integer count = authService.initOrUpdate();
+		Integer count = authorityService.initOrUpdate();
 		return new ResponseEntity<Integer>(count, HttpStatus.CREATED);
 	}
 }

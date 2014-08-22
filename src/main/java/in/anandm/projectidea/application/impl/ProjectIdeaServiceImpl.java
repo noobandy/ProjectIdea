@@ -20,6 +20,7 @@ import in.anandm.projectidea.domain.shared.ApplicationException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -66,6 +67,7 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 
 	@Transactional
 	@Override
+	@PreAuthorize("hasRole('DRAFT_IDEA')")
 	public ProjectIdea draftProjectidea(String author,
 			Specifications specifications) {
 		User user = userRepository.findUserByUserName(author);
@@ -78,6 +80,7 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 	
 	@Transactional
 	@Override
+	@PreAuthorize("hasRole('DRAFT_IDEA')")
 	public ProjectIdea updateDraftedProjectIdea(String author,
 			long projectIdeaId, Specifications newSpecifications) {
 
@@ -98,6 +101,7 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 
 	@Transactional
 	@Override
+	@PreAuthorize("hasRole('ADD_REVIEW')")
 	public Review addReview(String author, long projectIdeaId, int starRating,
 			String remark) {
 		ReviewQuery query = new ReviewQuery();
@@ -121,6 +125,7 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 
 	@Transactional
 	@Override
+	@PreAuthorize("hasRole('DELETE_REVIEW')")
 	public void deleteReview(String author, long reviewId) {
 		User user = userRepository.findUserByUserName(author);
 		Review review = reviewRepository.findReviewById(reviewId);
@@ -135,6 +140,7 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 
 	@Transactional
 	@Override
+	@PreAuthorize("hasRole('DRAFT_IDEA')")
 	public Attachment addAttachment(String author, long projectIdeaId,
 			MultipartFile file) {
 		User user = userRepository.findUserByUserName(author);
@@ -164,6 +170,7 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 
 	@Transactional
 	@Override
+	@PreAuthorize("hasRole('DRAFT_IDEA')")
 	public void deleteAttachment(String author, long attachementId) {
 		User user = userRepository.findUserByUserName(author);
 		Attachment attachment = attachmentRepository
@@ -188,6 +195,7 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 	
 	@Transactional
 	@Override
+	@PreAuthorize("hasRole('PUBLISH_IDEA')")
 	public void publishProjectIdea(String author, long projectIdeaId) {
 		User user = userRepository.findUserByUserName(author);
 		ProjectIdea idea = projectIdeaRepository
@@ -204,6 +212,7 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 
 	@Transactional
 	@Override
+	@PreAuthorize("hasRole('ARCHIVE_IDEA')")
 	public void archiveProjectIdea(String author, long projectIdeaId) {
 		User user = userRepository.findUserByUserName(author);
 		ProjectIdea idea = projectIdeaRepository

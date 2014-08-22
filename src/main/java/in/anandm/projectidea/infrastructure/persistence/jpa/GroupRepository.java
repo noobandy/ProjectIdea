@@ -56,4 +56,11 @@ public class GroupRepository extends BaseRepository<Group, Long> implements
 
 		return findAll();
 	}
+
+	@Override
+	public Group findgroupById(Long id) {
+
+		return find(id);
+	}
+
 }

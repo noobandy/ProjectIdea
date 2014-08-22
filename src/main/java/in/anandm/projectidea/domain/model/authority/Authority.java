@@ -3,6 +3,8 @@
  */
 package in.anandm.projectidea.domain.model.authority;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,23 +12,26 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * @author anandm
- *
+ * 
  */
 @Entity
-@Table(name="act_authority")
-public class Authority{
+@Table(name = "act_authority")
+public class Authority {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@Enumerated(EnumType.STRING)
 	private AuthorityConstants authority;
 
-	private Long expiredAt;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date expiredAt;
 
 	/**
 	 * 
@@ -41,6 +46,22 @@ public class Authority{
 		this.authority = authority;
 	}
 
+	public boolean hasExpired() {
+		return expiredAt != null && expiredAt.before(new Date());
+	}
+
+	public void expireNow() {
+		expiredAt = new Date();
+	}
+
+	public void expireAt(Date expiryDate) {
+		expiredAt = expiryDate;
+	}
+
+	public void expireNever() {
+		expiredAt = null;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -49,7 +70,7 @@ public class Authority{
 		return authority;
 	}
 
-	public Long getExpiredAt() {
+	public Date getExpiredAt() {
 		return expiredAt;
 	}
 

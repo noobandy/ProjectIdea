@@ -3,13 +3,20 @@
  */
 package in.anandm.projectidea.domain.model.user;
 
+import in.anandm.projectidea.domain.model.authority.Authority;
+
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -43,6 +50,10 @@ public class User {
 
 	@Embedded
 	private UserProfilePic profilePic;
+
+	@ManyToMany
+	@JoinTable(name = "act_user_authority", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "authority_id"))
+	private Set<Authority> authorities = new HashSet<Authority>();
 
 	User() {
 		super();
@@ -88,6 +99,14 @@ public class User {
 		}
 	}
 
+	public void grantAuthority(Authority authority) {
+		authorities.add(authority);
+	}
+
+	public void revokeAuthority(Authority authority) {
+		authorities.remove(authority);
+	}
+
 	// getters
 	public Long getId() {
 		return id;
@@ -119,6 +138,10 @@ public class User {
 
 	public Date getLastModified() {
 		return lastModified;
+	}
+
+	public Set<Authority> getAuthorities() {
+		return authorities;
 	}
 
 	@Override

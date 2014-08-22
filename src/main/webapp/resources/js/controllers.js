@@ -414,7 +414,7 @@ controller('ApplicationController',
 	$scope.authenticatedUser = function() {
 		return AuthService.getAuthenticatedUser();
 	};
-	
+
 	$scope.hasAuthority = function(authority){
 		return true;
 	};
@@ -428,58 +428,96 @@ controller('DashBoardController',['$scope','$stateParams','$http',function($scop
 	});
 
 }]).
-controller('UserController',['$scope','$stateParams','$http',function($scope,$stateParams,$http){
-	if($stateParams.username){
-
-		$scope.username = $stateParams.username;
-
-		$http.get('api/users/'+$scope.username).success(function(data){
-			$scope.user = data;
-		});
-	}else{
-		$scope.totalItems = 0;
-		$scope.currentPage = 1;
-		$scope.itemsPerPage = 10;
-		$scope.maxSize = 5;
+controller('UserGridController',['$scope','$http',function($scope,$http){
+	$scope.activeUser = '';
+	
+	$scope.totalItems = 0;
+	$scope.currentPage = 1;
+	$scope.itemsPerPage = 10;
+	$scope.maxSize = 5;
 
 
-		$scope.pageChanged = function() {
-			$scope.loadData();
-		};
-
-		$scope.loadData = function(){
-			var params = {
-					page: $scope.currentPage,
-					recordsPerPage: $scope.itemsPerPage
-			};
-			return $http.get('api/users',{params: params}).success(function(data){
-				$scope.totalItems = data.count;
-				$scope.users = data.items;
-			}).error(function(data){
-				//handle error
-			});
-		};
-
+	$scope.pageChanged = function() {
 		$scope.loadData();
-	}
-}]).
-controller('GroupController',['$scope','$stateParams','$http',function($scope,$stateParams,$http){
-	if($stateParams.groupName){
+	};
 
-		$scope.groupName = $stateParams.groupName;
-
-		$http.get('api/groups/'+$scope.groupName).success(function(data){
-			$scope.group = data;
+	$scope.loadData = function(){
+		var params = {
+				page: $scope.currentPage,
+				recordsPerPage: $scope.itemsPerPage
+		};
+		return $http.get('api/users',{params: params}).success(function(data){
+			$scope.totalItems = data.count;
+			$scope.users = data.items;
+		}).error(function(data){
+			//handle error
 		});
+	};
 
-	}else{
-		$scope.groups = [];
-		$http.get('api/groups').success(function(data){
-			$scope.groups = data;
-		});
-	}
+	$scope.activateUser = function(username){
+		$scope.activeUser = username;
+	};
+	$scope.loadData();
 }]).
-controller('AuthorityController',['$scope','$http',function($scope,$http){
+controller('UserController',['$scope','$stateParams','$http',function($scope,$stateParams,$http){
+	$scope.username = $stateParams.username;
+
+
+	$scope.alerts = [];
+
+	$scope.closeAlert = function(index) {
+		$scope.alerts.splice(index, 1);
+	};
+
+
+	$http.get('api/users/'+$scope.username).success(function(data){
+		$scope.user = data;
+	}).error(function(data){
+		//handle error
+	});
+
+	$http.get('api/users/'+$scope.username+'/authorities').success(function(data){
+		$scope.grantedAuthorities = data;
+	}).error(function(data){
+		//handle error
+	});
+
+	$http.get('api/publishedProjectIdeas/tagCounts',{params:{author:$scope.username}}).success(function(data){
+		$scope.tagCounts = data;
+	}).error(function(data){
+		//handle error
+	});
+
+	$http.get('api/authorities').success(function(data){
+		$scope.authorities = data;
+	}).error(function(data){
+		//handle error
+	});
+
+	$scope.grantAuthority = function(authority){
+		$http.post('api/users/'+$scope.username+'/authorities/'+authority).success(function(data){
+			$scope.alerts.push({ type: 'success', msg: 'Authority granted' });
+		}).error(function(data){
+			$scope.alerts.push({ type: 'danger', msg: 'failed to grant authority' });
+		});
+	};
+
+	$scope.revokeAuthority = function(authority){
+		$http.delete('api/users/'+$scope.username+'/authorities/'+authority).success(function(data){
+			$scope.alerts.push({ type: 'success', msg: 'Authority revoked' });
+		}).error(function(data){
+			$scope.alerts.push({ type: 'danger', msg: 'failed to revoke authority' });
+		});
+	};
+}]).
+controller('GroupGridController',['$scope','$stateParams','$http',function($scope,$stateParams,$http){
+
+	$scope.groups = [];
+	$http.get('api/groups').success(function(data){
+		$scope.groups = data;
+	});
+}]).
+controller('AuthorityGridController',['$scope','$http',function($scope,$http){
 
 	$scope.authorities = [];
 

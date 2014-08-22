@@ -1,58 +1,59 @@
 /**
  * 
  */
-package in.anandm.projectidea.domain.service;
+package in.anandm.projectidea.application.impl;
 
+import in.anandm.projectidea.application.UserGroupManagementService;
 import in.anandm.projectidea.domain.model.authority.Authority;
 import in.anandm.projectidea.domain.model.authority.AuthorityConstants;
 import in.anandm.projectidea.domain.model.authority.AuthorityRepository;
 import in.anandm.projectidea.domain.model.group.Group;
-import in.anandm.projectidea.domain.model.group.GroupAuthority;
 import in.anandm.projectidea.domain.model.group.GroupUser;
-import in.anandm.projectidea.domain.model.group.IGroupAuthorityRepository;
 import in.anandm.projectidea.domain.model.group.IGroupRepository;
 import in.anandm.projectidea.domain.model.group.IGroupUserRepository;
-import in.anandm.projectidea.domain.model.user.UserAuthorityRepository;
-import in.anandm.projectidea.domain.model.user.UserRepository;
 import in.anandm.projectidea.domain.model.user.User;
-import in.anandm.projectidea.domain.model.user.UserAuthority;
+import in.anandm.projectidea.domain.model.user.UserRepository;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Anand
- *
+ * 
  */
 @Service
 public class UserGroupManagementServiceImpl implements
-		IUserGroupManagementService {
+		UserGroupManagementService {
 
 	private UserRepository userRepository;
 	private IGroupRepository groupRepository;
 	private IGroupUserRepository groupUserRepository;
 	private AuthorityRepository authorityRepository;
-	private UserAuthorityRepository userAuthorityRepository;
-	private IGroupAuthorityRepository groupAuthorityRepository;
 
-	
+	/**
+	 * 
+	 */
+	UserGroupManagementServiceImpl() {
+		super();
+
+	}
 
 	@Autowired
 	public UserGroupManagementServiceImpl(UserRepository userRepository,
 			IGroupRepository groupRepository,
 			IGroupUserRepository groupUserRepository,
-			AuthorityRepository authorityRepository,
-			UserAuthorityRepository userAuthorityRepository,
-			IGroupAuthorityRepository groupAuthorityRepository) {
+			AuthorityRepository authorityRepository) {
 		super();
 		this.userRepository = userRepository;
 		this.groupRepository = groupRepository;
 		this.groupUserRepository = groupUserRepository;
 		this.authorityRepository = authorityRepository;
-		this.userAuthorityRepository = userAuthorityRepository;
-		this.groupAuthorityRepository = groupAuthorityRepository;
 	}
 
 	/*
@@ -61,7 +62,9 @@ public class UserGroupManagementServiceImpl implements
 	 * @see in.anandm.projectidea.domain.service.UserGroupManagementService#
 	 * addUserInGroup(java.lang.String, java.lang.String)
 	 */
+	@Transactional
 	@Override
+	@PreAuthorize("hasRole('ADMIN')")
 	public void addUserInGroup(String username, String groupName) {
 
 		User user = userRepository.findUserByUserName(username);
@@ -80,7 +83,9 @@ public class UserGroupManagementServiceImpl implements
 	 * @see in.anandm.projectidea.domain.service.UserGroupManagementService#
 	 * removeUserFormGroup(java.lang.String, java.lang.String)
 	 */
+	@Transactional
 	@Override
+	@PreAuthorize("hasRole('ADMIN')")
 	public void removeUserFormGroup(String username, String groupName) {
 		User user = userRepository.findUserByUserName(username);
 
@@ -97,17 +102,17 @@ public class UserGroupManagementServiceImpl implements
 	 * grantAuthorityToUser(java.lang.String,
 	 * in.anandm.projectidea.domain.model.AuthorityConstants)
 	 */
+	@Transactional
 	@Override
+	@PreAuthorize("hasRole('ADMIN')")
 	public void grantAuthorityToUser(String username,
 			AuthorityConstants authorityName) {
 		User user = userRepository.findUserByUserName(username);
 		Authority authority = authorityRepository
 				.findAuthorityByName(authorityName);
 
-		UserAuthority userAuthority = new UserAuthority(user.getId(),
-				authority.getId());
-
-		userAuthorityRepository.saveUserAuthority(userAuthority);
+		user.grantAuthority(authority);
+		userRepository.saveUser(user);
 	}
 
 	/*
@@ -117,15 +122,18 @@ public class UserGroupManagementServiceImpl implements
 	 * revokeAuthorityOfUser(java.lang.String,
 	 * in.anandm.projectidea.domain.model.AuthorityConstants)
 	 */
+	@Transactional
 	@Override
+	@PreAuthorize("hasRole('ADMIN')")
 	public void revokeAuthorityOfUser(String username,
 			AuthorityConstants authorityName) {
 		User user = userRepository.findUserByUserName(username);
 		Authority authority = authorityRepository
 				.findAuthorityByName(authorityName);
 
-		userAuthorityRepository.removeUserAuthority(user.getId(),
-				authority.getId());
+		user.revokeAuthority(authority);
+
+		userRepository.saveUser(user);
 
 	}
 
@@ -136,7 +144,9 @@ public class UserGroupManagementServiceImpl implements
 	 * grantAuthorityToGroup(java.lang.String,
 	 * in.anandm.projectidea.domain.model.AuthorityConstants)
 	 */
+	@Transactional
 	@Override
+	@PreAuthorize("hasRole('ADMIN')")
 	public void grantAuthorityToGroup(String groupName,
 			AuthorityConstants authorityName) {
 
@@ -144,10 +154,9 @@ public class UserGroupManagementServiceImpl implements
 		Authority authority = authorityRepository
 				.findAuthorityByName(authorityName);
 
-		GroupAuthority groupAuthority = new GroupAuthority(group.getId(),
-				authority.getId());
+		group.grantAuthority(authority);
 
-		groupAuthorityRepository.saveGroupAuthority(groupAuthority);
+		groupRepository.saveGroup(group);
 
 	}
 
@@ -158,7 +167,9 @@ public class UserGroupManagementServiceImpl implements
 	 * revokeAuthorityOfGroup(java.lang.String,
 	 * in.anandm.projectidea.domain.model.AuthorityConstants)
 	 */
+	@Transactional
 	@Override
+	@PreAuthorize("hasRole('ADMIN')")
 	public void revokeAuthorityOfGroup(String groupName,
 			AuthorityConstants authorityName) {
 
@@ -166,8 +177,9 @@ public class UserGroupManagementServiceImpl implements
 		Authority authority = authorityRepository
 				.findAuthorityByName(authorityName);
 
-		groupAuthorityRepository.removeGroupAuthority(group.getId(),
-				authority.getId());
+		group.revokeAuthority(authority);
+
+		groupRepository.saveGroup(group);
 	}
 
 	/*
@@ -177,9 +189,48 @@ public class UserGroupManagementServiceImpl implements
 	 * getGrantedAuthoritiesOfUser(java.lang.String)
 	 */
 	@Override
-	public List<AuthorityConstants> getGrantedAuthoritiesOfUser(String username) {
-		// TODO Auto-generated method stub
-		return null;
+	@Transactional(readOnly=true)
+	public Set<AuthorityConstants> getGrantedAuthoritiesOfUser(String username) {
+
+		Set<AuthorityConstants> grantedAuthorities = new HashSet<AuthorityConstants>();
+
+		Set<AuthorityConstants> deniedAuthorities = new HashSet<AuthorityConstants>();
+
+		User user = userRepository.findUserByUserName(username);
+
+		// non expired authorities granted to user
+		for (Authority authority : user.getAuthorities()) {
+			if (!authority.hasExpired()) {
+				grantedAuthorities.add(authority.getAuthority());
+			}
+		}
+
+		List<GroupUser> groupUsers = groupUserRepository
+				.findGroupUsersOfUser(user.getId());
+
+		for (GroupUser groupUser : groupUsers) {
+			Group group = groupRepository.findgroupById(groupUser.getGroupId());
+			if (group.isDenyGroup()) {
+				for (Authority authority : group.getAuthorities()) {
+					// authorities denied to user via group
+					deniedAuthorities.add(authority.getAuthority());
+				}
+			} else {
+				for (Authority authority : group.getAuthorities()) {
+					if (!authority.hasExpired()) {
+						// non expired authorities granted to user via group
+						grantedAuthorities.add(authority.getAuthority());
+					}
+				}
+			}
+		}
+
+		for (AuthorityConstants constants : deniedAuthorities) {
+			// denied takes precedence over granted
+			grantedAuthorities.remove(constants);
+		}
+
+		return grantedAuthorities;
 	}
 
 }

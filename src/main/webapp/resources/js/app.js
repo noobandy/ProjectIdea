@@ -104,7 +104,7 @@ angular.module(
 			  state('dashboard.users',{
 				  url: '/users',
 				  templateUrl: 'partials/users',
-				  controller: 'UserController',
+				  controller: 'UserGridController',
 				  data: {
 					  isSecure: true,
 					  ncyBreadcrumbLabel: 'Users',
@@ -124,7 +124,7 @@ angular.module(
 			  state('dashboard.groups',{
 				  url: '/groups',
 				  templateUrl: 'partials/groups',
-				  controller: 'GroupController',
+				  controller: 'GroupGridController',
 				  data: {
 					  isSecure: true,
 					  ncyBreadcrumbLabel: 'Groups',
@@ -144,6 +144,15 @@ angular.module(
 			  state('dashboard.authorities',{
 				  url: '/authorities',
 				  templateUrl: 'partials/authorities',
+				  controller: 'AuthorityGridController',
+				  data: {
+					  isSecure: true,
+					  ncyBreadcrumbLabel: 'Authorities',
+					  ncyBreadcrumbParent: 'dashboard'
+				  }
+			  }).state('dashboard.authorities.authority',{
+				  url: '/{authority}',
+				  templateUrl: 'partials/authority',
 				  controller: 'AuthorityController',
 				  data: {
 					  isSecure: true,

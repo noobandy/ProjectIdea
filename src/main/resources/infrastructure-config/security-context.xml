@@ -14,7 +14,7 @@
 	</bean>
 
 	<bean id="customUserDetailsService"
-		class="in.anandm.projectidea.domain.service.CustomUserDetailsService">
+		class="in.anandm.projectidea.application.impl.CustomUserDetailsService">
 
 	</bean>
 

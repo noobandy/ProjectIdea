@@ -3,7 +3,12 @@
  */
 package in.anandm.projectidea.application.util;
 
+import in.anandm.projectidea.domain.model.authority.AuthorityConstants;
+
+import java.util.Collection;
+
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -50,6 +55,20 @@ public class SecurityUtility {
 				return !"anonymous".equals(username);
 
 			} else {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static final boolean hasAuthority(AuthorityConstants authority) {
+		Collection<? extends GrantedAuthority> grantedAuthorities = SecurityContextHolder
+				.getContext().getAuthentication().getAuthorities();
+
+		for (GrantedAuthority grantedAuthority : grantedAuthorities) {
+			if (authority.equals(AuthorityConstants.valueOf(grantedAuthority
+					.getAuthority()))) {
 				return true;
 			}
 		}
