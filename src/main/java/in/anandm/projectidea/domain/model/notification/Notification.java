@@ -6,6 +6,8 @@ package in.anandm.projectidea.domain.model.notification;
 import in.anandm.projectidea.domain.model.user.User;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -20,12 +22,9 @@ public class Notification {
 
 	@Id
 	private Long id;
-
-	private NotificationType type;
 	private String message;
-	private String resourceURI;
+	private Map<String, String> extras = new HashMap<String, String>();
 	private Date createdOn;
-	private boolean dismissed;
 
 	@ManyToOne
 	private User recipient;
@@ -40,19 +39,25 @@ public class Notification {
 
 	/**
 	 * @param type
-	 * @param resourceURI
+	 * 
 	 */
-	public Notification(NotificationType type, String message,
-			String resourceURI, User recipient) {
+	public Notification(NotificationType type, String message, User recipient) {
 		super();
 		this.type = type;
 		this.message = message;
-		this.resourceURI = resourceURI;
 		this.recipient = recipient;
 	}
 
 	public void dismiss() {
 		dismissed = true;
+	}
+
+	public void putExtra(String key, String value) {
+		extras.put(key, value);
+	}
+
+	public void deleteExtra(String key) {
+		extras.remove(key);
 	}
 
 	public Long getId() {
@@ -67,10 +72,6 @@ public class Notification {
 		return message;
 	}
 
-	public String getResourceURI() {
-		return resourceURI;
-	}
-
 	public Date getCreatedOn() {
 		return createdOn;
 	}
@@ -81,6 +82,10 @@ public class Notification {
 
 	public User getRecipient() {
 		return recipient;
+	}
+
+	public Map<String, String> getExtras() {
+		return extras;
 	}
 
 }
