@@ -67,34 +67,34 @@ body {
 	display: none !important;
 }
 
-#spinner {  
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    z-index:1000;
-    background-color:white;
-    opacity: .8;
- }
-
-.ajax-loader {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin-left: -32px; /* -1 * image width / 2 */
-    margin-top: -32px;  /* -1 * image height / 2 */
-    display: block;     
+#spinner {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1000;
+	background-color: white;
+	opacity: .8;
 }
 
+.ajax-loader {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -32px; /* -1 * image width / 2 */
+	margin-top: -32px; /* -1 * image height / 2 */
+	display: block;
+}
 </style>
 <title><spring:message code="Project.title" /></title>
 </head>
-<body ng-cloak class="ng-cloak" ng-app="ProjectIdeaApp" ng-controller="ApplicationController">
+<body ng-cloak class="ng-cloak" ng-app="ProjectIdeaApp"
+	ng-controller="ApplicationController">
 
-<img id="spinner" class="ajax-loader" ng-src="resources/img/loading1.gif"
-		style="display: none;">
-		
+	<img id="spinner" class="ajax-loader"
+		ng-src="resources/img/loading1.gif" style="display: none;">
+
 	<!-- Fixed navbar -->
 	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container">
@@ -122,6 +122,7 @@ body {
 					</a></li>
 				</ul>
 				<ul ng-if="isAuthenticated()" class="nav navbar-nav navbar-right">
+					<notification></notification>
 					<li ui-sref-active="active"><a ui-sref="chat"> <i
 							class="fa fa-comments-o"></i>
 					</a></li>
@@ -162,6 +163,8 @@ body {
 
 	<script
 		src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/js/jquery.atmosphere.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/angular-file-upload-shim.min.js"></script>
 	<script

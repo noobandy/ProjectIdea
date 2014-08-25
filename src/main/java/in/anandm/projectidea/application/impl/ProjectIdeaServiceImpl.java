@@ -3,9 +3,11 @@
  */
 package in.anandm.projectidea.application.impl;
 
+import in.anandm.projectidea.application.ApplicationEvents;
 import in.anandm.projectidea.application.ProjectIdeaService;
 import in.anandm.projectidea.domain.model.attachment.Attachment;
 import in.anandm.projectidea.domain.model.attachment.AttachmentRepository;
+import in.anandm.projectidea.domain.model.events.ProjectIdeaPublishedEvent;
 import in.anandm.projectidea.domain.model.projectidea.ProjectIdea;
 import in.anandm.projectidea.domain.model.projectidea.ProjectIdeaRepository;
 import in.anandm.projectidea.domain.model.projectidea.Specifications;
@@ -17,6 +19,7 @@ import in.anandm.projectidea.domain.model.user.UserRepository;
 import in.anandm.projectidea.domain.shared.AccessDeniedException;
 import in.anandm.projectidea.domain.shared.ApplicationException;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,15 +39,14 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 	private ProjectIdeaRepository projectIdeaRepository;
 	private ReviewRepository reviewRepository;
 	private AttachmentRepository attachmentRepository;
+	private ApplicationEvents applicationEvents;
 
-	
-	
 	/**
 	 * 
 	 */
 	ProjectIdeaServiceImpl() {
 		super();
-		
+
 	}
 
 	@Autowired
@@ -53,16 +55,19 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 	 * @param projectIdeaRepository
 	 * @param reviewRepository
 	 * @param attachmentRepository
+	 *
 	 */
 	public ProjectIdeaServiceImpl(UserRepository userRepository,
 			ProjectIdeaRepository projectIdeaRepository,
 			ReviewRepository reviewRepository,
-			AttachmentRepository attachmentRepository) {
+			AttachmentRepository attachmentRepository,
+			ApplicationEvents applicationEvents) {
 		super();
 		this.userRepository = userRepository;
 		this.projectIdeaRepository = projectIdeaRepository;
 		this.reviewRepository = reviewRepository;
 		this.attachmentRepository = attachmentRepository;
+		this.applicationEvents = applicationEvents;
 	}
 
 	@Transactional
@@ -77,7 +82,7 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 		return projectIdea;
 
 	}
-	
+
 	@Transactional
 	@Override
 	@PreAuthorize("hasRole('DRAFT_IDEA')")
@@ -192,7 +197,7 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 					+ idea.getId() + ", which is created by some one else");
 		}
 	}
-	
+
 	@Transactional
 	@Override
 	@PreAuthorize("hasRole('PUBLISH_IDEA')")
@@ -208,6 +213,10 @@ public class ProjectIdeaServiceImpl implements ProjectIdeaService {
 					+ " is trying to publish draft : " + projectIdeaId
 					+ ", which is created by some one else");
 		}
+
+		applicationEvents
+				.projectIdeaWasPublished(new ProjectIdeaPublishedEvent(this,
+						idea, new Date()));
 	}
 
 	@Transactional

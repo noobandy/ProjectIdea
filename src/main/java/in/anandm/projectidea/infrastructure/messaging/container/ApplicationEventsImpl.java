@@ -9,11 +9,13 @@ import in.anandm.projectidea.domain.model.events.ReviewCretedEvent;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
+import org.springframework.stereotype.Component;
 
 /**
  * @author anandm
  * 
  */
+@Component
 public class ApplicationEventsImpl implements ApplicationEvents,
 		ApplicationEventPublisherAware {
 

@@ -1,5 +1,3 @@
-<%@ taglib uri="http://www.springframework.org/security/tags"
-	prefix="security"%>
 <div class="row">
 	<div class="col-md-1"></div>
 	<div class="conversation-wrap col-md-3">
@@ -41,11 +39,4 @@
 			<chat></chat>
 		</div>
 	</div>
-
-	<script type="text/javascript"
-		src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/js/jquery.atmosphere.js"></script>
-
-
 </div>

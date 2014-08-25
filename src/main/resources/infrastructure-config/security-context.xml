@@ -39,6 +39,7 @@
 
 		<security:intercept-url pattern="/partials/**" access="permitAll" />
 		
+		<security:intercept-url pattern="notifications**" access="isAuthenticated()" />
 		<security:intercept-url pattern="/api/draftedProjectIdeas**" access="isAuthenticated()" />
 		<security:intercept-url pattern="/api/users**" access="isAuthenticated()" />
 		<security:intercept-url pattern="/api/groups**" access="isAuthenticated()" />
