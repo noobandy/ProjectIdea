@@ -4,9 +4,15 @@
 package in.anandm.projectidea.infrastructure.messaging.container;
 
 import in.anandm.projectidea.domain.model.events.ProjectIdeaPublishedEvent;
+import in.anandm.projectidea.domain.model.notification.Event;
+import in.anandm.projectidea.domain.model.notification.EventInstance;
+import in.anandm.projectidea.domain.model.notification.EventInstanceRepository;
+import in.anandm.projectidea.domain.model.notification.EventRepository;
+import in.anandm.projectidea.domain.model.notification.EventSubscription;
+import in.anandm.projectidea.domain.model.notification.EventSubscriptionQuery;
+import in.anandm.projectidea.domain.model.notification.EventSubscriptionRepository;
 import in.anandm.projectidea.domain.model.notification.Notification;
 import in.anandm.projectidea.domain.model.notification.NotificationRepository;
-import in.anandm.projectidea.domain.model.notification.NotificationType;
 import in.anandm.projectidea.domain.model.projectidea.ProjectIdea;
 import in.anandm.projectidea.domain.model.user.User;
 
@@ -29,52 +35,61 @@ import org.springframework.stereotype.Component;
 public class ProjectIdeaPublishedEventListener implements
 		ApplicationListener<ProjectIdeaPublishedEvent> {
 
-	private static final String PROJECT_IDEA_ID = "projectIdeaId";
-
 	@Autowired
 	private NotificationRepository notificationRepository;
+
+	private EventRepository eventRepository;
+
+	private EventInstanceRepository eventInstanceRepository;
+
+	private EventSubscriptionRepository eventSubscriptionRepository;
 
 	private ObjectMapper mapper = new ObjectMapper();
 
 	@Override
 	public void onApplicationEvent(ProjectIdeaPublishedEvent event) {
-		// add notification
-		// Notification notification = new
-		// Notification(NotificationType.PROJECT_IDEA_PUBLISHED, "",
-		// resourceURI, recipient)
 		ProjectIdea projectIdea = event.getProjectIdea();
 
 		User author = projectIdea.getAuthor();
 
-		StringBuilder messageBuilder = new StringBuilder("Project idea ");
-		messageBuilder.append(event.getProjectIdea().getSpecifications()
-				.getTitle());
-		messageBuilder.append(' ');
-		messageBuilder.append("published");
+		Event eventChannel = eventRepository.findByTitle(Event
+				.userPublishedAProjectIdeaEvent(author));
 
-		Notification notification = new Notification(
-				NotificationType.PROJECT_IDEA_PUBLISHED,
-				messageBuilder.toString(), author);
+		EventInstance eventInstance = eventChannel.newInstance(author);
 
-		notification.putExtra(PROJECT_IDEA_ID,
-				String.valueOf(projectIdea.getId()));
+		eventInstanceRepository.saveEventInstance(eventInstance);
 
-		notificationRepository.saveNotification(notification);
+		EventSubscriptionQuery query = new EventSubscriptionQuery();
 
-		Broadcaster broadcaster = BroadcasterFactory.getDefault().lookup(
-				author.getUsername());
+		query.title(eventChannel.getTitle());
 
-		try {
-			broadcaster.broadcast(mapper.writeValueAsString(notification));
-		} catch (JsonGenerationException e) {
+		long count = eventSubscriptionRepository.count(query);
 
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
+		for (int i = 0; i < count; i = i + 100) {
+			query.start(i);
+			query.maxResult(i + 100);
+			for (EventSubscription subscription : eventSubscriptionRepository
+					.list(query)) {
+				Notification notification = new Notification(eventInstance,
+						subscription.getSubscriber());
 
-			e.printStackTrace();
-		} catch (IOException e) {
+				notificationRepository.saveNotification(notification);
+				Broadcaster broadcaster = BroadcasterFactory.getDefault()
+						.lookup(notification.getRecipient());
+				try {
+					broadcaster.broadcast(mapper
+							.writeValueAsString(notification));
+				} catch (JsonGenerationException e) {
 
-			e.printStackTrace();
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+
+					e.printStackTrace();
+				} catch (IOException e) {
+
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }
